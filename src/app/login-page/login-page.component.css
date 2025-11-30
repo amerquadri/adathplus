@@ -1,0 +1,61 @@
+/* Login card container styles */
+.login-card-container {
+	padding: 20px;
+	max-width: 400px;
+	margin: auto;
+	margin-top: 100px;
+}
+
+/* Style for the login header containing the SVG and title */
+.login-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.login-title {
+	margin-top: 16px;
+}
+
+.login-svg {
+	margin-top: 16px; /* Assuming you want to maintain the margin for the SVG */
+}
+
+/* Error message styling */
+.error-message {
+	background-color: #ffebee;
+	color: #c62828;
+	padding: 12px;
+	border-radius: 4px;
+	margin-bottom: 16px;
+	border-left: 4px solid #c62828;
+	font-size: 14px;
+}
+
+/* Login button container */
+.login-button-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 16px;
+}
+
+.login-button {
+	min-width: 120px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.login-spinner {
+	display: inline-block;
+}
+
+.loading-text {
+	margin-left: 8px;
+}
+
+/* Full width for form fields */
+.full-width {
+	width: 100%;
+}

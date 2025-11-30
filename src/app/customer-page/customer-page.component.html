@@ -1,0 +1,199 @@
+<app-master-page>
+	<mat-card>
+		<mat-card-content>
+			<div class="customer-search-bar">
+				<mat-form-field class="full-width-filter">
+					<mat-label>Filter</mat-label>
+					<input matInput (keyup)="applyFilter($event)" placeholder="Search customers..." #input>
+				</mat-form-field>
+				<div class="action-buttons">
+					<button mat-mini-fab color="primary" (click)="openNewCustomerDialog()" aria-label="Add Customer"
+						matTooltip="Add New Customer">
+						<mat-icon>add</mat-icon>
+					</button>
+					<button mat-mini-fab color="accent" (click)="exportToExcel()" aria-label="Export to Excel"
+						matTooltip="Export to Excel">
+						<mat-icon>description</mat-icon>
+					</button>
+					<button mat-mini-fab color="warn" (click)="exportToPDF()" aria-label="Export to PDF"
+						matTooltip="Export to PDF">
+						<mat-icon>picture_as_pdf</mat-icon>
+					</button>
+					<button mat-mini-fab color="basic" (click)="forceRefreshFromAPI()" aria-label="Refresh from API"
+						matTooltip="Force Refresh from API">
+						<mat-icon>refresh</mat-icon>
+					</button>
+					<button mat-mini-fab color="basic" (click)="testAPIConnection()" aria-label="Test API"
+						matTooltip="Test API Connection">
+						<mat-icon>wifi_find</mat-icon>
+					</button>
+					<button mat-mini-fab color="basic" (click)="generateTemporaryCustomers()"
+						aria-label="Generate Test Data" matTooltip="Generate Test Data">
+						<mat-icon>data_array</mat-icon>
+					</button>
+				</div>
+			</div>
+			<div class="table-container" tabindex="0">
+				<!-- Debug info -->
+				<div *ngIf="dataSource.data.length === 0" class="no-data-message">
+					<p>No customer data available. Data length: {{dataSource.data.length}}</p>
+					<p>Try clicking "Generate Test Data" to see the table.</p>
+				</div>
+
+				<div class="simple-table" *ngIf="dataSource.data.length > 0">
+					<!-- Table Headers -->
+					<div class="table-header">
+						<div class="header-cell expand-cell"></div>
+						<div class="header-cell">ID</div>
+						<div class="header-cell">Name</div>
+						<div class="header-cell">Phone 1</div>
+						<div class="header-cell">Email</div>
+						<div class="header-cell">Active</div>
+						<div class="header-cell">Actions</div>
+					</div>
+
+					<!-- Table Rows -->
+					<div *ngFor="let customer of paginatedData" class="table-row-container">
+						<!-- Main Row -->
+						<div class="table-row" [class.expanded]="expandedElement === customer" 
+							 (click)="toggleRow(customer)">
+							<div class="table-cell expand-cell">
+								<button mat-icon-button (click)="toggleRow(customer); $event.stopPropagation()">
+									<mat-icon>{{expandedElement === customer ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+								</button>
+							</div>
+							<div class="table-cell">{{customer.customerId}}</div>
+							<div class="table-cell">{{customer.customerName}}</div>
+							<div class="table-cell">{{customer.phone1 || '-'}}</div>
+							<div class="table-cell">{{customer.email || '-'}}</div>
+							<div class="table-cell">
+								<mat-chip [color]="customer.isActive ? 'primary' : 'warn'" [highlighted]="true">
+									{{customer.isActive ? 'Yes' : 'No'}}
+								</mat-chip>
+							</div>
+							<div class="table-cell">
+								<button mat-mini-fab color="primary" (click)="viewCustomer(customer); $event.stopPropagation()" 
+										class="action-button" matTooltip="Edit Customer">
+									<mat-icon>edit</mat-icon>
+								</button>
+								<button mat-mini-fab color="warn" (click)="confirmDeleteCustomer(customer); $event.stopPropagation()" 
+										class="action-button" matTooltip="Delete Customer">
+									<mat-icon>delete</mat-icon>
+								</button>
+							</div>
+						</div>
+
+						<!-- Expanded Detail Row -->
+						<div *ngIf="expandedElement === customer" class="expanded-detail" [@detailExpand]="'expanded'">
+							<div class="customer-detail">
+								<div class="detail-container">
+									<div class="detail-header">
+										<h3>{{customer.customerName}} - Customer Details</h3>
+										<mat-chip-set>
+											<mat-chip [color]="customer.isActive ? 'primary' : 'warn'" [highlighted]="true">
+												{{customer.isActive ? 'Active' : 'Inactive'}}
+											</mat-chip>
+										</mat-chip-set>
+									</div>
+
+									<div class="detail-grid">
+										<div class="detail-section">
+											<h4><mat-icon>person</mat-icon> Personal Information</h4>
+											<div class="detail-item">
+												<span class="label">Customer ID:</span>
+												<span class="value">{{customer.customerId}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Full Name:</span>
+												<span class="value">{{customer.customerName}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Email:</span>
+												<span class="value">{{customer.email || 'Not provided'}}</span>
+											</div>
+										</div>
+
+										<div class="detail-section">
+											<h4><mat-icon>phone</mat-icon> Contact Information</h4>
+											<div class="detail-item">
+												<span class="label">Primary Phone:</span>
+												<span class="value">{{customer.phone1 || 'Not provided'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Secondary Phone:</span>
+												<span class="value">{{customer.phone2 || 'Not provided'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Address:</span>
+												<span class="value">{{customer.address || 'Not provided'}}</span>
+											</div>
+										</div>
+
+										<div class="detail-section">
+											<h4><mat-icon>account_balance_wallet</mat-icon> Financial Information</h4>
+											<div class="detail-item">
+												<span class="label">Credit Amount:</span>
+												<span class="value credit">₹{{customer.credit | number:'1.2-2'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Debit Amount:</span>
+												<span class="value debit">₹{{customer.debit | number:'1.2-2'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Opening Balance:</span>
+												<span class="value">₹{{customer.openingAmt | number:'1.2-2'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Current Balance:</span>
+												<span class="value balance"
+													[class.positive]="(customer.credit - customer.debit) >= 0"
+													[class.negative]="(customer.credit - customer.debit) < 0">
+													₹{{(customer.credit - customer.debit) | number:'1.2-2'}}
+												</span>
+											</div>
+										</div>
+
+										<div class="detail-section">
+											<h4><mat-icon>info</mat-icon> Additional Details</h4>
+											<div class="detail-item">
+												<span class="label">Description:</span>
+												<span class="value">{{customer.detail || 'No description available'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Company ID:</span>
+												<span class="value">{{customer.companyId}}</span>
+											</div>
+										</div>
+
+										<div class="detail-section">
+											<h4><mat-icon>history</mat-icon> Record Information</h4>
+											<div class="detail-item">
+												<span class="label">Created By:</span>
+												<span class="value">{{customer.createdById || 'System'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Created Date:</span>
+												<span class="value">{{customer.createdDate | date:'medium'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Updated By:</span>
+												<span class="value">{{customer.updatedById || 'Not updated'}}</span>
+											</div>
+											<div class="detail-item">
+												<span class="label">Updated Date:</span>
+												<span class="value">{{customer.updatedDate | date:'medium'}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<mat-paginator [length]="dataSource.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+				showFirstLastButtons></mat-paginator>
+		</mat-card-content>
+	</mat-card>
+</app-master-page>

@@ -1,0 +1,42 @@
+<mat-card class="login-card login-card-container" align="center" vertical-align="middle">
+	<div class="login-header">
+		<svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="login-svg">
+			<circle cx="12" cy="8" r="4" fill="#1976d2"/>
+			<path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="#1976d2"/>
+		</svg>
+		<h2 class="login-title">Login</h2>
+	</div>
+	<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+		<!-- Error message display -->
+		<div *ngIf="errorMessage" class="error-message">
+			{{ errorMessage }}
+		</div>
+		
+		<mat-form-field appearance="fill" class="full-width">
+			<mat-label>Username</mat-label>
+			<input matInput formControlName="username" required placeholder="Enter your username" 
+			       (input)="onInputChange()">
+			<mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+				Username is required
+			</mat-error>
+		</mat-form-field>
+<br>
+		<mat-form-field appearance="fill" class="full-width">
+			<mat-label>Password</mat-label>
+			<input matInput type="password" formControlName="password" required placeholder="Enter your password"
+			       (input)="onInputChange()">
+					<mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+						Password is required
+					</mat-error>
+		</mat-form-field>
+<br>
+		<div class="login-button-container">
+			<button mat-raised-button color="primary" type="submit" 
+			        [disabled]="!loginForm.valid || isLoading" class="login-button">
+				<span *ngIf="!isLoading">Login</span>
+				<mat-spinner *ngIf="isLoading" diameter="20" class="login-spinner"></mat-spinner>
+				<span *ngIf="isLoading" class="loading-text">Logging in...</span>
+			</button>
+		</div>
+	</form>
+</mat-card>

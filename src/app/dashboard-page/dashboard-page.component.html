@@ -1,0 +1,51 @@
+<div class="app-container">
+  <app-header></app-header>
+  <div class="content-wrapper">
+    <main class="main-content">
+      <div class="dashboard-content">
+      
+        <!-- User Information Card -->
+        <div class="user-info-section">
+          <mat-card class="user-info-card">
+            <mat-card-header>
+              <mat-card-title>User Session Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-grid">
+                <div class="info-item">
+                  <strong>Username:</strong> 
+                  <span>{{ userInfo.username || 'Not available' }}</span>
+                </div>
+                <div class="info-item">
+                  <strong>User ID:</strong> 
+                  <span>{{ userInfo.userId || 'Not available' }}</span>
+                </div>
+                <div class="info-item">
+                  <strong>Full Name:</strong> 
+                  <span>{{ userInfo.userFullName || 'Not available' }}</span>
+                </div>
+                <div class="info-item">
+                  <strong>Company ID:</strong> 
+                  <span>{{ userInfo.companyId || 'Not available' }}</span>
+                </div>
+                <div class="info-item">
+                  <strong>Role ID:</strong> 
+                  <span>{{ userInfo.roleId || 'Not available' }}</span>
+                </div>
+                <div class="info-item">
+                  <strong>Login Time:</strong> 
+                  <span>{{ userInfo.loginTime || 'Not available' }}</span>
+                </div>
+                <div class="info-item">
+                  <strong>Auth Token:</strong> 
+                  <span class="token-display">{{ userInfo.authToken ? (userInfo.authToken.length > 50 ? userInfo.authToken.substring(0, 50) + '...' : userInfo.authToken) : 'Not available' }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </main>
+  </div>
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,100 @@
+<!-- Dialog header bar -->
+<div class="dialog-header">
+  <div class="dialog-title">Vendor Details</div>
+  <div class="dialog-header-actions">
+    <button mat-mini-fab color="primary" aria-label="Save" (click)="onSaveVendor()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button *ngIf="vendor && vendor.vendorId" mat-mini-fab color="warn" aria-label="Delete" (click)="onDeleteVendor()">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Close" (click)="dialogRef.close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<mat-dialog-content>
+  <form class="customer-dialog-form">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Vendor Name</mat-label>
+        <input matInput [(ngModel)]="vendor.vendorName" name="vendorName" placeholder="Vendor Name">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Phone 1</mat-label>
+        <input matInput [(ngModel)]="vendor.phone1" name="phone1" placeholder="Phone 1">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Phone 2</mat-label>
+        <input matInput [(ngModel)]="vendor.phone2" name="phone2" placeholder="Phone 2">
+      </mat-form-field>
+    </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="vendor.email" name="email" placeholder="Email">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="address-field">
+        <mat-label>Address</mat-label>
+        <textarea matInput [(ngModel)]="vendor.address" rows="2" name="address" placeholder="Address"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Detail</mat-label>
+        <textarea matInput [(ngModel)]="vendor.detail" rows="2" name="detail" placeholder="Detail"></textarea>
+      </mat-form-field>
+    </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Credit</mat-label>
+        <input matInput type="number" [(ngModel)]="vendor.credit" name="credit" placeholder="Credit">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Debit</mat-label>
+        <input matInput type="number" [(ngModel)]="vendor.debit" name="debit" placeholder="Debit">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Opening Amount</mat-label>
+        <input matInput type="number" [(ngModel)]="vendor.openingAmt" name="openingAmt" placeholder="Opening Amount">
+      </mat-form-field>
+    </div>
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Created By ID</mat-label>
+        <input matInput type="number" [(ngModel)]="vendor.createdById" name="createdById" placeholder="Created By ID">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Created Date</mat-label>
+        <input matInput [matDatepicker]="createdDatePicker" [(ngModel)]="vendor.createdDate" name="createdDate" placeholder="Select created date" readonly>
+        <mat-datepicker-toggle matIconSuffix [for]="createdDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #createdDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Updated By ID</mat-label>
+        <input matInput type="number" [(ngModel)]="vendor.updatedById" name="updatedById" placeholder="Updated By ID">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Updated Date</mat-label>
+        <input matInput [matDatepicker]="updatedDatePicker" [(ngModel)]="vendor.updatedDate" name="updatedDate" placeholder="Select updated date" readonly>
+        <mat-datepicker-toggle matIconSuffix [for]="updatedDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #updatedDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Is Active</mat-label>
+        <mat-select [(ngModel)]="vendor.isActive" name="isActive" placeholder="Is Active">
+          <mat-option [value]="true">True</mat-option>
+          <mat-option [value]="false">False</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Company ID</mat-label>
+        <input matInput type="number" [(ngModel)]="vendor.companyId" name="companyId" placeholder="Company ID">
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="onSaveVendor()" type="button">Save</button>
+  <button mat-button mat-dialog-close type="button">Close</button>
+</mat-dialog-actions>

@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Ensure app-root takes full height for sticky footer */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* App scaling helper - apply to `html` or `app-root` to scale the entire UI */
+.app-scale-80 {
+  transform: scale(0.8);
+  transform-origin: top left;
+  transition: transform 200ms ease-in-out;
+  /* To prevent layout overflow when scaling, make container origin at 0,0 */
+}
+
+/* When scaling, ensure the app container keeps a white background and doesn't show scroll artifacts */
+.app-scale-80, .app-scale-80 body, .app-scale-80 app-root {
+  background-color: #fff;
+}

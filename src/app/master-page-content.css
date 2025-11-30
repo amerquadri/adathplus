@@ -1,0 +1,8 @@
+.master-page-content {
+  margin: 32px auto;
+  padding: 32px;
+  max-width: 900px;
+  background: #f5f7fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
