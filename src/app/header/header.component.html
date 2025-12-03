@@ -19,9 +19,8 @@
         </mat-menu>
         <button mat-button [matMenuTriggerFor]="Payment">Payment</button>
          <mat-menu #Payment="matMenu">
-          <button mat-menu-item (click)="goToCustomer()">Customer</button>
-          <button mat-menu-item (click)="goToCustomertest()">Farmer</button>
-         
+          <button mat-menu-item (click)="goToVendorPayment()">Farmer Payment</button>
+          <button mat-menu-item (click)="goToVendorPayment()">Customer Payment</button>
         </mat-menu>
         <button mat-button>Test 2</button>
       </nav>

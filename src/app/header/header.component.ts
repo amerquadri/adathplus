@@ -13,7 +13,7 @@ import { MatCardModule } from "@angular/material/card";
   standalone: true,
   imports: [MatButtonModule, MatIconModule, MatMenuModule, MatCardModule, NgIf],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
   public isSignedIn: boolean = false;
@@ -61,6 +61,9 @@ export class HeaderComponent {
   }
   goToItem() {
     this.router.navigate(['/item-master-page']);
+  }
+  goToVendorPayment() {
+    this.router.navigate(['/vendor-payment']);
   }
   goToHome() {
     this.router.navigate(['/dashboard-page']);

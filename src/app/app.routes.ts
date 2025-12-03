@@ -10,6 +10,7 @@ import { ErrorPageComponent } from './error-page.component';
 import { DashboardPageTestComponent } from './dashboard-page-test/dashboard-page-test.component';
 import { CustomerPageTestComponent } from './customer-page-test/customer-page-test.component';
 import { VendorPageTestComponent } from './vendor-page-test/vendor-page-test.component';
+import { VendorPaymentComponent } from './vendor-payment/vendor-payment.component';
 
 
 export const routes: Routes = [
@@ -57,5 +58,10 @@ export const routes: Routes = [
 		path: 'error-page',
 		component: ErrorPageComponent,
 		data: { breadcrumb: 'Error' }
-	}
+	},
+	{
+		path:'vendor-payment',
+		component: VendorPaymentComponent,
+		data: { breadcrumb:'Master / Vendor Payment'}
+	},
 ];
