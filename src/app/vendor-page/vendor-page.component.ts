@@ -13,7 +13,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { VendorService, Vendor } from './vendor.service';
+import { VendorService } from './vendor.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ViewChild } from '@angular/core';
@@ -22,6 +22,8 @@ import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.componen
 import { VendorDialogComponent } from './vendor-dialog.component';
 import { timeout, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+// import { VendorPaymentInterface } from '../vendor-payment/vendor-payment-interface';
+import { VendorInterface } from '../vendor-payment/vendor-payment-interface';
 
 @Component({
   selector: 'app-vendor-page',
@@ -39,8 +41,8 @@ export class VendorPageComponent {
   public ConfirmDialog = ConfirmDialogComponent;
 
   vendorForm: FormGroup;
-  vendors: Vendor[] = [];
-  dataSource = new MatTableDataSource<Vendor>([]);
+  vendors: VendorInterface[] = [];
+  dataSource = new MatTableDataSource<VendorInterface>([]);
   searchValue: string = '';
   isUsingTestData: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -51,7 +53,7 @@ export class VendorPageComponent {
   constructor(private fb: FormBuilder, private dialog: MatDialog, private vendorService: VendorService) {
     this.vendorForm = this.fb.group({
       vendorId: [null],
-      vendorName: ['', Validators.required],
+      vendorName: [''],
       phone1: [''],
       phone2: [''],
       email: [''],
@@ -103,7 +105,7 @@ export class VendorPageComponent {
     dialogRef.afterClosed().subscribe(result => { if (result === 'saved' || result === 'deleted') { if (!this.isUsingTestData) this.fetchVendors(); } });
   }
 
-  viewVendor(vendor: Vendor) {
+  viewVendor(vendor: VendorInterface) {
     this.vendorService.getVendorById(vendor.vendorId).subscribe({
       next: (response: any) => {
         const fetched = response && response.data ? response.data : response;
@@ -116,20 +118,34 @@ export class VendorPageComponent {
     });
   }
 
-  generateTemporaryVendors() {
-    this.vendors = Array.from({ length: 100 }, (_, i) => ({ vendorId: i+1, vendorName: `Vendor ${i+1}`, phone1: `123456789${i%10}`, phone2: `987654321${i%10}`, email: `vendor${i+1}@example.com`, address: `Address ${i+1}`, detail: `Detail ${i+1}`, credit: Math.floor(Math.random()*10000), debit: Math.floor(Math.random()*5000), openingAmt: Math.floor(Math.random()*2000), createdById:1, createdDate: new Date().toISOString(), updatedById:1, updatedDate: new Date().toISOString(), isActive: true, companyId:1 }));
-    this.dataSource.data = this.vendors; this.isUsingTestData = true; if (this.paginator) this.dataSource.paginator = this.paginator;
-  }
+  
 
   ngAfterViewInit() { if (this.paginator) this.dataSource.paginator = this.paginator; }
 
   applyFilter() { this.fetchVendors(); this.dataSource.filter = this.searchValue.trim().toLowerCase(); }
 
-  confirmDeleteVendor(vendor: Vendor) {
+  confirmDeleteVendor(vendor: VendorInterface): void {
     this.blurActiveElement();
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, { width: '350px', data: { title: 'Delete Vendor', message: `Are you sure you want to delete vendor '${vendor.vendorName}'?` } });
-    dialogRef.afterClosed().subscribe(result => { if (result === 'confirm') { this.vendorService.deleteVendor(vendor.vendorId).subscribe(() => this.fetchVendors()); } });
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Delete Vendor',
+        message: `Are you sure you want to delete vendor '${vendor.vendorName}'?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'confirm') {
+        this.vendorService
+          .deleteVendor(vendor.vendorId)
+          .subscribe(() => {
+            this.fetchVendors();
+          });
+      }
+    });
   }
+
 
   private blurActiveElement(): void {
     try {

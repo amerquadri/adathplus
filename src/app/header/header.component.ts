@@ -68,7 +68,14 @@ export class HeaderComponent {
   goToHome() {
     this.router.navigate(['/dashboard-page']);
   }
+
+   goToCustomerPayment() {
+    this.router.navigate(['/customer-payment']);
+  }
   
+  goToFarmerBill() {
+    this.router.navigate(['/farmer-bill']);
+  }
   logout() {
     // Clear session storage token/user and update UI
     console.log('Logout clicked');

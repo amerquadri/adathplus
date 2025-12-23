@@ -5,14 +5,14 @@
         <button mat-button (click)="goToHome()"> Home</button>
         <button mat-flat-button [matMenuTriggerFor]="menu1">Master</button>
         <mat-menu #menu1="matMenu">
-          <button mat-menu-item (click)="goToCustomer()">Customer</button>
-          <button mat-menu-item (click)="goToCustomertest()">Farmer</button>
+          <button mat-menu-item (click)="goToCustomer()">Customer Detail</button>
+          <button mat-menu-item (click)="goToCustomertest()">Customer</button>
           <button mat-menu-item (click)="goToVendor()">Vendor</button>
           <button mat-menu-item (click)="goToItem()">Item</button>
         </mat-menu>
         <button mat-button [matMenuTriggerFor]="Bill">Bill</button>
          <mat-menu #Bill="matMenu">
-          <button mat-menu-item (click)="goToCustomer()">Farmer</button>
+          <button mat-menu-item (click)="goToFarmerBill()">Farmer Bill</button>
           <button mat-menu-item (click)="goToCustomertest()">Customer</button>
           <button mat-menu-item (click)="goToVendor()">Vendor</button>
           <button mat-menu-item (click)="goToItem()">Item</button>
@@ -20,7 +20,7 @@
         <button mat-button [matMenuTriggerFor]="Payment">Payment</button>
          <mat-menu #Payment="matMenu">
           <button mat-menu-item (click)="goToVendorPayment()">Farmer Payment</button>
-          <button mat-menu-item (click)="goToVendorPayment()">Customer Payment</button>
+          <button mat-menu-item (click)="goToCustomerPayment()">Customer Payment</button>
         </mat-menu>
         <button mat-button>Test 2</button>
       </nav>

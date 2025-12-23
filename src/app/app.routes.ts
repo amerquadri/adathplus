@@ -9,8 +9,9 @@ import { ItemMasterPageComponent } from './item-master-page/item-master-page.com
 import { ErrorPageComponent } from './error-page.component';
 import { DashboardPageTestComponent } from './dashboard-page-test/dashboard-page-test.component';
 import { CustomerPageTestComponent } from './customer-page-test/customer-page-test.component';
-import { VendorPageTestComponent } from './vendor-page-test/vendor-page-test.component';
 import { VendorPaymentComponent } from './vendor-payment/vendor-payment.component';
+import { CustomerPaymentComponent } from './customer-payment/customer-payment.component';
+import { FarmerBillComponent } from './farmer-bill/farmer-bill.component';
 
 
 export const routes: Routes = [
@@ -34,12 +35,7 @@ export const routes: Routes = [
 		component: CustomerPageTestComponent,
 		data: { breadcrumb: 'Customer Test' }
 	},
-	{
-		path: 'vendor-page-test',
-		component: VendorPageTestComponent,
-		data: { breadcrumb: 'Vendor Test' }
-	},
-	{
+		{
 		path: 'customer-page',
 		component: CustomerPageComponent,
 		data: { breadcrumb: 'Master / Customer' }
@@ -63,5 +59,15 @@ export const routes: Routes = [
 		path:'vendor-payment',
 		component: VendorPaymentComponent,
 		data: { breadcrumb:'Master / Vendor Payment'}
+	},
+	{
+		path:'customer-payment',
+		component: CustomerPaymentComponent,
+		data: { breadcrumb:'Master / Customer Payment'}
+	},
+	{
+		path:'farmer-bill',
+		component: FarmerBillComponent,
+		data: { breadcrumb:'Master / Farmer Bill'}
 	},
 ];

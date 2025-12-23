@@ -3,29 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { LoginServiceService } from '../login-page/login-service.service';
+import { VendorPaymentInterface } from '../vendor-payment/vendor-payment-interface';
 
 const localurl = environment.apiUrl;
-
-export interface Vendor {
-    
-  vendorId: number;
-  vendorName: string;
-  phone1: string;
-  phone2: string;
-  email: string;
-  address: string;
-  detail: string;
-  credit: number;
-  debit: number;
-  openingAmt: number;
-  createdById: number;
-  createdDate: string;
-  updatedById: number;
-  updatedDate: string;
-  isActive: boolean;
-  companyId: number;
-}
- 
 
 @Injectable({ providedIn: 'root' })
 export class VendorService {
@@ -37,29 +17,29 @@ export class VendorService {
     return `${localurl}/Vendor/GetVendorList?CompanyId=${companyId}`;
   }
 
-  getVendors(): Observable<Vendor[]> {
+  getVendors(): Observable<VendorPaymentInterface[]> {
     const url = this.getListUrl();
-    return this.http.post<Vendor[]>(url, {} );
+    return this.http.post<VendorPaymentInterface[]>(url, {} );
   }
 
-  getVendorById(vendorId: number): Observable<Vendor> {
+  getVendorById(vendorId: number): Observable<VendorPaymentInterface> {
     const companyId = this.loginService?.getCompanyId() ?? 10001;
     const url = `${localurl}/Vendor/GetVendorById?VendorId=${vendorId}&CompanyId=${companyId}`;
-    return this.http.post<Vendor>(url, {});
+    return this.http.post<VendorPaymentInterface>(url, {});
   }
 
-  insertVendor(vendor: Vendor): Observable<Vendor> {
+  insertVendor(vendor: VendorPaymentInterface): Observable<VendorPaymentInterface> {
     const companyId = this.loginService?.getCompanyId() ?? 10001;
     vendor.companyId = companyId;
     const insertUrl = `${localurl}/Vendor/SaveVendor`;
-    return this.http.put<Vendor>(insertUrl, vendor);
+    return this.http.put<VendorPaymentInterface>(insertUrl, vendor);
   }
 
-  updateVendor(vendor: Vendor): Observable<Vendor> {
+  updateVendor(vendor: VendorPaymentInterface): Observable<VendorPaymentInterface> {
     const companyId = this.loginService?.getCompanyId() ?? 10001;
     vendor.companyId = companyId;
     const updateUrl = `${localurl}/Vendor/SaveVendor`;
-    return this.http.put<Vendor>(updateUrl, vendor);
+    return this.http.put<VendorPaymentInterface >(updateUrl, vendor);
   }
 
   deleteVendor(vendorId: number): Observable<void> {

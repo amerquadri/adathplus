@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [MatCard, ReactiveFormsModule, MatInputModule, MatButtonModule, MatFormFieldModule, CommonModule],
   templateUrl: './login-page-test.component.html',
-  styleUrl: './login-page-test.component.css'
+  styleUrls: ['./login-page-test.component.css']
 })
 export class LoginPageTestComponent {
   loginForm: FormGroup;

@@ -41,9 +41,5 @@ table.mat-table { width:100%; min-width:760px;overflow: auto; }
 	.card-actions button { font-size:12px; padding:6px 8px; }
 	table.mat-table { min-width:640px; font-size:13px; }
 	.mat-paginator { font-size:12px; }
-} 
-
-
-mat-mdc-form-field-flex {
-  margin: -15px -15px -15px 20px;
 }
+ 

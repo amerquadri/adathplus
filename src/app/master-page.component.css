@@ -41,3 +41,10 @@ nav {
   margin-bottom: 24px;
   margin-left: 20px;
 }
+.mat-mdc-form-field {
+ margin: -15px -15px -15px 20px;
+}
+
+/* style="
+    margin: -15px -15px -15px 20px;
+" */
