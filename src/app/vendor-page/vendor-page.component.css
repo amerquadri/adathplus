@@ -10,8 +10,7 @@
 .card-actions { display:flex; align-items:center; gap:8px; margin-left:auto; }
 .header-search { width:320px; max-width:40vw; }
 @media (max-width:768px) { .card-header-bar { flex-direction:column; align-items:stretch; gap:8px; } .card-actions { justify-content:flex-end; } .header-search{ width:100%; } }
-@import url('../master-page-content.css');
-
+ 
  .ocean-input {
    margin-top: -15px;
    margin-right: -15px;

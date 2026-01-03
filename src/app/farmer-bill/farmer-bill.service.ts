@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginServiceService } from '../login-page/login-service.service';
-import { VendorPaymentInterface,VendorInterface } from '../vendor-payment/vendor-payment-interface';
+import { VendorPaymentInterface, VendorInterface } from '../vendor-payment/vendor-payment-interface';
 import { Observable } from 'rxjs';
-import { FarmerBillDetailModel,farmerBill } from './farmer-bill-interface';
+import { FarmerBillDetailModel, farmerBill } from './farmer-bill-interface';
 
 const localurl = environment.apiUrl;
 @Injectable({
@@ -25,38 +25,85 @@ export class FarmerBillService {
     return this.http.post<VendorInterface[]>(url, {});
   }
 
-  InsertFarmerBillDetails(farmerBill: farmerBill[] | farmerBill, farmerBillDetail: FarmerBillDetailModel[] | FarmerBillDetailModel): Observable<any> {
+  GetFarmerBill(ComissionBillId: number): Observable<any[]> {
+    const companyId = this.loginService?.getCompanyId() ?? 10001;
+    const url = `${localurl}/FarmerBill/GetFarmerBill?ComissionBillId=${ComissionBillId}&CompanyId=${companyId}`;
+    return this.http.get<any[]>(url);
+  }
+
+  GetFarmerBillDetails(ComissionBillId: number): Observable<any[]> {
+    const companyId = this.loginService?.getCompanyId() ?? 10001;
+    const url = `${localurl}/FarmerBill/GetFarmerBillDetails?ComissionBillId=${ComissionBillId}&CompanyId=${companyId}`;
+    return this.http.get<any[]>(url);
+  }
+
+  GetNewComissionBillId(): Observable<any[]> {
+    const companyId = this.loginService?.getCompanyId() ?? 10001;
+    const url = `${localurl}/FarmerBill/GetNewComissionBillId?CompanyId=${companyId}`;
+    return this.http.get<any[]>(url);
+  }
+
+
+
+
+  InsertFarmerBillDetails(FarmerBillModel: farmerBill, FarmerBillDetail: FarmerBillDetailModel): Observable<number> {
+   
     const url = `${localurl}/FarmerBill/InsertFarmerBillDetails`;
     const companyId = this.loginService?.getCompanyId() ?? 10001;
-    if (Array.isArray(farmerBill)) {
-      farmerBill.forEach(fb => fb.companyId = companyId);
-    } else {
-      farmerBill.companyId = companyId;
-    }
-    const payload = { farmerBill, farmerBillDetail };
-    return this.http.post<any>(url, payload);
+    // ensure companyId is assigned on the model sent to the API
+    FarmerBillModel.companyId = companyId;
+    // Map camelCase client model to PascalCase server model expected by .NET
+    const mapFarmerBillToServer = (fb: farmerBill) => ({
+      FarmerBillId: fb?.farmerBillId ?? 0,
+      ComissionBillId: fb?.comissionBillId ?? 0,
+      VendorId: fb?.vendorId ?? 0,
+      VendorName: (fb as any)?.vendorName ?? '',
+      ParticularName: (fb as any)?.particularName ?? '',
+      CompanyId: fb?.companyId ?? companyId,
+      CreatedById: fb?.createdById ?? 0,
+      CreatedDate: fb?.createdDate ? (fb.createdDate instanceof Date ? fb.createdDate.toISOString() : fb.createdDate) : null,
+      UpdatedById: (fb as any)?.updatedById ?? 0,
+      UpdatedDate: (fb as any)?.updatedDate ? ((fb as any).updatedDate instanceof Date ? (fb as any).updatedDate.toISOString() : (fb as any).updatedDate) : null,
+      BillDate: fb?.billDate ? (fb.billDate instanceof Date ? fb.billDate.toISOString() : fb.billDate) : null,
+      IsActive: !!fb?.isActive
+    });
 
-  } 
+    const mapDetailToServer = (d: FarmerBillDetailModel) => ({
+      FarmerBillDetailId: d?.farmerBillDetailId ?? 0,
+      ComissionBillId: d?.ComissionBillId ?? 0,
+      ParticularName: (d?.particularName ?? '').toString(),
+      Amt: Number(d?.amt ?? 0),
+      Qty: Number(d?.qty ?? 0),
+      Unit: (d?.unit ?? '').toString(),
+      Rate: Number(d?.rate ?? 0),
+      Weight: Number(d?.weight ?? 0),
+      ComissionPercent: Number(d?.comissionPercent ?? 0),
+      CompanyId: d?.companyId ?? companyId,
 
-/*
- $.ajax({
-     url: _webApiUrl + '/FarmerBill/InsertFarmerBillDetails', // Use the global variable
-     type: "POST", // Request type
-     //data: JSON.stringify(farmerBillDetail), // Data to be sent
-     data: JSON.stringify({ farmerBill: _farmerBill, farmerBillDetail: _farmerBillDetail }), // Data to be sent
+    });
 
-     contentType: "application/json;charset=utf-8",
-     dataType: "json",
-     success: function (data) {
-         console.log('Farmer Bill Detail inserted:', data);
-         $('#FarmerBillId').val(data);
-         _LoadFarmerBillDetails($('#ComissionBillId').val(), _CompanyId);
-         GrandTotal();
-     },
-     error: function (xhr, status, error) {
-         console.error("Error inserting farmer bill detail: ", status, error);
-     }
- });
+    //const detailsArray: FarmerBillDetailModel[] = Array.isArray(FarmerBillDetail) ? FarmerBillDetail : [FarmerBillDetail as FarmerBillDetailModel];
+    // const serverDetails = detailsArray.map(mapDetailToServer);
 
-*/
+    // send the FarmerBillModel object directly in the request body so the controller
+    // parameter `FarmerBillModel FarmerBill` can bind it. Use mapped PascalCase object.
+    const serverFarmerBill = mapFarmerBillToServer(FarmerBillModel);
+    const serverFarmerBillDetails = mapDetailToServer(FarmerBillDetail);
+
+    // Build the FarmerBillRequestModel object as the request body so ASP.NET [FromBody]
+    // parameter can bind directly to it. Property names must match the server model.
+    const payload = {
+      FarmerBill: serverFarmerBill,
+      FarmerBillExpenses: [],
+      FarmerBillDetail: serverFarmerBillDetails
+    };
+
+    console.log('Inserting Farmer Bill with payload:', JSON.stringify(payload, null, 2));
+    // set explicit JSON content-type header and expect JSON response
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json;charset=utf-8' });
+    return this.http.post<number>(url, payload, { headers, responseType: 'json' as const });
+  }
+
+
+
 }

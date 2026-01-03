@@ -1,4 +1,4 @@
- 
+
 export interface FarmerBillModel {
     FarmerBillId?: number;
     ComissionBillId?: number;
@@ -52,16 +52,24 @@ export interface FarmerBillDetailModel {
     rate: number;
     weight: number;
     comissionPercent: number;
-}
- 
-export interface farmerBill{
-     farmerBillId: number;
-        comissionBillId: number;
-        vendorId: number;
-        billDate: Date;
-        companyId: number;
-        createdById: number;
-        isActive: boolean;
+    comissionAmount?: number;
+    companyId?: number;
+    
 }
 
- 
+export interface farmerBill {
+
+    farmerBillId?: number;
+    comissionBillId?: number;
+    vendorId?: number;
+    vendorName?: string;
+    particularName?: string;
+    companyId?: number;
+    createdById?: number;
+    createdDate?: Date;
+    updatedById?: number;
+    updatedDate?: Date;
+    billDate?: Date;
+    isActive?: boolean;
+}
+

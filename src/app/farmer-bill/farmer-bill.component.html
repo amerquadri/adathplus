@@ -4,63 +4,47 @@
 
 		<div class="controls">
 			<div class="row">
-				<div class="col small">
-					<mat-form-field appearance="outline" class="ocean-input" class="ocean-input">
+				<div class="col medium">
+					<mat-form-field appearance="outline">
 						<mat-label>##</mat-label>
-						<input matInput type="number" name="FarmerBillId" value="0" placeholder="##" />
+						<input matInput type="number" name="farmerBillId" [(ngModel)]="_farmerBill.farmerBillId"
+							disabled="true" value="0" placeholder="##" />
 					</mat-form-field>
 				</div>
-				<div class="col small">
-					<mat-form-field appearance="outline" class="ocean-input">
-						<mat-label>COmmission Bill No</mat-label>
-						<input matInput type="text" value="5" name="ComissionBillId" placeholder="Bill No" />
+				<div class="col medium">
+					<mat-form-field appearance="outline">
+						<mat-label>Bill No</mat-label>
+						<input matInput type="number" name="comissionBillId" [(ngModel)]="_farmerBill.comissionBillId"
+							placeholder="Bill No" />
 					</mat-form-field>
 				</div>
 				<div class="col btns">
 					<div class="button-group">
 						<button mat-raised-button color="primary">Edit</button>
-						<button mat-raised-button color="primary">View</button>
+						<button mat-raised-button color="primary" (click)="GetNewComissionBillId()">View</button>
 					</div>
 				</div>
 
 				<div class="col farmer-select">
-					<!-- <mat-form-field appearance="outline" class="farmer-select" class="ocean-input">
-						<mat-label>Select Farmer</mat-label>
-						<mat-select>
-							<mat-option value="">--Select--</mat-option>
-						</mat-select>
-					</mat-form-field> -->
 
-					<!-- <mat-form-field appearance="outline" class="farmer-autocomplete ocean-input">
+					<mat-form-field class="col medium" appearance="outline">
 						<mat-label>Select Farmer</mat-label>
-						<input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" placeholder="Select Farmer">
-						<mat-autocomplete #auto="matAutocomplete" (optionSelected)="onVendorSelected($event.option.value)">
-							<mat-option *ngFor="let option of filteredOptions | async" [value]="option">{{ option }}</mat-option>
-						</mat-autocomplete>
-					</mat-form-field> -->
-
-
-					<mat-form-field class="example-full-width">
-						<mat-label>Select Farmer</mat-label>
-						<input type="text" name="vendorId" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
-							[matAutocomplete]="auto">
-						<mat-autocomplete #auto="matAutocomplete" (optionSelected)="onVendorSelected($event.option.value)">
-							<mat-option *ngFor="let option of (filteredOptions | async)" [value]="option">{{ option }}</mat-option>
+						<input type="text" name="vendorId" placeholder="Pick one" aria-label="Number" matInput
+							[formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="_farmerBill.vendorId">
+						<mat-autocomplete #auto="matAutocomplete"
+							(optionSelected)="onVendorSelected($event.option.value)">
+							<mat-option *ngFor="let option of (filteredOptions | async)" [value]="option">{{ option
+								}}</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
 
-
-					<!-- <mat-form-field name="vendorId" placeholder="Farmer Name" appearance="outline">
-						<mat-option *ngFor="let vendorItem of vendorList" [value]="vendorItem.vendorId">{{
-							vendorItem.vendorName }}
-							</mat-option>
-					</mat-form-field> -->
 				</div>
 
 				<div class="col date">
 					<mat-form-field appearance="outline" class="ocean-input">
 						<mat-label>Bill Date</mat-label>
-						<input matInput [matDatepicker]="picker" placeholder="dd/MM/yyyy" value="14/Dec/2025">
+						<input matInput [matDatepicker]="picker" placeholder="dd/MM/yyyy"
+							[(ngModel)]="_farmerBill.billDate">
 						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 						<mat-datepicker #picker></mat-datepicker>
 					</mat-form-field>
@@ -69,91 +53,152 @@
 		</div>
 
 		<div class="content">
-			<div class="table-area">
-				<div class="table-header">
-					<div class="cell small">#Sr</div>
-					<div class="cell">Particular</div>
-					<div class="cell small">Qty</div>
-					<div class="cell small">Unit</div>
-					<div class="cell small">Weight</div>
-					<div class="cell small">Rate</div>
-					<div class="cell small">Com %</div>
-					<div class="cell small">Amt</div>
-					<div class="cell small">Delete</div>
-				</div>
 
-				<div class="table-body">
-					<!-- rows will be rendered here by component logic -->
-					<div class="no-rows">No records</div>
-				</div>
+			<mat-card class="table-content">
 
-				<!-- entry row: add new item -->
-				<div class="entry-row">
-					<div class="entry-left">
-						<div class="entry-label">Total</div>
-						<div class="entry-records">Records : 0</div>
-						<button mat-stroked-button class="enter-btn">Enter</button>
-					</div>
+				<table mat-table [dataSource]="dataSource" class="mat-elevation-z25">
+					<!-- View Column -->
+					<ng-container matColumnDef="view">
+						<th mat-header-cell *matHeaderCellDef> View </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail">
+							<button mat-button color="warn" (click)="confirmDelete(_farmerBillDetail)">
+								<mat-icon>delete</mat-icon>
+							</button>
+						</td>
+					</ng-container>
+					<ng-container matColumnDef="farmerBillDetailId">
+						<th mat-header-cell *matHeaderCellDef> ID </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.farmerBillDetailId}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="particularName">
+						<th mat-header-cell *matHeaderCellDef> Particular Name </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.particularName}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="unit">
+						<th mat-header-cell *matHeaderCellDef> Unit </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.unit}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="qty">
+						<th mat-header-cell *matHeaderCellDef> Qty </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.qty}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="rate">
+						<th mat-header-cell *matHeaderCellDef> Rate </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.rate}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="weight">
+						<th mat-header-cell *matHeaderCellDef> Weight </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.weight}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="comissionPercent">
+						<th mat-header-cell *matHeaderCellDef> Commission Percent </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionPercent}} </td>
+					</ng-container>
+
+					<ng-container matColumnDef="comissionAmount">
+						<th mat-header-cell *matHeaderCellDef> Commission Amount </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionAmount}} </td>
+					</ng-container>
+					<ng-container matColumnDef="amt">
+						<th mat-header-cell *matHeaderCellDef>   Amount </th>
+						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.amt}} </td>
+					</ng-container>
+
+					<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+					<tr *ngIf="dataSource.data.length === 0">
+						<td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
+					</tr>
+
+
+				</table>
+				<mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
+					showFirstLastButtons>
+				</mat-paginator>
+
+
+				<mat-card>
+					
 					<div class="entry-controls">
+						<div class="entry-left">
+						<div class="entry-label">Total</div>
+						<div class="entry-records">Records : {{dataSource.data.length}}</div>
+					</div>
 						<mat-form-field appearance="outline" class="entry-select">
 							<mat-select [(value)]="selectedParticular">
 								<mat-option value="Alu">Alu</mat-option>
 								<mat-option value="Matar">Matar</mat-option>
 								<mat-option value="Pyaz">Pyaz</mat-option>
+								<mat-option value="Adarak">Adarak</mat-option>
+								<mat-option value="Mirchi">Mirchi</mat-option>
 							</mat-select>
 						</mat-form-field>
 						<mat-form-field appearance="outline" class="entry-field">
-							<input matInput placeholder="Qty" type="number" />
+							<input matInput placeholder="Qty" type="number" [(ngModel)]="_farmerBillDetail.qty" />
 						</mat-form-field>
 						<mat-form-field appearance="outline" class="entry-field">
-							<input matInput placeholder="Unit" type="number" />
+							<input matInput placeholder="Unit" [(ngModel)]="_farmerBillDetail.unit" />
 						</mat-form-field>
 						<mat-form-field appearance="outline" class="entry-field">
-							<input matInput placeholder="Weight" type="number" />
+							<input matInput placeholder="Weight" type="number" [(ngModel)]="_farmerBillDetail.weight" />
 						</mat-form-field>
 						<mat-form-field appearance="outline" class="entry-field">
-							<input matInput placeholder="Rate" type="number" />
+							<input matInput placeholder="Rate" type="number" [(ngModel)]="_farmerBillDetail.rate" />
 						</mat-form-field>
 						<mat-form-field appearance="outline" class="entry-field">
-							<input matInput placeholder="ComPer" type="number" />
+							<input matInput placeholder="Com %" type="number"
+								[(ngModel)]="_farmerBillDetail.comissionPercent" />
 						</mat-form-field>
-						<div class="entry-amount">0.00</div>
-						<button mat-flat-button color="accent" class="save-entry">Save</button>
-					</div>
-				</div>
+						<div class="entry-amount">{{ (_farmerBillDetail.rate || 0) * (_farmerBillDetail.qty || 0) |
+							number:'1.2-2' }}</div>
+						<button mat-flat-button color="accent" class="save-entry"
+							(click)="insertFarmerBillDetails()">Save</button>
 
-				<!-- right sidebar with amounts -->
-			</div>
-			<div class="sidebar">
+					</div>
+				</mat-card>
+
+
+			</mat-card>
+
+			<!-- entry row: add new item -->
+
+
+			<mat-card class="sidebar">
 				<div class="sidebar-box">
 					<div class="sidebar-title">रुपय</div>
 					<div class="sidebar-list">
 						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input matInput
-							placeholder="कमीशन"		value="0"></mat-form-field>
+									placeholder="कमीशन" value="0"></mat-form-field>
 							<div class="side-label">कमीशन</div>
 						</div>
 						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-							placeholder="उच्चल"		matInput></mat-form-field>
+									placeholder="उच्चल" matInput></mat-form-field>
 							<div class="side-label">उच्चल</div>
 						</div>
 						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-							placeholder="हमाली"		matInput></mat-form-field>
+									placeholder="हमाली" matInput></mat-form-field>
 							<div class="side-label">हमाली</div>
 						</div>
 						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-							placeholder="वराई"		matInput></mat-form-field>
+									placeholder="वराई" matInput></mat-form-field>
 							<div class="side-label">वराई</div>
 						</div>
 						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-									placeholder="गाडी भाई"		matInput></mat-form-field>
+									placeholder="गाडी भाई" matInput></mat-form-field>
 							<div class="side-label">गाडी भाई</div>
 						</div>
 						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-								placeholder="इतर"		matInput></mat-form-field>
+									placeholder="इतर" matInput></mat-form-field>
 							<div class="side-label">इतर</div>
 						</div>
 						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-									placeholder="बटाव"		matInput></mat-form-field>
+									placeholder="बटाव" matInput></mat-form-field>
 							<div class="side-label">बटाव</div>
 						</div>
 					</div>
@@ -162,7 +207,7 @@
 						<div class="sidebar-total-label">Total</div>
 					</div>
 				</div>
-			</div>
+			</mat-card>
 		</div>
 
 		<div class="bottom-bar">

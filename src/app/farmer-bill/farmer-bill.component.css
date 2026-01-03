@@ -34,18 +34,22 @@
 .col.small { width:80px; }
 .col.btns { display:flex; gap:8px; align-items:center; }
 .small-input{ width:100%; padding:6px 8px; }
-.farmer-select { min-width:200px; background:#00ffff33; }
 /* .date mat-form-field { width: 180px; } */
 
 .content { display:flex; gap:12px; padding: 8px 16px; align-items:flex-start; }
-.table-area{ flex:1; background:#fff; border:1px solid #ccc; display:flex; flex-direction:column; min-height:320px; max-height:520px; }
-.sidebar{ width:220px; }
+.table-area{ flex: 0 0 80%; background:#fff; border:1px solid #ccc; display:flex; flex-direction:column; min-height:320px; max-height:520px; }
+.sidebar{ flex: 0 0 20%; width: auto; }
+
+/* If template uses <mat-card-content> instead of a .table-area wrapper, apply the same sizing */
+.content > mat-card-content { flex: 0 0 76%; display: block; }
+.content > mat-card-content .mat-table { width: 100%;;overflow-x: auto; }
 
 .table-header{ display:flex; background:#f5f5f5; color:#333; font-weight:600; border-bottom:1px solid #e6e6e6; }
 .table-header .cell{ padding:6px 8px; border-right:1px solid #ececec; }
 .table-header .small{ width:80px; }
 .table-body{ flex:1; min-height:200px; padding:12px; overflow:auto; }
 .no-rows{ color:#666; }
+.table-content{ width:100%; overflow-x: auto; }
 
 .table-footer{ display:flex; justify-content:space-between; align-items:center; background:#0b6b3a; color:#fff; padding:8px; }
 .footer-left{ padding-left:8px; }
@@ -54,11 +58,12 @@
 .entry-select{ padding:6px 8px; }
 .amount{ padding:6px 8px; background:#fff; color:#000; border-radius:4px; }
 
-.sidebar-box{ background:#fff; border:1px solid #e6e6e6; padding:8px; position:sticky; top:80px; }
+.sidebar-box{ background:#fff; border:1px solid #e6e6e6; padding:8px; /* make sidebar scrollable */ max-height: 50vh; overflow-y: auto; }
 .sidebar-title{ background:#f5f5f5; color:#333; padding:8px; text-align:center; font-weight:600; }
 .sidebar-list{ padding:8px; }
-.side-row{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.side-field{ width:100px; }
+.side-row{ display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+.side-field{ width:96px; }
+.side-field input.mat-input-element { padding:6px 8px; height:34px; box-sizing:border-box; }
 .side-label{ flex:1; text-align:left; padding-left:4px; }
 .sidebar-total{ font-weight:700; text-align:center; margin-top:8px; background:#f5f5f5; color:#333; padding:6px; }
 .sidebar-total-label{ text-align:center; color:#333; font-weight:600; }
@@ -91,10 +96,10 @@
 .entry-label{ font-weight:700; padding:6px 8px; }
 .entry-records{ padding:6px 8px; }
 .enter-btn{ background:#fff; color:#333; }
-.entry-controls{ display:flex; align-items:center; gap:8px; flex:1; }
-.entry-select{ width:120px; background:#fff; border-radius:4px; }
-.entry-field{ width:110px; background:#fff; }
-.entry-amount{ min-width:80px; text-align:center; background:#fff; color:#000; padding:6px 8px; border-radius:4px; }
+.entry-controls{ display:flex; align-items:center; gap:6px; flex:1; }
+.entry-select{ width:100px; background:#fff; border-radius:4px; }
+.entry-field{ width:90px; background:#fff; }
+.entry-amount{ min-width:60px; text-align:center; background:#fff; color:#000; padding:6px 8px; border-radius:4px; }
 .save-entry{ background:#1976d2; color:#fff; }
 
 /* reduce mat form field padding & input height inside this component */
@@ -105,6 +110,19 @@ input.mat-input-element { padding:6px 8px; font-size:13px; height:32px; } */
 
 @media (max-width: 900px){
 	.entry-controls{ flex-wrap:wrap; }
+}
+
+/* Hide native number input spinners but keep functionality (typing and keyboard arrows) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button,
+input.mat-input-element[type="number"]::-webkit-outer-spin-button,
+input.mat-input-element[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+} 
+/* Firefox */
+input[type="number"], input.mat-input-element[type="number"] {
+	-moz-appearance: textfield;
 }
  
   
