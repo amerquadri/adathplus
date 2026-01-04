@@ -129,7 +129,7 @@ export class CustomerPaymentComponent {
 
 
   viewCustomer(customer: CustomerPaymentInterface) {
-    debugger
+    //debugger
     this.customerPaymentService.getCustomerPaymentById(customer.companyId, TransactionType.Customer, customer.transactionId).subscribe({
       next: (response: any) => {
 

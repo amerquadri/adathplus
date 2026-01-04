@@ -5,7 +5,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NgIf } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { MatCardModule } from "@angular/material/card";   
+import { MatCardModule } from "@angular/material/card";
 
 
 @Component({
@@ -69,13 +69,18 @@ export class HeaderComponent {
     this.router.navigate(['/dashboard-page']);
   }
 
-   goToCustomerPayment() {
+  goToCustomerPayment() {
     this.router.navigate(['/customer-payment']);
   }
-  
+
   goToFarmerBill() {
     this.router.navigate(['/farmer-bill']);
   }
+
+  goToListOfValues() {
+    this.router.navigate(['/list-of-values']);
+  }
+
   logout() {
     // Clear session storage token/user and update UI
     console.log('Logout clicked');

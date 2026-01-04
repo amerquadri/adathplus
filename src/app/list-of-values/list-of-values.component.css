@@ -1,0 +1,36 @@
+/* Layout for form: place fields in a row with gaps and wrap on small screens */
+.lov-form {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-bottom: 16px;
+}
+
+/* Make material form fields flexible but with a sensible minimum width */
+mat-form-field.full-width {
+	flex: 1 1 220px;
+	min-width: 180px;
+}
+
+.buttons {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	margin-left: 8px;
+}
+
+.lov-table {
+	margin-top: 16px;
+}
+
+.full-width-table {
+	width: 100%;
+}
+
+.empty-note {
+	padding: 12px 0;
+	color: rgba(0,0,0,0.6);
+}
+
+ 

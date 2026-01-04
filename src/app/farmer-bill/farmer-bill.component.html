@@ -21,7 +21,7 @@
 				<div class="col btns">
 					<div class="button-group">
 						<button mat-raised-button color="primary">Edit</button>
-						<button mat-raised-button color="primary" (click)="GetNewComissionBillId()">View</button>
+						<button mat-raised-button color="primary" (click)="GetFarmerBill(_farmerBill.comissionBillId || 0)">View</button>
 					</div>
 				</div>
 
@@ -53,90 +53,96 @@
 		</div>
 
 		<div class="content">
+			<mat-card>
+				<mat-card class="table-content">
+					<section class="example-container mat-elevation-z8" tabindex="0">
 
-			<mat-card class="table-content">
+						<table mat-table [dataSource]="dataSource" class="mat-elevation-z25">
+							<!-- View Column -->
+							<ng-container matColumnDef="view">
+								<th mat-header-cell *matHeaderCellDef> View </th>
 
-				<table mat-table [dataSource]="dataSource" class="mat-elevation-z25">
-					<!-- View Column -->
-					<ng-container matColumnDef="view">
-						<th mat-header-cell *matHeaderCellDef> View </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail">
-							<button mat-button color="warn" (click)="confirmDelete(_farmerBillDetail)">
-								<mat-icon>delete</mat-icon>
-							</button>
-						</td>
-					</ng-container>
-					<ng-container matColumnDef="farmerBillDetailId">
-						<th mat-header-cell *matHeaderCellDef> ID </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.farmerBillDetailId}} </td>
-					</ng-container>
+								<td mat-cell *matCellDef="let _farmerBillDetail">
+									<button mat-button color="warn" (click)="confirmDelete(_farmerBillDetail)">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+							</ng-container>
+							<ng-container matColumnDef="farmerBillDetailId">
+								<th mat-header-cell *matHeaderCellDef> ID </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail">
+									{{_farmerBillDetail.farmerBillDetailId}} </td>
+							</ng-container>
 
-					<ng-container matColumnDef="particularName">
-						<th mat-header-cell *matHeaderCellDef> Particular Name </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.particularName}} </td>
-					</ng-container>
+							<ng-container matColumnDef="particularName">
+								<th mat-header-cell *matHeaderCellDef> Particular Name </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.particularName}}
+								</td>
+							</ng-container>
 
-					<ng-container matColumnDef="unit">
-						<th mat-header-cell *matHeaderCellDef> Unit </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.unit}} </td>
-					</ng-container>
+							<ng-container matColumnDef="unit">
+								<th mat-header-cell *matHeaderCellDef> Unit </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.unit}} </td>
+							</ng-container>
 
-					<ng-container matColumnDef="qty">
-						<th mat-header-cell *matHeaderCellDef> Qty </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.qty}} </td>
-					</ng-container>
+							<ng-container matColumnDef="qty">
+								<th mat-header-cell *matHeaderCellDef> Qty </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.qty}} </td>
+							</ng-container>
 
-					<ng-container matColumnDef="rate">
-						<th mat-header-cell *matHeaderCellDef> Rate </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.rate}} </td>
-					</ng-container>
+							<ng-container matColumnDef="rate">
+								<th mat-header-cell *matHeaderCellDef> Rate </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.rate}} </td>
+							</ng-container>
 
-					<ng-container matColumnDef="weight">
-						<th mat-header-cell *matHeaderCellDef> Weight </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.weight}} </td>
-					</ng-container>
+							<ng-container matColumnDef="weight">
+								<th mat-header-cell *matHeaderCellDef> Weight </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.weight}} </td>
+							</ng-container>
 
-					<ng-container matColumnDef="comissionPercent">
-						<th mat-header-cell *matHeaderCellDef> Commission Percent </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionPercent}} </td>
-					</ng-container>
+							<ng-container matColumnDef="comissionPercent">
+								<th mat-header-cell *matHeaderCellDef> Commission Percent </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionPercent}}
+								</td>
+							</ng-container>
 
-					<ng-container matColumnDef="comissionAmount">
-						<th mat-header-cell *matHeaderCellDef> Commission Amount </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionAmount}} </td>
-					</ng-container>
-					<ng-container matColumnDef="amt">
-						<th mat-header-cell *matHeaderCellDef>   Amount </th>
-						<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.amt}} </td>
-					</ng-container>
+							<ng-container matColumnDef="comissionAmount">
+								<th mat-header-cell *matHeaderCellDef> Commission Amount </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionAmount}}
+								</td>
+							</ng-container>
+							<ng-container matColumnDef="amt">
+								<th mat-header-cell *matHeaderCellDef> Amount </th>
+								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.amt}} </td>
+							</ng-container>
 
-					<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-					<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-					<tr *ngIf="dataSource.data.length === 0">
-						<td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
-					</tr>
+							<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+							<!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+							<tr *ngIf="dataSource.data.length === 0">
+								<td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
+							</tr>
 
+							<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 
-				</table>
-				<mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
+							<tr mat-row *matRowDef="let _farmerBillDetail; columns: displayedColumns;"></tr>
+
+						</table>
+						<!-- <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
 					showFirstLastButtons>
-				</mat-paginator>
-
+				</mat-paginator> -->
+					</section>
+				</mat-card>
 
 				<mat-card>
-					
 					<div class="entry-controls">
 						<div class="entry-left">
-						<div class="entry-label">Total</div>
-						<div class="entry-records">Records : {{dataSource.data.length}}</div>
-					</div>
+							<div class="entry-label">Total</div>
+							<div class="entry-records">Records : {{dataSource.data.length}}</div>
+						</div>
 						<mat-form-field appearance="outline" class="entry-select">
-							<mat-select [(value)]="selectedParticular">
-								<mat-option value="Alu">Alu</mat-option>
-								<mat-option value="Matar">Matar</mat-option>
-								<mat-option value="Pyaz">Pyaz</mat-option>
-								<mat-option value="Adarak">Adarak</mat-option>
-								<mat-option value="Mirchi">Mirchi</mat-option>
+							<mat-select [(value)]="selectedParticular" placeholder="Select Particular">
+								<mat-option *ngFor="let p of particularOptions" [value]="p">{{ p }}</mat-option>
+								<mat-option *ngIf="particularOptions.length === 0" value="">(no particulars)</mat-option>
 							</mat-select>
 						</mat-form-field>
 						<mat-form-field appearance="outline" class="entry-field">
@@ -163,57 +169,45 @@
 					</div>
 				</mat-card>
 
-
 			</mat-card>
-
-			<!-- entry row: add new item -->
-
 
 			<mat-card class="sidebar">
 				<div class="sidebar-box">
-					<div class="sidebar-title">रुपय</div>
+					<div class="sidebar-title">रुपय
+						
+						<button mat-mini-fab color="primary" (click)="addSidebarItem()" aria-label="Add Customer"
+							matTooltip="Add New Customer">
+							<mat-icon>add</mat-icon>
+						</button>
+						
+					</div>
 					<div class="sidebar-list">
-						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input matInput
-									placeholder="कमीशन" value="0"></mat-form-field>
-							<div class="side-label">कमीशन</div>
-						</div>
-						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-									placeholder="उच्चल" matInput></mat-form-field>
-							<div class="side-label">उच्चल</div>
-						</div>
-						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-									placeholder="हमाली" matInput></mat-form-field>
-							<div class="side-label">हमाली</div>
-						</div>
-						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-									placeholder="वराई" matInput></mat-form-field>
-							<div class="side-label">वराई</div>
-						</div>
-						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-									placeholder="गाडी भाई" matInput></mat-form-field>
-							<div class="side-label">गाडी भाई</div>
-						</div>
-						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-									placeholder="इतर" matInput></mat-form-field>
-							<div class="side-label">इतर</div>
-						</div>
-						<div class="side-row"><mat-form-field appearance="outline" class="side-field"><input
-									placeholder="बटाव" matInput></mat-form-field>
-							<div class="side-label">बटाव</div>
+						<div class="side-row" *ngFor="let item of sidebarItems; let i = index">
+							<mat-form-field appearance="outline" class="side-field">
+								<input matInput placeholder="नाम" [(ngModel)]="sidebarItems[i].label">
+							</mat-form-field>
+							<mat-form-field appearance="outline" class="side-field amount-field">
+								<input matInput placeholder="रकम" type="number" [(ngModel)]="sidebarItems[i].value">
+							</mat-form-field>
+							<button mat-icon-button color="warn" aria-label="Remove" (click)="removeSidebarItem(i)">
+								<mat-icon>remove_circle</mat-icon>
+							</button>
 						</div>
 					</div>
+					 
 					<div class="sidebar-total-row">
-						<div class="sidebar-total">0.00</div>
+						<div class="sidebar-total">{{ sidebarTotal | number:'1.2-2' }}</div>
 						<div class="sidebar-total-label">Total</div>
 					</div>
 				</div>
 			</mat-card>
 		</div>
 
+
 		<div class="bottom-bar">
 			<div class="grand-total">Total:0</div>
 			<div class="actions">
-				<button mat-raised-button color="primary">New Bill</button>
+				<button mat-raised-button color="primary" (click)="GetNewComissionBillId()" >New Bill</button>
 				<button mat-raised-button color="accent">Save Bill</button>
 			</div>
 		</div>

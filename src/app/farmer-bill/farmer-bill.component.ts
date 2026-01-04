@@ -28,6 +28,8 @@ import { FarmerBillDetailModel, farmerBill } from './farmer-bill-interface';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.component';
+import { FarmerBillExpensesComponent } from './farmer-bill-expenses/farmer-bill-expenses.component';
+import { ListofValuesService } from '../list-of-values/listof-values.service';
 
 
 @Component({
@@ -49,7 +51,7 @@ import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.componen
     MatAutocompleteModule,
     MatTableModule,
     MatPaginatorModule,
-    MasterPageComponent
+    MasterPageComponent,
   ],
   templateUrl: './farmer-bill.component.html',
   styleUrls: ['./farmer-bill.component.css']
@@ -60,7 +62,7 @@ export class FarmerBillComponent implements OnInit {
     'farmerBillDetailId', 'particularName', 'qty', 'unit', 'rate', 'weight', 'comissionPercent', 'comissionAmount', 'amt','view'
   ];
 
-  constructor(private dialog: MatDialog, private FarmerBillService: FarmerBillService, private fb: FormBuilder, private snackBar: MatSnackBar) {
+  constructor(private dialog: MatDialog, private FarmerBillService: FarmerBillService, private fb: FormBuilder, private snackBar: MatSnackBar, private lovService: ListofValuesService) {
     this.farmerBillControls = this.fb.group({
       farmerBillId: [null],
       comissionBillId: [null],
@@ -82,6 +84,7 @@ export class FarmerBillComponent implements OnInit {
     this.loadVendorList();
     this.getVendorNameList();
     //this.GetNewComissionBillId();
+    this.loadListOfValues();
   }
 
   public _farmerBillDetail: FarmerBillDetailModel = {} as FarmerBillDetailModel;
@@ -97,12 +100,17 @@ export class FarmerBillComponent implements OnInit {
   
   selectedVendorId: any = null;
   selectedParticular: string = 'Alu';
+  particularOptions: string[] = [];
   dataSource = new MatTableDataSource<FarmerBillDetailModel>([]);
 
+  // sidebar dynamic items (label/value pairs)
+  public sidebarItems: Array<{ label: string; value: number }> = [
+    { label: 'कमीशन', value: 0 },
+    { label: 'कमीशन', value: 0 }
+  ];
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-
 
 
   fetchVendors(ComissionBillId: number, companyId?: number) {
@@ -156,6 +164,60 @@ export class FarmerBillComponent implements OnInit {
 
   ngAfterViewInit() { if (this.paginator) this.dataSource.paginator = this.paginator; }
 
+  private loadListOfValues() {
+    this.lovService.getListOfValues().subscribe({
+      next: (data: any[]) => {
+        const items = this.mapListValues(data);
+
+        // populate particulars for Farmer-Bill
+        this.populateParticularOptions(items, 'farmer-bill-particulars');
+
+        // populate sidebar items from same source
+        this.populateSidebarFromItems(items, 'farmer-bill');
+      },
+      error: (err: any) => console.error('Failed to load list of values', err)
+    });
+  }
+
+  /** Normalize incoming API items to a consistent shape */
+  private mapListValues(data: any[] = []) {
+    return (data || []).map(d => {
+      const src = d || {};
+      return {
+        ValuesId: src.ValuesId ?? src.valuesId ?? 0,
+        Form: src.Form ?? src.form ?? '',
+        Name: src.Name ?? src.name ?? '',
+        Values: src.Values ?? src.values ?? null,
+        Details: src.Details ?? src.details ?? null
+      };
+    });
+  }
+
+  /** Populate `particularOptions` filtered by `formFilter` (case-insensitive) */
+  private populateParticularOptions(items: Array<any>, formFilter: string) {
+    this.particularOptions = (items || [])
+      .filter(it => (it.Form || '').toString().toLowerCase() === (formFilter || '').toString().toLowerCase())
+      .map(it => (it.Name || '').toString().trim())
+      .filter((v: string, i: number, a: string[]) => v !== '' && a.indexOf(v) === i);
+
+      if (this.particularOptions.length > 0) {
+      this.selectedParticular = this.particularOptions[0];
+    }
+  }
+
+  /** Populate `sidebarItems` from items filtered by `formFilter`.
+   * Uses `Name` as label and numeric `Values` as value when possible.
+   */
+  private populateSidebarFromItems(items: Array<any>, formFilter: string) {
+    const filtered = (items || []).filter(it => (it.Form || '').toString().toLowerCase() === (formFilter || '').toString().toLowerCase());
+    if (!filtered || filtered.length === 0) return;
+
+    this.sidebarItems = filtered.map(it => ({
+      label: (it.Name || '').toString().trim() || 'नया',
+      value: Number(it.Values) || 0
+    }));
+  }
+
   GetFarmerBill(ComissionBillId: number) {
     //this.farmerBillControls.value.comissionBillId
     this.FarmerBillService.GetFarmerBill(ComissionBillId).subscribe({
@@ -196,9 +258,11 @@ export class FarmerBillComponent implements OnInit {
         // try common property names (server may return PascalCase or camelCase)
         // Prefer value from form if present (allow 0), otherwise check response fields (various casings)
         const commissionId = this._farmerBill.comissionBillId ?? item?.comissionBillId ?? item?.ComissionBillId ?? item?.commissionBillId ?? null;
+        this._farmerBill.comissionBillId = 0;
 
         console.log('CommissionBillId =', commissionId);
-        this.GetFarmerBill(commissionId);
+        this._farmerBill.comissionBillId = commissionId;
+        //this.GetFarmerBill(commissionId);
         // use commissionId as needed
       },
       error: err => console.error(err)
@@ -297,8 +361,57 @@ export class FarmerBillComponent implements OnInit {
   }
 
   private calculateGrandTotal() {
-    // TODO: implement grand total calculation
-    console.log('calculateGrandTotal called');
+    // compute and log grand total (sums sidebar items + detail amounts if needed)
+    console.log('calculateGrandTotal called - total:', this.sidebarTotal);
+  }
+
+  // Sidebar helpers
+  public addSidebarItem(): void {
+    this.sidebarItems.push({ label: 'नया', value: 0 });
+  }
+
+  public removeSidebarItem(index: number): void {
+    if (index >= 0 && index < this.sidebarItems.length) {
+      this.sidebarItems.splice(index, 1);
+    }
+  }
+
+  public get sidebarTotal(): number {
+    return this.sidebarItems.reduce((sum, it) => sum + (Number(it.value) || 0), 0);
+  }
+
+  onExpensesChanged(expenses: any[]) {
+    console.log('Expenses updated:', expenses);
+    // persist or attach to bill payload as needed
+  }
+
+  // Open expenses component in a dialog
+  public openExpensesDialog(): void {
+    const ref = this.dialog.open(FarmerBillExpensesComponent, {
+      width: '720px',
+      maxHeight: '80vh'
+    });
+
+    // Subscribe to events emitted by the dialog component
+    // (componentInstance is available for standalone components opened with MatDialog)
+    const instance: any = ref.componentInstance as any;
+    if (instance && instance.expensesChanged && instance.expensesChanged.subscribe) {
+      const sub = instance.expensesChanged.subscribe((expenses: any[]) => {
+        this.onExpensesChanged(expenses);
+      });
+      // also handle final result when dialog closes
+      ref.afterClosed().subscribe((result: any) => {
+        if (result) {
+          this.onExpensesChanged(result);
+        }
+        sub.unsubscribe();
+      });
+    } else {
+      // fallback: process dialog close result
+      ref.afterClosed().subscribe((result: any) => {
+        if (result) this.onExpensesChanged(result);
+      });
+    }
   }
 
 
@@ -307,6 +420,7 @@ export class FarmerBillComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value || '')),
     );
+    this.loadListOfValues();
   }
 
 

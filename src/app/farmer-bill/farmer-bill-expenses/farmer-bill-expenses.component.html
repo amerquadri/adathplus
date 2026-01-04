@@ -1,1 +1,62 @@
-<p>farmer-bill-expenses works!</p>
+<mat-card class="expenses-card">
+	<div class="dialog-header">
+		<div class="dialog-title">Farmer Bill Expenses</div>
+		<div class="dialog-actions">
+			<button mat-mini-fab color="primary" aria-label="Save" (click)="closeDialog()"><mat-icon>save</mat-icon></button>
+			<button mat-mini-fab color="warn" aria-label="Delete" (click)="deleteAll()"><mat-icon>delete</mat-icon></button>
+			<button mat-icon-button aria-label="Close" (click)="cancel()"><mat-icon>close</mat-icon></button>
+		</div>
+	</div>
+	<mat-card-content>
+		<div class="expense-inputs">
+			<mat-form-field appearance="outline">
+				<mat-label>Name</mat-label>
+				<input matInput [(ngModel)]="newExpense.name" placeholder="Expense name">
+			</mat-form-field>
+			<mat-form-field appearance="outline">
+				<mat-label>Details</mat-label>
+				<input matInput [(ngModel)]="newExpense.details" placeholder="Details">
+			</mat-form-field>
+			<button mat-flat-button color="primary" (click)="addExpense()">Add Expense</button>
+		</div>
+
+		<table mat-table [dataSource]="expenses" class="mat-elevation-z2 expenses-table">
+
+			<ng-container matColumnDef="chargesId">
+				<th mat-header-cell *matHeaderCellDef> ID </th>
+				<td mat-cell *matCellDef="let e"> {{e.chargesId}} </td>
+			</ng-container>
+
+			<ng-container matColumnDef="name">
+				<th mat-header-cell *matHeaderCellDef> Name </th>
+				<td mat-cell *matCellDef="let e"> {{e.name}} </td>
+			</ng-container>
+
+			<ng-container matColumnDef="details">
+				<th mat-header-cell *matHeaderCellDef> Details </th>
+				<td mat-cell *matCellDef="let e"> {{e.details}} </td>
+			</ng-container>
+
+			<ng-container matColumnDef="createdDate">
+				<th mat-header-cell *matHeaderCellDef> Created </th>
+				<td mat-cell *matCellDef="let e"> {{e.createdDate}} </td>
+			</ng-container>
+
+			<ng-container matColumnDef="actions">
+				<th mat-header-cell *matHeaderCellDef> </th>
+				<td mat-cell *matCellDef="let e; let i = index">
+					<button mat-icon-button color="warn" (click)="removeExpense(i)">
+						<mat-icon>delete</mat-icon>
+					</button>
+				</td>
+			</ng-container>
+
+			<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+		</table>
+	</mat-card-content>
+	<!-- <mat-card-actions style="display:flex; justify-content:flex-end; gap:8px; padding:12px;">
+		<button mat-stroked-button color="primary" (click)="closeDialog()">Done</button>
+		<button mat-button color="warn" (click)="cancel()">Cancel</button>
+	</mat-card-actions> -->
+</mat-card>
