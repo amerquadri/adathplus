@@ -337,7 +337,7 @@ export class FarmerBillComponent implements OnInit {
      this._farmerBill.isActive = true;
 
     console.log('Calling InsertFarmerBillDetails with', this._farmerBill, this._farmerBillDetail);
-    this.FarmerBillService.InsertFarmerBillDetails(this._farmerBill, this._farmerBillDetail).subscribe({
+    this.FarmerBillService.InsertFarmerBillDetails(this._farmerBill, this._farmerBillDetail, this.sidebarItems).subscribe({
       next: (response: number) => {
         console.log('Farmer Bill Detail inserted:', response);
           this.snackBar.open('Saved Successfully!', 'Close', { duration: 3000 , horizontalPosition: this.horizontalPosition,
@@ -354,6 +354,68 @@ export class FarmerBillComponent implements OnInit {
       }
     });
   }
+
+
+  insertFarmerBill() {
+
+    const _farmerBillControls: farmerBill = this._farmerBill;
+    if (!this._farmerBill) {
+      this.snackBar.open('No farmer bill to insert', 'Close', { duration: 3000 });
+      return;
+    }
+
+    {
+      this._farmerBill.vendorId = this.selectedVendorId;
+      // read BillDate from form input with id 'BillDate' (if present)
+      const billDateEl = document.getElementById('billDate') as HTMLInputElement | null;
+      if (billDateEl && billDateEl.value) {
+        // convert input string to Date to match model type
+        const parsedDate = new Date(billDateEl.value);
+        this._farmerBill.billDate = isNaN(parsedDate.getTime()) ? new Date(billDateEl.value) : parsedDate;
+      }
+
+      // this._farmerBill.farmerBillId = _farmerBillControls.farmerBillId;//-----------------------
+      // read existing FarmerBillId from form input with id 'FarmerBillId' (if present)
+      const farmerBillIdEl = document.getElementById('farmerBillId') as HTMLInputElement | null;
+      if (farmerBillIdEl && farmerBillIdEl.value) {
+        // this._farmerBill.farmerBillId = Number(farmerBillIdEl.value);
+      }
+
+      // read ComissionBillId from form input with id 'ComissionBillId' (if present)
+      const comissionEl = document.getElementById('comissionBillId') as HTMLInputElement | null;
+      if (comissionEl && comissionEl.value) {
+        const val = Number(comissionEl.value);
+        //this._farmerBill.comissionBillId = comissionEl.value ? val : 0;
+        // also assign to model so service receives it
+        // (this._farmerBill as any).comissionBillId = this.comissionBillId;
+      }
+    }
+    this._farmerBillDetail.ComissionBillId = this._farmerBill.comissionBillId || 0;
+    this._farmerBillDetail.particularName = this.selectedParticular;
+    this._farmerBillDetail.companyId = this._farmerBill.companyId;
+    //this._farmerBillDetail.farmerBillDetailId = 0; // new detail
+    this._farmerBillDetail.amt = this._farmerBillDetail.rate! * this._farmerBillDetail.qty!;
+     this._farmerBill.isActive = true;
+
+    console.log('Calling InsertFarmerBillDetails with', this._farmerBill, this._farmerBillDetail);
+    this.FarmerBillService.InsertFarmerBill(this._farmerBill, this._farmerBillDetail, this.sidebarItems).subscribe({
+      next: (response: number) => {
+        console.log('Farmer Bill Detail inserted:', response);
+          this.snackBar.open('Saved Successfully!', 'Close', { duration: 3000 , horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition});
+    
+        this.farmerBillId = response;
+        // previously: $('#FarmerBillId').val(data);
+        this.loadFarmerBillDetails(this._farmerBill.comissionBillId, this._farmerBill.companyId);
+        this.calculateGrandTotal();
+        this.GetFarmerBill(this._farmerBillDetail.ComissionBillId);
+      },
+      error: (err: any) => {
+        console.error('Error inserting farmer bill detail: ', err);
+      }
+    });
+  }
+
 
   private loadFarmerBillDetails(comissionBillId?: number, companyId?: number) {
     // TODO: implement actual loading of farmer bill details

@@ -173,10 +173,10 @@
 
 			<mat-card class="sidebar">
 				<div class="sidebar-box">
-					<div class="sidebar-title">रुपय
+					<div class="sidebar-title">Details
 						
 						<button mat-mini-fab color="primary" (click)="addSidebarItem()" aria-label="Add Customer"
-							matTooltip="Add New Customer">
+							matTooltip="Add New Customer" hidden>
 							<mat-icon>add</mat-icon>
 						</button>
 						
@@ -189,7 +189,7 @@
 							<mat-form-field appearance="outline" class="side-field amount-field">
 								<input matInput placeholder="रकम" type="number" [(ngModel)]="sidebarItems[i].value">
 							</mat-form-field>
-							<button mat-icon-button color="warn" aria-label="Remove" (click)="removeSidebarItem(i)">
+							<button mat-icon-button color="warn" aria-label="Remove" (click)="removeSidebarItem(i)" hidden>
 								<mat-icon>remove_circle</mat-icon>
 							</button>
 						</div>
@@ -208,7 +208,7 @@
 			<div class="grand-total">Total:0</div>
 			<div class="actions">
 				<button mat-raised-button color="primary" (click)="GetNewComissionBillId()" >New Bill</button>
-				<button mat-raised-button color="accent">Save Bill</button>
+				<button mat-raised-button color="accent" (click)="insertFarmerBill()">Save Bill</button>
 			</div>
 		</div>
 	</mat-card>

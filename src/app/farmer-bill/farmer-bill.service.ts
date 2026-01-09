@@ -46,10 +46,11 @@ export class FarmerBillService {
 
 
 
-  InsertFarmerBillDetails(FarmerBillModel: farmerBill, FarmerBillDetail: FarmerBillDetailModel): Observable<number> {
+  InsertFarmerBillDetails(FarmerBillModel: farmerBill, FarmerBillDetail: FarmerBillDetailModel, FarmerBillExpenses?: Array<{ label: string; value: number }>): Observable<number> {
    
     const url = `${localurl}/FarmerBill/InsertFarmerBillDetails`;
-    const companyId = this.loginService?.getCompanyId() ?? 10001;
+
+    const companyId = this.loginService?.getCompanyId() ?? 0;
     // ensure companyId is assigned on the model sent to the API
     FarmerBillModel.companyId = companyId;
     // Map camelCase client model to PascalCase server model expected by .NET
@@ -90,11 +91,20 @@ export class FarmerBillService {
     const serverFarmerBill = mapFarmerBillToServer(FarmerBillModel);
     const serverFarmerBillDetails = mapDetailToServer(FarmerBillDetail);
 
+    // Map expenses (client sidebar items) to server model FarmerBillExpensesModel
+    const serverExpenses = (FarmerBillExpenses || []).map(e => ({
+      CompanyId: FarmerBillModel.companyId ?? companyId,
+      FarmerBillId: FarmerBillModel.farmerBillId ?? 0,
+      ComissionBillId: FarmerBillModel.comissionBillId ?? 0,
+      Amt: Number(e.value) || 0,
+      Name: (e.label || '').toString()
+    }));
+
     // Build the FarmerBillRequestModel object as the request body so ASP.NET [FromBody]
     // parameter can bind directly to it. Property names must match the server model.
     const payload = {
       FarmerBill: serverFarmerBill,
-      FarmerBillExpenses: [],
+      FarmerBillExpenses: serverExpenses,
       FarmerBillDetail: serverFarmerBillDetails
     };
 
@@ -105,5 +115,67 @@ export class FarmerBillService {
   }
 
 
+  InsertFarmerBill(FarmerBillModel: farmerBill, FarmerBillDetail: FarmerBillDetailModel, FarmerBillExpenses?: Array<{ label: string; value: number }>): Observable<number> {
+   
+    const url = `${localurl}/FarmerBill/InsertFarmerBill`;
+
+    const companyId = this.loginService?.getCompanyId() ?? 0;
+    // ensure companyId is assigned on the model sent to the API
+    FarmerBillModel.companyId = companyId;
+    // Map camelCase client model to PascalCase server model expected by .NET
+    const mapFarmerBillToServer = (fb: farmerBill) => ({
+      FarmerBillId: fb?.farmerBillId ?? 0,
+      ComissionBillId: fb?.comissionBillId ?? 0,
+      VendorId: fb?.vendorId ?? 0,
+      VendorName: (fb as any)?.vendorName ?? '',
+      ParticularName: (fb as any)?.particularName ?? '',
+      CompanyId: fb?.companyId ?? companyId,
+      CreatedById: fb?.createdById ?? 0,
+      CreatedDate: fb?.createdDate ? (fb.createdDate instanceof Date ? fb.createdDate.toISOString() : fb.createdDate) : null,
+      UpdatedById: (fb as any)?.updatedById ?? 0,
+      UpdatedDate: (fb as any)?.updatedDate ? ((fb as any).updatedDate instanceof Date ? (fb as any).updatedDate.toISOString() : (fb as any).updatedDate) : null,
+      BillDate: fb?.billDate ? (fb.billDate instanceof Date ? fb.billDate.toISOString() : fb.billDate) : null,
+      IsActive: !!fb?.isActive
+    });
+
+    const mapDetailToServer = (d: FarmerBillDetailModel) => ({
+      FarmerBillDetailId: d?.farmerBillDetailId ?? 0,
+      ComissionBillId: d?.ComissionBillId ?? 0,
+      ParticularName: (d?.particularName ?? '').toString(),
+      Amt: Number(d?.amt ?? 0),
+      Qty: Number(d?.qty ?? 0),
+      Unit: (d?.unit ?? '').toString(),
+      Rate: Number(d?.rate ?? 0),
+      Weight: Number(d?.weight ?? 0),
+      ComissionPercent: Number(d?.comissionPercent ?? 0),
+      CompanyId: d?.companyId ?? companyId,
+
+    });
+
+    const serverFarmerBill = mapFarmerBillToServer(FarmerBillModel);
+    const serverFarmerBillDetails = mapDetailToServer(FarmerBillDetail);
+
+    // Map expenses (client sidebar items) to server model FarmerBillExpensesModel
+    const serverExpenses = (FarmerBillExpenses || []).map(e => ({
+      CompanyId: FarmerBillModel.companyId ?? companyId,
+      FarmerBillId: FarmerBillModel.farmerBillId ?? 0,
+      ComissionBillId: FarmerBillModel.comissionBillId ?? 0,
+      Amt: Number(e.value) || 0,
+      Name: (e.label || '').toString()
+    }));
+
+    // Build the FarmerBillRequestModel object as the request body so ASP.NET [FromBody]
+    // parameter can bind directly to it. Property names must match the server model.
+    const payload = {
+      FarmerBill: serverFarmerBill,
+      FarmerBillExpenses: serverExpenses,
+      //FarmerBillDetail: serverFarmerBillDetails
+    };
+
+    console.log('Inserting Farmer Bill with payload:', JSON.stringify(payload, null, 2));
+    // set explicit JSON content-type header and expect JSON response
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json;charset=utf-8' });
+    return this.http.post<number>(url, payload, { headers, responseType: 'json' as const });
+  }
 
 }
