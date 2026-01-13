@@ -1,87 +1,84 @@
-
 <app-master-page>
 
-<div class="lov-container">
-	<form [formGroup]="form" (ngSubmit)="addOrUpdate()" class="lov-form">
-        
-		<mat-form-field appearance="outline" >
-			<mat-label>Form</mat-label>
-			<input matInput formControlName="Form" placeholder="Enter form name" />
-			<mat-error *ngIf="form.get('Form')?.invalid && form.get('Form')?.touched">Required (max 100)</mat-error>
-		</mat-form-field>
+	<div class="lov-container">
+		<form [formGroup]="form" (ngSubmit)="addOrUpdate()" class="lov-form">
 
-		<mat-form-field appearance="outline"  >
-			<mat-label>Name</mat-label>
-			<input matInput formControlName="Name" placeholder="Enter name" />
-			<mat-error *ngIf="form.get('Name')?.invalid && form.get('Name')?.touched">Required (max 100)</mat-error>
-		</mat-form-field>
+			<mat-form-field appearance="outline">
+				<mat-label>Form</mat-label>
+				<input matInput formControlName="Form" placeholder="Enter form name" />
+				<mat-error *ngIf="form.get('Form')?.invalid && form.get('Form')?.touched">Required (max 100)</mat-error>
+			</mat-form-field>
 
-		<mat-form-field appearance="outline"  >
-			<mat-label>Values</mat-label>
-			<input matInput formControlName="Values"  placeholder="Values"/>
-		</mat-form-field>
+			<mat-form-field appearance="outline">
+				<mat-label>Name</mat-label>
+				<input matInput formControlName="Name" placeholder="Enter name" />
+				<mat-error *ngIf="form.get('Name')?.invalid && form.get('Name')?.touched">Required (max 100)</mat-error>
+			</mat-form-field>
 
-		<mat-form-field appearance="outline"  >
-			<mat-label>Details</mat-label>
-			<input matInput formControlName="Details"  placeholder="Details" />
-		</mat-form-field>
-			<button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">{{ editingId == null ? 'Add' : 'Update' }}</button>
+			<mat-form-field appearance="outline">
+				<mat-label>Values</mat-label>
+				<input matInput formControlName="Values" placeholder="Values" />
+			</mat-form-field>
+
+			<mat-form-field appearance="outline">
+				<mat-label>Details</mat-label>
+				<input matInput formControlName="Details" placeholder="Details" />
+			</mat-form-field>
+			<button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">{{ editingId == null ?
+				'Add' : 'Update' }}</button>
 			<button mat-button type="button" (click)="reset()">Reset</button>
 
-	</form>
+		</form>
 
-	<div class="lov-table">
-		<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width-table">
+		<div class="lov-table">
+			<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 full-width-table">
 
-			<ng-container matColumnDef="ValuesId">
-				<th mat-header-cell *matHeaderCellDef>ValuesId</th>
-				<td mat-cell *matCellDef="let item">{{ item.ValuesId }}</td>
-			</ng-container>
+				<ng-container matColumnDef="ValuesId">
+					<th mat-header-cell *matHeaderCellDef>ValuesId</th>
+					<td mat-cell *matCellDef="let item">{{ item.ValuesId }}</td>
+				</ng-container>
 
-			<ng-container matColumnDef="Form">
-				<th mat-header-cell *matHeaderCellDef>Form</th>
-				<td mat-cell *matCellDef="let item">{{ item.Form }}</td>
-			</ng-container>
+				<ng-container matColumnDef="Form">
+					<th mat-header-cell *matHeaderCellDef>Form</th>
+					<td mat-cell *matCellDef="let item">{{ item.Form }}</td>
+				</ng-container>
 
-			<ng-container matColumnDef="Name">
-				<th mat-header-cell *matHeaderCellDef>Name</th>
-				<td mat-cell *matCellDef="let item">{{ item.Name }}</td>
-			</ng-container>
+				<ng-container matColumnDef="Name">
+					<th mat-header-cell *matHeaderCellDef>Name</th>
+					<td mat-cell *matCellDef="let item">{{ item.Name }}</td>
+				</ng-container>
 
-			<ng-container matColumnDef="Values">
-				<th mat-header-cell *matHeaderCellDef>Values</th>
-				<td mat-cell *matCellDef="let item">{{ item.Values }}</td>
-			</ng-container>
+				<ng-container matColumnDef="Values">
+					<th mat-header-cell *matHeaderCellDef>Values</th>
+					<td mat-cell *matCellDef="let item">{{ item.Values }}</td>
+				</ng-container>
 
-			<ng-container matColumnDef="Details">
-				<th mat-header-cell *matHeaderCellDef>Details</th>
-				<td mat-cell *matCellDef="let item">{{ item.Details }}</td>
-			</ng-container>
+				<ng-container matColumnDef="Details">
+					<th mat-header-cell *matHeaderCellDef>Details</th>
+					<td mat-cell *matCellDef="let item">{{ item.Details }}</td>
+				</ng-container>
 
-			<ng-container matColumnDef="Actions">
-				<th mat-header-cell *matHeaderCellDef>Actions</th>
-				<td mat-cell *matCellDef="let item">
-					<button mat-icon-button color="primary" (click)="edit(item)">
-						<mat-icon>edit</mat-icon>
-					</button>
-					<button mat-icon-button color="warn" (click)="delete(item.ValuesId)">
-						<mat-icon>delete</mat-icon>
-					</button>
-				</td>
-			</ng-container>
+				<ng-container matColumnDef="Actions">
+					<th mat-header-cell *matHeaderCellDef>Actions</th>
+					<td mat-cell *matCellDef="let item">
+						<button mat-icon-button color="primary" (click)="edit(item)">
+							<mat-icon>edit</mat-icon>
+						</button>
+						<button mat-icon-button color="warn" (click)="delete(item.ValuesId)">
+							<mat-icon>delete</mat-icon>
+						</button>
+					</td>
+				</ng-container>
 
-			<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 			<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
 
 				<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 
-							<tr mat-row *matRowDef="let item; columns: displayedColumns;"></tr>
+				<tr mat-row *matRowDef="let item; columns: displayedColumns;"></tr>
 
-						
-
-		</table>
-		<div *ngIf="items.length === 0" class="empty-note">No values added yet.</div>
+			</table>
+			<div *ngIf="items.length === 0" class="empty-note">No values added yet.</div>
+		</div>
 	</div>
-</div>
 </app-master-page>
-

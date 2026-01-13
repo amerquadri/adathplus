@@ -115,7 +115,7 @@ export class CustomerPageComponent {
 
 fetchCustomers() {
   console.log('Fetching customers from API...');
-  console.log('API URL:', this.customerService['apiUrl']); // Log the API URL being used
+ // console.log('API URL:', this.customerService['apiUrl']); // Log the API URL being used
   
   this.customerService.getCustomers()
     .pipe(

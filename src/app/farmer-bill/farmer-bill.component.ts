@@ -24,7 +24,7 @@ import { MasterPageComponent } from "../master-page.component";
 
 import { VendorInterface } from './farmer-bill-interface';
 import { FarmerBillService } from './farmer-bill.service';
-import { FarmerBillDetailModel, farmerBill } from './farmer-bill-interface';
+import { FarmerBillDetailModel, farmerBill, FarmerBillExpensesModel } from './farmer-bill-interface';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.component';
@@ -58,8 +58,8 @@ import { ListofValuesService } from '../list-of-values/listof-values.service';
 })
 export class FarmerBillComponent implements OnInit {
   farmerBillControls: FormGroup;
- displayedColumns: string[] = [
-    'farmerBillDetailId', 'particularName', 'qty', 'unit', 'rate', 'weight', 'comissionPercent', 'comissionAmount', 'amt','view'
+  displayedColumns: string[] = ['sr',
+     'particularName', 'qty', 'unit', 'rate', 'weight', 'comissionPercent', 'comissionAmount', 'amt', 'view'
   ];
 
   constructor(private dialog: MatDialog, private FarmerBillService: FarmerBillService, private fb: FormBuilder, private snackBar: MatSnackBar, private lovService: ListofValuesService) {
@@ -90,14 +90,14 @@ export class FarmerBillComponent implements OnInit {
   public _farmerBillDetail: FarmerBillDetailModel = {} as FarmerBillDetailModel;
   public _farmerBill: farmerBill = {} as farmerBill;
   public farmerBillId: number | null = null;
+  public _farmerBillExpensesModel: FarmerBillExpensesModel[] = [];
 
   public vendorList: VendorInterface[] = [];
-  //public comissionBillId: number | null = null;
   myControl = new FormControl('');
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
-   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   selectedVendorId: any = null;
   selectedParticular: string = 'Alu';
   particularOptions: string[] = [];
@@ -123,7 +123,7 @@ export class FarmerBillComponent implements OnInit {
         console.error('Fetch vendors failed:', err);
       }
     });
-  } 
+  }
 
 
   private blurActiveElement(): void {
@@ -136,27 +136,21 @@ export class FarmerBillComponent implements OnInit {
       // ignore
     }
   }
-  confirmDelete(_farmerBillDetailModel: FarmerBillDetailModel): void {
+  confirmDelete(____farmerBillDetailId: number): void {
     this.blurActiveElement();
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '350px',
       data: {
         title: 'Delete item ',
-        message: `Are you sure you want to delete - '${_farmerBillDetailModel.particularName}'?`
+        message: `Are you sure you want to delete ?`
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'confirm') {
-        // this.customerPaymentService
-        //   .deleteCustomerPayment(_farmerBillDetailModel.farmerBillDetailId, _farmerBillDetailModel.companyId)
-        //   .subscribe(() => {
-        //     //this.fetchCustomers();
-        //   this.GetNewComissionBillId() ;
-
-        //   });
-         //this.GetNewComissionBillId() ;
+        this.deleteFarmerBillDetail(____farmerBillDetailId || 0);
+        this.GetFarmerBill(this._farmerBill.comissionBillId || 0);
       }
     });
   }
@@ -173,7 +167,7 @@ export class FarmerBillComponent implements OnInit {
         this.populateParticularOptions(items, 'farmer-bill-particulars');
 
         // populate sidebar items from same source
-        this.populateSidebarFromItems(items, 'farmer-bill');
+        this.populateSidebarFromItems(items, 'farmer-bill', 'New-Bill');
       },
       error: (err: any) => console.error('Failed to load list of values', err)
     });
@@ -200,7 +194,7 @@ export class FarmerBillComponent implements OnInit {
       .map(it => (it.Name || '').toString().trim())
       .filter((v: string, i: number, a: string[]) => v !== '' && a.indexOf(v) === i);
 
-      if (this.particularOptions.length > 0) {
+    if (this.particularOptions.length > 0) {
       this.selectedParticular = this.particularOptions[0];
     }
   }
@@ -208,27 +202,45 @@ export class FarmerBillComponent implements OnInit {
   /** Populate `sidebarItems` from items filtered by `formFilter`.
    * Uses `Name` as label and numeric `Values` as value when possible.
    */
-  private populateSidebarFromItems(items: Array<any>, formFilter: string) {
-    const filtered = (items || []).filter(it => (it.Form || '').toString().toLowerCase() === (formFilter || '').toString().toLowerCase());
-    if (!filtered || filtered.length === 0) return;
+  private populateSidebarFromItems(items: Array<any>, formFilter: string, Type?: string) {
 
-    this.sidebarItems = filtered.map(it => ({
-      label: (it.Name || '').toString().trim() || 'नया',
-      value: Number(it.Values) || 0
-    }));
+    if (Type === 'Saved-Bill') {
+      this.sidebarItems = items.map(it => ({
+        label: (it.name || '').toString().trim() || 'Comission',
+        value: Number(it.amt) || 0
+      }));
+    }
+    else {
+      const filtered = (items || []).filter(it => (it.Form || '').toString().toLowerCase() === (formFilter || '').toString().toLowerCase());
+      if (!filtered || filtered.length === 0) return;
+
+      this.sidebarItems = filtered.map(it => ({
+        label: (it.Name || '').toString().trim() || 'नया',
+        value: Number(it.Values) || 0
+      }));
+
+    }
   }
 
   GetFarmerBill(ComissionBillId: number) {
-    //this.farmerBillControls.value.comissionBillId
     this.FarmerBillService.GetFarmerBill(ComissionBillId).subscribe({
       next: (response: any[]) => {
         // console.log('Farmer Bill response:', response);
-        //if (response && response.length > 0) 
         {
+          // this.loadListOfValues()
           const item = Array.isArray(response) ? response[0] : response;
-          const farmerBillId = item.farmerBill.farmerBillId;
+          if (item.farmerBillExpenses.length > 0) {
+            this.populateSidebarFromItems(item.farmerBillExpenses, 'farmer-bill', 'Saved-Bill');
+          } else {
+            this.populateSidebarFromItems(item.farmerBillExpenses, 'farmer-bill', 'New-Bill');
+          }
+
+          const farmerBillId = item.farmerBill.farmerBillId ?? null;
+
           this._farmerBill.farmerBillId = farmerBillId;
           this._farmerBill.vendorId = item.farmerBill.vendorId;
+          this._farmerBill.billDate = item.farmerBill.billDate;
+
           // set the vendor autocomplete input and selectedVendorId based on vendorId
           const foundVendor = this.vendorList.find(v => v.vendorId === this._farmerBill.vendorId);
           if (foundVendor) {
@@ -236,7 +248,6 @@ export class FarmerBillComponent implements OnInit {
             // update the autocomplete text to show the vendor name
             this.myControl.setValue((foundVendor.vendorName || '').trim());
           }
-          this._farmerBill.billDate = item.farmerBill.billDate  ;
           this.fetchVendors(ComissionBillId);
 
           console.log("GetFarmerBill - ", item);
@@ -251,19 +262,19 @@ export class FarmerBillComponent implements OnInit {
     this.FarmerBillService.GetNewComissionBillId().subscribe({
       next: (response: any) => {
         console.log('raw response', response);
-
         // normalize to a single item
         const item = Array.isArray(response) ? response[0] : response;
-
-        // try common property names (server may return PascalCase or camelCase)
-        // Prefer value from form if present (allow 0), otherwise check response fields (various casings)
-        const commissionId = this._farmerBill.comissionBillId ?? item?.comissionBillId ?? item?.ComissionBillId ?? item?.commissionBillId ?? null;
-        this._farmerBill.comissionBillId = 0;
-
-        console.log('CommissionBillId =', commissionId);
+        this.loadListOfValues()
+        this._farmerBill.farmerBillId = 0;
+        this._farmerBillDetail = {} as FarmerBillDetailModel;
+        const commissionId =  item?.comissionBillId ;
         this._farmerBill.comissionBillId = commissionId;
-        //this.GetFarmerBill(commissionId);
-        // use commissionId as needed
+        this.dataSource.data =   [];
+        this._farmerBill.vendorId = 0;
+        this.myControl.setValue('');
+        this.selectedParticular = 'Alu';
+       // this.populateSidebarFromItems([], 'farmer-bill', 'New-Bill');
+       // console.log("New ComissionBillId - ", commissionId);
       },
       error: err => console.error(err)
     });
@@ -279,7 +290,7 @@ export class FarmerBillComponent implements OnInit {
     });
   }
 
-    
+
   getVendorNameList() {
     this.FarmerBillService.getVendors().subscribe({
       next: (response: VendorInterface[]) => {
@@ -293,6 +304,47 @@ export class FarmerBillComponent implements OnInit {
     });
   }
 
+  /** Return true when all entry inputs are filled and valid */
+  public isEntryValid(): boolean {
+    const d = this._farmerBillDetail || ({} as FarmerBillDetailModel);
+    const hasParticular = (this.selectedParticular || '').toString().trim().length > 0;
+    const _date = this._farmerBill.billDate;
+    const qty = Number(d.qty);
+    const rate = Number(d.rate);
+    const weight = Number(d.weight);
+    const unit = (d.unit || '').toString().trim().length > 0;
+    const comPercent = d.comissionPercent !== null && d.comissionPercent !== undefined  ? Number(d.comissionPercent) : NaN;
+
+    if (!hasParticular) return false;
+    if (!unit) return false;
+    if (!comPercent) return false; // allow 0 if explicitly provided
+    if (isNaN(qty) || qty <= 0) return false;
+    if (isNaN(rate) || rate <= 0) return false;
+    if (isNaN(weight)) return false;
+    if(!_date || !(_date instanceof Date) || isNaN(_date.getTime())) return false;
+    return true;
+  }
+
+  deleteFarmerBillDetail(farmerBillDetailId: number) {
+    this.FarmerBillService.delete(farmerBillDetailId).subscribe({
+      next: (response: any) => {  
+        console.log('Farmer Bill Detail deleted:', response);
+        this.snackBar.open('Deleted Successfully!', 'Close', {
+          duration: 3000, horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition
+        });
+      },
+      error: err => {
+        console.error('Error deleting farmer bill detail: ', err);
+         this.snackBar.open('Error Deleting '+err, 'Close', {
+          duration: 3000, horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition
+        });
+      }
+    });
+  }
+
+
   insertFarmerBillDetails() {
 
     const _farmerBillControls: farmerBill = this._farmerBill;
@@ -301,8 +353,6 @@ export class FarmerBillComponent implements OnInit {
       return;
     }
 
-    // if vendor id not set on model, take selectedVendorId
-    //if (this._farmerBill.vendorId && this.selectedVendorId) 
     {
       this._farmerBill.vendorId = this.selectedVendorId;
       // read BillDate from form input with id 'BillDate' (if present)
@@ -334,15 +384,17 @@ export class FarmerBillComponent implements OnInit {
     this._farmerBillDetail.companyId = this._farmerBill.companyId;
     //this._farmerBillDetail.farmerBillDetailId = 0; // new detail
     this._farmerBillDetail.amt = this._farmerBillDetail.rate! * this._farmerBillDetail.qty!;
-     this._farmerBill.isActive = true;
+    this._farmerBill.isActive = true;
 
     console.log('Calling InsertFarmerBillDetails with', this._farmerBill, this._farmerBillDetail);
     this.FarmerBillService.InsertFarmerBillDetails(this._farmerBill, this._farmerBillDetail, this.sidebarItems).subscribe({
       next: (response: number) => {
         console.log('Farmer Bill Detail inserted:', response);
-          this.snackBar.open('Saved Successfully!', 'Close', { duration: 3000 , horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition});
-    
+        this.snackBar.open('Saved Successfully!', 'Close', {
+          duration: 3000, horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition
+        });
+
         this.farmerBillId = response;
         // previously: $('#FarmerBillId').val(data);
         this.loadFarmerBillDetails(this._farmerBill.comissionBillId, this._farmerBill.companyId);
@@ -395,15 +447,17 @@ export class FarmerBillComponent implements OnInit {
     this._farmerBillDetail.companyId = this._farmerBill.companyId;
     //this._farmerBillDetail.farmerBillDetailId = 0; // new detail
     this._farmerBillDetail.amt = this._farmerBillDetail.rate! * this._farmerBillDetail.qty!;
-     this._farmerBill.isActive = true;
+    this._farmerBill.isActive = true;
 
     console.log('Calling InsertFarmerBillDetails with', this._farmerBill, this._farmerBillDetail);
     this.FarmerBillService.InsertFarmerBill(this._farmerBill, this._farmerBillDetail, this.sidebarItems).subscribe({
       next: (response: number) => {
         console.log('Farmer Bill Detail inserted:', response);
-          this.snackBar.open('Saved Successfully!', 'Close', { duration: 3000 , horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition});
-    
+        this.snackBar.open('Saved Successfully!', 'Close', {
+          duration: 3000, horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition
+        });
+
         this.farmerBillId = response;
         // previously: $('#FarmerBillId').val(data);
         this.loadFarmerBillDetails(this._farmerBill.comissionBillId, this._farmerBill.companyId);

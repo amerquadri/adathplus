@@ -161,7 +161,7 @@
 	border: 1px solid #e6e6e6;
 	padding: 8px;
 	/* make sidebar scrollable */
-	max-height: 50vh;
+	max-height: 64vh;
 	overflow-y: auto;
 }
 
@@ -347,10 +347,7 @@ input.mat-input-element[type="number"]::-webkit-inner-spin-button {
 
 /* Firefox */
 input[type="number"],
-input.mat-input-element[type="number"] {
-	-moz-appearance: textfield;
-}
-
+ 
 .example-container {
 	height: 400px;
 	overflow: auto;

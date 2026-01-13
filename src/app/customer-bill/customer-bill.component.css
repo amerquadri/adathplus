@@ -1,0 +1,153 @@
+/* Styles for Customer Bill page */
+.customer-bill-card {
+	padding: 16px;
+}
+
+.header-bar {
+	background: #0d6efd;
+	padding: 12px 16px;
+	border-radius: 4px;
+	margin-bottom: 16px;
+}
+
+.header-bar h2 {
+	margin: 0;
+	font-size: 1.6rem;
+}
+
+.filters {
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	margin-bottom: 16px;
+}
+
+.filter-item {
+	width: 220px;
+}
+
+.view-button {
+	align-self: flex-end;
+}
+ 
+
+.table-wrapper {
+	
+	padding: 8px;
+	
+	min-height: 320px;
+}
+
+.bill-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 8px;
+}
+
+.bill-table thead th {
+	 
+	padding: 8px;
+	text-align: left;
+}
+
+.bill-table tbody td {
+	padding: 8px;
+	 
+}
+
+.entry-row {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+ 
+	padding: 10px;
+	margin-top: 12px;
+	border-radius: 4px;
+}
+
+.entry-cell {
+	display: flex;
+	align-items: center;
+}
+
+.entry-cell.total-label {
+	font-weight: 700;
+	width: 90px;
+}
+
+.entry-cell.customer-select {
+	width: 220px;
+}
+
+.entry-cell.date-input {
+	width: 180px;
+}
+
+.entry-cell.qty,
+.entry-cell.unit,
+.entry-cell.weight,
+.entry-cell.rate,
+.entry-cell.com {
+	width: 110px;
+}
+
+.entry-cell.amt {
+	width: 80px;
+	text-align: right;
+}
+
+.entry-cell.save-btn button {
+	 
+	color: #000;
+}
+
+
+.footer {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin-top: 12px;
+}
+
+.footer .first-row {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.footer .second-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.grand-total {
+	font-size: 28px;
+	font-weight: 700;
+}
+
+.actions {
+	display: flex;
+	gap: 12px;
+}
+
+.save-large {
+	 
+	color: #000;
+}
+
+.new-large {
+	background: #0d6efd;
+	 
+}
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+	.filters { gap: 8px; }
+	.filter-item { width: 100%; }
+	.entry-row { flex-direction: column; align-items: stretch; }
+	.entry-cell { width: 100%; }
+}
+

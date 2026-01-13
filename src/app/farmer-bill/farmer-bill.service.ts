@@ -45,7 +45,6 @@ export class FarmerBillService {
 
 
 
-
   InsertFarmerBillDetails(FarmerBillModel: farmerBill, FarmerBillDetail: FarmerBillDetailModel, FarmerBillExpenses?: Array<{ label: string; value: number }>): Observable<number> {
    
     const url = `${localurl}/FarmerBill/InsertFarmerBillDetails`;
@@ -177,5 +176,12 @@ export class FarmerBillService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json;charset=utf-8' });
     return this.http.post<number>(url, payload, { headers, responseType: 'json' as const });
   }
+
+  
+  delete(farmerBillDetailId: number): Observable<any> {
+    const url = `${localurl}/FarmerBill/DeleteFarmerBillDetails?farmerBillDetailId=${farmerBillDetailId}`;
+    return this.http.delete<any>(url, {});
+  }
+
 
 }

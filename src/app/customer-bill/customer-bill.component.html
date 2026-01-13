@@ -1,0 +1,161 @@
+<app-master-page>
+
+    <mat-card class="customer-bill-card">
+        <div class="header-bar">
+            <h2>Customer Bill</h2>
+        </div>
+
+        <div class="filters">
+            <div class="filter-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>Select Date</mat-label>
+                    <mat-select placeholder="Nothing selected">
+                        <mat-option value="">Nothing selected</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="filter-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>Select Farmer</mat-label>
+                    <mat-select placeholder="Nothing selected">
+                        <mat-option value="">Nothing selected</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="filter-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>Select Item</mat-label>
+                    <mat-select placeholder="Nothing selected">
+                        <mat-option value="">Nothing selected</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="filter-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>Select BillNo</mat-label>
+                    <mat-select placeholder="Nothing selected">
+                        <mat-option value="">Nothing selected</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="filter-item view-button">
+                <button mat-flat-button color="accent" class="view-btn">View</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="bill-table">
+                <thead>
+                    <tr>
+                        <th>Bill No</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Qty</th>
+                        <th>Unit</th>
+                        <th>Weight</th>
+                        <th>Rate</th>
+                        <th>Com %</th>
+                        <th>Amt</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- data rows will be rendered here via component's dataSource in TS code -->
+                    <tr class="empty-row">
+                        <td colspan="10"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- entry row -->
+
+        </div>
+
+        <div class="footer">
+            <div class="first-row">
+                <div class="entry-cell customer-select">
+                    <mat-form-field appearance="outline">
+						<mat-label>Select Customer</mat-label>
+						<input type="text" name="customerId" placeholder="Pick one" aria-label="Number" matInput
+							[formControl]="myControl" [matAutocomplete]="auto" >
+						<mat-autocomplete #auto="matAutocomplete"
+							(optionSelected)="onCustomerSelected($event.option.value)">
+							<mat-option *ngFor="let option of (filteredOptions | async)" [value]="option">
+                                {{ option	}}</mat-option>
+						</mat-autocomplete>
+					</mat-form-field>
+                </div>
+                <div class="entry-cell date-input">
+                    <mat-form-field appearance="outline">
+                        <input matInput [matDatepicker]="entryDatePicker" placeholder="Select Date">
+                        <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
+                        <mat-datepicker #entryDatePicker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="entry-cell qty">
+                    <mat-form-field appearance="outline" class="entry-field">
+                        <input matInput placeholder="Qty" type="number" required />
+                    </mat-form-field>
+                </div>
+                <div class="entry-cell unit">
+                    <mat-form-field appearance="outline" class="entry-field">
+                        <input matInput placeholder="Enter Unit" required />
+                    </mat-form-field>
+                </div>
+                <div class="entry-cell weight">
+                    <mat-form-field appearance="outline" class="entry-field">
+                        <input matInput placeholder="Weight" type="number" required />
+                    </mat-form-field>
+                </div>
+                <div class="entry-cell rate">
+                    <mat-form-field appearance="outline" class="entry-field">
+                        <input matInput placeholder="Enter Rate" required />
+                    </mat-form-field>
+                </div>
+                <div class="entry-cell com">
+                    <mat-form-field appearance="outline" class="entry-field">
+                        <input matInput placeholder="Com %" type="number" required />
+                    </mat-form-field>
+                </div>
+                <div class="entry-cell amt">
+                    <mat-form-field appearance="outline" class="entry-field">
+                        <input matInput placeholder="Amount" readonly="true" disabled />
+                    </mat-form-field>
+                </div>
+
+                <div class="entry-cell save-btn">
+                    <button mat-mini-fab color="primary">
+                        <mat-icon>save</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="first-row">
+
+                <div class="entry-cell com">
+                    <mat-form-field appearance="outline" class="entry-field">
+                        <input matInput placeholder="Market Fee" readonly="true" type="number" disabled />
+                    </mat-form-field>
+                </div>
+                <div class="entry-cell amt">
+                    <mat-form-field appearance="outline" class="entry-field">
+                        <input matInput placeholder="Com Amt" readonly="true" disabled />
+                    </mat-form-field>
+
+                </div>
+
+            </div>
+            <div class="second-row">
+                <div class="grand-total">Total: <span class="total-value">12345.66</span></div>
+                <div class="actions">
+                    <button mat-flat-button color="primary" class="save-large">Save</button>
+                    <button mat-flat-button color="accent" class="new-large">New</button>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+
+</app-master-page>

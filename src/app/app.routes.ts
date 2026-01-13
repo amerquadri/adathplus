@@ -13,6 +13,7 @@ import { VendorPaymentComponent } from './vendor-payment/vendor-payment.componen
 import { CustomerPaymentComponent } from './customer-payment/customer-payment.component';
 import { FarmerBillComponent } from './farmer-bill/farmer-bill.component';
 import { ListOfValuesComponent } from './list-of-values/list-of-values.component';
+import { CustomerBillComponent } from './customer-bill/customer-bill.component';
 
 
 export const routes: Routes = [
@@ -75,5 +76,11 @@ export const routes: Routes = [
 		path:'list-of-values',
 		component: ListOfValuesComponent,
 		data: { breadcrumb:'Master / List of Values'}
+	},
+	{
+		path:'customer-bill',
+		component: CustomerBillComponent,
+		data: { breadcrumb:'Master / Customer Bill'}
 	}
+
 ];

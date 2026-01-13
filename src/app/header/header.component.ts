@@ -81,6 +81,10 @@ export class HeaderComponent {
     this.router.navigate(['/list-of-values']);
   }
 
+  goToCustomerBill() {
+    this.router.navigate(['/customer-bill']);
+  }
+
   logout() {
     // Clear session storage token/user and update UI
     console.log('Logout clicked');
