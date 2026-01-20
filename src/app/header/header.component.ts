@@ -19,7 +19,8 @@ export class HeaderComponent {
   public isSignedIn: boolean = false;
   public userName: string | null = null;
   public isScaled80: boolean = false;
-
+  public formname: string = 'header-form';
+  
   constructor(private router: Router) {
     this.loadAuthState();
     // Refresh auth state on route changes (useful after login redirects)

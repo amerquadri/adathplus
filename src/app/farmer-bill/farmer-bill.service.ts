@@ -184,4 +184,38 @@ export class FarmerBillService {
   }
 
 
+ 
+  getFarmerBillDateList(FarmerBillModel: farmerBill): Observable<any[]> {
+    const companyId = this.loginService?.getCompanyId() ?? 0;
+
+     FarmerBillModel.companyId = companyId;
+    // Map camelCase client model to PascalCase server model expected by .NET
+    const mapFarmerBillToServer = (fb: farmerBill) => ({
+      FarmerBillId: fb?.farmerBillId ?? 0,
+      ComissionBillId: fb?.comissionBillId ?? 0,
+      VendorId: fb?.vendorId ?? 0,
+      VendorName: (fb as any)?.vendorName ?? '',
+      ParticularName: (fb as any)?.particularName ?? '',
+      CompanyId:   companyId,
+      CreatedById: fb?.createdById ?? 0,
+      CreatedDate: fb?.createdDate ? (fb.createdDate instanceof Date ? fb.createdDate.toISOString() : fb.createdDate) : null,
+      UpdatedById: (fb as any)?.updatedById ?? 0,
+      UpdatedDate: (fb as any)?.updatedDate ? ((fb as any).updatedDate instanceof Date ? (fb as any).updatedDate.toISOString() : (fb as any).updatedDate) : null,
+      BillDate: fb?.billDate ? (fb.billDate instanceof Date ? fb.billDate.toISOString() : fb.billDate) : null,
+      IsActive: !!fb?.isActive
+    });
+
+
+    const apiUrl = `${localurl}/FarmerBill/GetDDLFarmerValues?FarmerBillModel=${ mapFarmerBillToServer }&CompanyId=${companyId}`;
+    try {
+      return this.http.post<any[]>(apiUrl,{});
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+      throw error;
+    }
+
+  }
+
+
+
 }

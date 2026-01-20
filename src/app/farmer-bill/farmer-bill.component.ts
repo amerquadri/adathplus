@@ -30,7 +30,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.component';
 import { FarmerBillExpensesComponent } from './farmer-bill-expenses/farmer-bill-expenses.component';
 import { ListofValuesService } from '../list-of-values/listof-values.service';
-
+import { MarathiName } from '../common-fields/marathi-name';
 
 @Component({
   selector: 'app-farmer-bill',
@@ -52,6 +52,7 @@ import { ListofValuesService } from '../list-of-values/listof-values.service';
     MatTableModule,
     MatPaginatorModule,
     MasterPageComponent,
+    
   ],
   templateUrl: './farmer-bill.component.html',
   styleUrls: ['./farmer-bill.component.css']
@@ -62,7 +63,7 @@ export class FarmerBillComponent implements OnInit {
      'particularName', 'qty', 'unit', 'rate', 'weight', 'comissionPercent', 'comissionAmount', 'amt', 'view'
   ];
 
-  constructor(private dialog: MatDialog, private FarmerBillService: FarmerBillService, private fb: FormBuilder, private snackBar: MatSnackBar, private lovService: ListofValuesService) {
+  constructor(private dialog: MatDialog, private FarmerBillService: FarmerBillService, private fb: FormBuilder, private snackBar: MatSnackBar, private lovService: ListofValuesService, private marathiName: MarathiName) {
     this.farmerBillControls = this.fb.group({
       farmerBillId: [null],
       comissionBillId: [null],
@@ -91,6 +92,7 @@ export class FarmerBillComponent implements OnInit {
   public _farmerBill: farmerBill = {} as farmerBill;
   public farmerBillId: number | null = null;
   public _farmerBillExpensesModel: FarmerBillExpensesModel[] = [];
+  public marathiNameObj: MarathiName = new MarathiName();
 
   public vendorList: VendorInterface[] = [];
   myControl = new FormControl('');

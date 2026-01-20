@@ -151,3 +151,19 @@
 	.entry-cell { width: 100%; }
 }
 
+.example-container {
+	height: 400px;
+	overflow: auto;
+	min-width: 1000px;
+}
+
+.mat-footer-cell {
+	font-weight: bold;
+	position: sticky;
+	bottom: 0;
+	background: #fff;
+	z-index: 10;
+	padding-top: 12px;
+	/* make footer font bold */
+	font-weight: 700;
+}

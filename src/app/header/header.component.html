@@ -2,7 +2,9 @@
   <div class=" box-shadow">
     <div class="header-content">
       <nav class="nav-buttons">
-        <button mat-button (click)="goToHome()"> Home</button>
+      
+      <h1>Adath Solution 1.0</h1>
+        <!-- <button mat-button (click)="goToHome()"> Dashboard</button> -->
         <button mat-flat-button [matMenuTriggerFor]="menu1">Master</button>
         <mat-menu #menu1="matMenu">
           <button mat-menu-item (click)="goToCustomer()">Customer Detail</button>
@@ -14,19 +16,27 @@
          <mat-menu #Bill="matMenu">
           <button mat-menu-item (click)="goToFarmerBill()">Farmer Bill</button>
           <button mat-menu-item (click)="goToCustomerBill()">Customer Bill</button>
-          <button mat-menu-item (click)="goToVendor()">Vendor</button>
-          <button mat-menu-item (click)="goToItem()">Item</button>
+           
         </mat-menu>
         <button mat-button [matMenuTriggerFor]="Payment">Payment</button>
          <mat-menu #Payment="matMenu">
           <button mat-menu-item (click)="goToVendorPayment()">Farmer Payment</button>
           <button mat-menu-item (click)="goToCustomerPayment()">Customer Payment</button>
         </mat-menu>
-        <button mat-button>Test 2</button>
+        <button mat-button [matMenuTriggerFor]="Reports">Reports</button>
+         <mat-menu #Reports="matMenu">
+          <button mat-menu-item (click)="goToVendorPayment()">Farmer Payment</button>
+          <button mat-menu-item (click)="goToCustomerPayment()">Customer Payment</button>
+        </mat-menu>
+
+        <button mat-button [matMenuTriggerFor]="Payment">Setting</button>
+         <mat-menu #Payment="matMenu">
+          <button mat-menu-item (click)="goToVendorPayment()">Farmer Payment</button>
+          <button mat-menu-item (click)="goToCustomerPayment()">Customer Payment</button>
+        </mat-menu>
       </nav>
 
-      <h1>My App Header</h1>
-
+ <h1> {{ formname }}</h1>
       <!-- Sign in / user menu -->
       <div class="auth-area">
         <ng-container *ngIf="!isSignedIn; else signedInTpl">

@@ -1,4 +1,3 @@
-import { get } from "https";
 
 export interface SaleAmt {
 
@@ -16,26 +15,25 @@ export interface SaleAmt {
 
 export interface SaleDetails {
 
-    SaleDetailsId: number;
-    CustomerBillId: number;
-    CustomerId: number;
-    CustomerName: string;
-    CustomerBillDate: Date;
-    ParticularName: string;
-    FarmerId: number;
-    Qty: number;
-    Unit: string;
-    Weight: number;
-    Rate: number;
-    Amt: number;
-    ComissionPercent: number;
-    TaxRate: number;
-    ComissionBillId: number;
-    CreatedById: number;
-    CreatedDate: Date;
-    CompanyId: number;
-    ComissionAmt: number;
-    TaxAmt: number;
-
+    saleDetailsId: number;
+    customerBillId: number;
+    customerId: number;
+    customerName: string;
+    customerBillDate: Date;
+    particularName: string;
+    farmerId: number;
+    qty: number;
+    unit: string;
+    weight: number;
+    rate: number;
+    amt: number;
+    comissionPercent: number;
+    taxRate: number;
+    comissionBillId: number;
+    createdById: number;
+    createdDate: Date;
+    companyId: number;
+    comissionAmt: number;
+    taxAmt: number;
 }
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
@@ -17,9 +17,11 @@ import { Subscription } from 'rxjs';
   templateUrl: './master-page.component.html',
   styleUrl: './master-page.component.css'
 })
-export class MasterPageComponent implements OnInit, OnDestroy {
+export class MasterPageComponent implements OnInit, OnDestroy, AfterViewInit {
   public isLoading = false;
   private routerSub: Subscription | null = null;
+  @ViewChild(HeaderComponent) headerComponent!: HeaderComponent;
+  public formname: string = 'master-page';
 
   constructor(private router: Router) {}
 
@@ -32,6 +34,13 @@ export class MasterPageComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  ngAfterViewInit(): void {
+    if (this.headerComponent) {
+      this.headerComponent.formname = this.formname;
+    }
+  }
+
 
   ngOnDestroy(): void {
     if (this.routerSub) this.routerSub.unsubscribe();

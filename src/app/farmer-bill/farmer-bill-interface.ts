@@ -13,6 +13,8 @@ export interface FarmerBillModel {
     BillDate?: Date;
     IsActive?: boolean;
 }
+
+
 export interface FarmerBillExpensesModel {
     CompanyId?: number;
     FarmerBillId?: number;

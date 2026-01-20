@@ -1,6 +1,6 @@
 <app-master-page>
 	<mat-card class="farmer-card">
-		<div class="title-bar">Farmer Bill</div>
+		<div class="title-bar">Farmer / {{ marathiNameObj.farmer }} Bill </div>
 
 		<div class="controls">
 			<div class="row">
@@ -161,8 +161,11 @@
 						</mat-form-field>
 						<div class="entry-amount">{{ (_farmerBillDetail.rate || 0) * (_farmerBillDetail.qty || 0) |
 							number:'1.2-2' }}</div>
-						<button mat-flat-button color="accent" class="save-entry"
-							(click)="insertFarmerBillDetails()" [disabled]="!isEntryValid()">Save</button>
+						<button mat-icon-button color="accent" class="save-entry"
+							(click)="insertFarmerBillDetails()" [disabled]="!isEntryValid()">
+							<mat-icon>save</mat-icon>
+						
+						</button>
 
 					</div>
 				</mat-card>
