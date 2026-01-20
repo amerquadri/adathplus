@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { RuntimeConfigService } from '../runtime-config.service';
 import { environment } from '../../environments/environment';
 
 export interface LoginResponseItem {
@@ -60,9 +61,11 @@ export interface LoginResult {
   providedIn: 'root'
 })
 export class LoginServiceService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private runtimeConfig: RuntimeConfigService) {
+    this.apiUrl = this.runtimeConfig.get('apiUrl', environment.apiUrl);
+  }
 
   /**
    * Login function that calls the API and stores token in session

@@ -1,28 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { RuntimeConfigService } from '../runtime-config.service';
 import { environment } from '../../environments/environment';
 import { LoginServiceService } from '../login-page/login-service.service';
 import { VendorPaymentInterface, VendorInterface } from '../vendor-payment/vendor-payment-interface';
-
-const localurl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class VendorPaymentServiceService {
+  private baseUrl: string = '';
 
-  constructor(private http: HttpClient, private loginService: LoginServiceService) { }
+  constructor(private http: HttpClient, private loginService: LoginServiceService, private runtimeConfig: RuntimeConfigService) {
+    this.baseUrl = this.runtimeConfig.get('apiUrl', environment.apiUrl);
+  }
  
   getVendorPayment(): Observable<VendorPaymentInterface[]> {
     const companyId = this.loginService?.getCompanyId() ?? 0;
-    const url = `${localurl}/AmtTransactions/GetAllTransactions?CompanyId=${companyId}&TypeId=`+ TransactionType.Farmer;
+    const url = `${this.baseUrl}/AmtTransactions/GetAllTransactions?CompanyId=${companyId}&TypeId=`+ TransactionType.Farmer;
     return this.http.get<VendorPaymentInterface[]>(url, {} );
   }
 
   getVendorPaymentById(CompanyId: number, TypeId: number, Id: number): Observable<VendorPaymentInterface[]> {
     const companyId = this.loginService?.getCompanyId() ?? 0;
-    const url = `${localurl}/AmtTransactions/GetTransactionById?CompanyId=${companyId}&TypeId=${TypeId}&Id=${Id}`;
+    const url = `${this.baseUrl}/AmtTransactions/GetTransactionById?CompanyId=${companyId}&TypeId=${TypeId}&Id=${Id}`;
     return this.http.get<VendorPaymentInterface[]>(url, {} );
   }
 
@@ -33,7 +35,7 @@ export class VendorPaymentServiceService {
   
 
 
-    const insertUrl = `${localurl}/AmtTransactions/SaveTransaction`;
+    const insertUrl = `${this.baseUrl}/AmtTransactions/SaveTransaction`;
     // Some APIs expect the transaction payload wrapped under a `transaction` key.
     // Wrap the vendor payment object to match that shape so validation keys like
     // 'transaction' and 'vendorName' are present server-side.
@@ -42,13 +44,13 @@ export class VendorPaymentServiceService {
   }
 
   deleteVendorPayment( transactionId :number, CompanyId:number): Observable<void> {
-    const deleteUrl = `${localurl}/AmtTransactions/DeleteTransaction?TransactionId=${transactionId}&CompanyId=${CompanyId}`;
+    const deleteUrl = `${this.baseUrl}/AmtTransactions/DeleteTransaction?TransactionId=${transactionId}&CompanyId=${CompanyId}`;
     return this.http.delete<void>(deleteUrl);
   }
 
   getVendorNameList(): Observable<VendorInterface[]> {
     const companyId = this.loginService?.getCompanyId() ?? 0;
-    const url = `${localurl}/Vendor/GetVendorList?CompanyId=${companyId}`;
+    const url = `${this.baseUrl}/Vendor/GetVendorList?CompanyId=${companyId}`;
     return this.http.post<VendorInterface[]>(url, {} );
   }
 

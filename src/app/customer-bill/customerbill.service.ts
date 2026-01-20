@@ -1,36 +1,36 @@
 import { Injectable } from '@angular/core';
+import { RuntimeConfigService } from '../runtime-config.service';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
 import { LoginServiceService } from '../login-page/login-service.service';
 import { Observable } from 'rxjs';
 import { SaleAmt, SaleDetails } from './customerbill';
 
-
-
-const localurl = environment.apiUrl;
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerbillService {
   public companyId: number | null = null;
   public createdById: number | null = null;
+  private baseUrl: string = '';
 
-  constructor(private http: HttpClient, private loginService: LoginServiceService) { 
+    constructor(private http: HttpClient, private loginService: LoginServiceService, private runtimeConfig: RuntimeConfigService) { 
      this.companyId = this.loginService?.getCompanyId() ?? 0;
      this.createdById = this.loginService?.getUserId() ?? 0;
+      this.baseUrl = this.runtimeConfig.get('apiUrl', environment.apiUrl);
 
   }
 
 
   GetCustomerBillDetails(CustomerBillId: number): Observable<any[]> {
-    const url = `${localurl}/CustomerBill/GetCustomerBillDetails?CustomerBillId=${CustomerBillId}`;
+    const url = `${this.baseUrl}/CustomerBill/GetCustomerBillDetails?CustomerBillId=${CustomerBillId}`;
     return this.http.get<any[]>(url);
   }
 
   
   getCustomersNameList(): Observable<any[]> {
     const companyId = this.loginService?.getCompanyId() ?? 0;
-    const apiUrl = `${localurl}/Customer/GetCustomerList?CompanyId=${companyId}`;
+    const apiUrl = `${this.baseUrl}/Customer/GetCustomerList?CompanyId=${companyId}`;
     try {
       return this.http.get<any[]>(apiUrl);
     } catch (error) {
@@ -42,12 +42,12 @@ export class CustomerbillService {
 
 
  DeleteCustomerBillDetails(saleDetailsId: number): Observable<any> {
-    const url = `${localurl}/CustomerBill/DeleteCustomerBillDetails?SaleDetailsId=${saleDetailsId}`;
+    const url = `${this.baseUrl}/CustomerBill/DeleteCustomerBillDetails?SaleDetailsId=${saleDetailsId}`;
     return this.http.delete<any>(url);
   }
 
   InsertCustomerBill(_saleDetails: SaleDetails, _saleAmt:  SaleAmt,_saledetailslist: SaleDetails[] ): Observable<any> {
-    const url = `${localurl}/CustomerBill/InsertCustomerBillDetails`;
+    const url = `${this.baseUrl}/CustomerBill/InsertCustomerBillDetails`;
 
   _saleAmt.CompanyId = this.companyId ?? 0;
   _saleDetails.companyId = this.companyId ?? 0;
@@ -110,7 +110,7 @@ const maptoServerSaleAmt = {
 
 
   InsertCustomerDetails(_saleDetails: SaleDetails  ): Observable<any> {
-    const url = `${localurl}/CustomerBill/InsertCustomerBillDetails`;
+    const url = `${this.baseUrl}/CustomerBill/InsertCustomerBillDetails`;
  
       const maptoserverSalesDetails =  {
         SaleDetailsId: _saleDetails.saleDetailsId,

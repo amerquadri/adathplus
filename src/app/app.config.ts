@@ -1,6 +1,7 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, APP_INITIALIZER } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { provideHttpClient } from '@angular/common/http';
+import { RuntimeConfigService } from './runtime-config.service';
 import { ErrorInterceptor } from './error.interceptor';
 import { provideRouter } from '@angular/router';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -16,6 +17,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(),
     provideNativeDateAdapter(),
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    // Load runtime config before app starts. Put a `config.json` at your server root (public/config.json -> /config.json)
+    { provide: APP_INITIALIZER, multi: true, useFactory: (rc: RuntimeConfigService) => () => rc.load(), deps: [RuntimeConfigService] }
   ]
 };

@@ -541,6 +541,136 @@ export class FarmerBillComponent implements OnInit {
     this.loadListOfValues();
   }
 
+  printFarmerBill() {
+    const rows = (this.dataSource && Array.isArray(this.dataSource.data)) ? this.dataSource.data : [];
+    const totalQty = rows.reduce((s: number, r: any) => s + (Number(r.qty) || 0), 0);
+    const totalWeight = rows.reduce((s: number, r: any) => s + (Number(r.weight) || 0), 0);
+    const totalAmt = rows.reduce((s: number, r: any) => s + (Number(r.amt) || 0), 0);
+
+    const head = `
+      <style>
+        body{font-family: Arial, Helvetica, sans-serif; margin:20px}
+        .bill-header{text-align:center;margin-bottom:12px}
+        .bill-header h1{margin:0;font-size:20px}
+        .bill-header p{margin:0;font-size:12px}
+        table{width:100%;border-collapse:collapse;margin-top:12px}
+        th,td{border:1px solid #ddd;padding:6px;font-size:12px}
+        th{background:#f5f5f5}
+        tfoot td{font-weight:700}
+      </style>`;
+
+    const rowsHtml = rows.map((r: any) => `
+      <tr>
+        <td>${r.particularName || ''}</td>
+        <td style="text-align:right">${Number(r.qty || 0)}</td>
+        <td>${r.unit || ''}</td>
+        <td style="text-align:right">${Number(r.weight || 0)}</td>
+        <td style="text-align:right">${Number(r.rate || 0)}</td>
+        <td style="text-align:right">${Number(r.comissionPercent || 0)}</td>
+        <td style="text-align:right">${Number(r.comissionAmount || 0)}</td>
+        <td style="text-align:right">${Number(r.amt || 0)}</td>
+      </tr>`).join('');
+
+    // include sidebar details
+    const detailsHtml = (this.sidebarItems || []).map(it => `
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <div style="background:#fafafa;border:1px solid #eee;padding:8px 10px;border-radius:6px;min-width:120px;font-weight:600">${(it.label||'').toString()}</div>
+        <div style="border:1px solid #eee;padding:8px 10px;border-radius:6px;min-width:100px;text-align:right">${Number(it.value||0)}</div>
+      </div>
+    `).join('');
+
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Farmer Bill</title>${head}</head><body>
+      <div class="bill-header">
+        <h1>Farmer Bill</h1>
+        <p>Bill No: ${this._farmerBill.comissionBillId || ''} | Date: ${this._farmerBill.billDate ? new Date(this._farmerBill.billDate).toLocaleDateString('en-GB') : ''}</p>
+      </div>
+      <div style="display:flex;gap:20px;align-items:flex-start">
+        <div style="flex:1;min-width:600px">
+          <table>
+            <thead>
+              <tr>
+                <th>Particular</th>
+                <th>Qty</th>
+                <th>Unit</th>
+                <th>Weight</th>
+                <th>Rate</th>
+                <th>Com %</th>
+                <th>Com Amt</th>
+                <th>Amt</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td>Total</td>
+                <td style="text-align:right">${totalQty}</td>
+                <td></td>
+                <td style="text-align:right">${totalWeight}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align:right">${totalAmt}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div style="width:260px">
+          <div style="font-weight:700;margin-bottom:8px;padding:6px 8px;background:#f5f5f5;border:1px solid #e6e6e6;text-align:center">Details</div>
+          ${detailsHtml}
+        </div>
+      </div>
+      <div style="margin-top:18px;font-size:13px">
+        <p>Prepared by: ____________________</p>
+        <p>Signature: ______________________</p>
+      </div>
+    </body></html>`;
+
+    const w = window.open('', '_blank', 'noopener');
+    // if (w) {
+    //   w.document.open();
+    //   w.document.write(html);
+    //   w.document.close();
+    //   setTimeout(() => { w.focus(); w.print(); }, 300);
+    // } else
+       {
+      // iframe fallback
+      try {
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        iframe.style.visibility = 'hidden';
+        document.body.appendChild(iframe);
+        const idoc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
+        if (idoc) {
+          idoc.open();
+          idoc.write(html);
+          idoc.close();
+        }
+        setTimeout(() => {
+          try {
+            const win = iframe.contentWindow as Window | null;
+            if (win) {
+              win.focus();
+              win.print();
+            }
+          } catch (e) {
+            console.error('Print fallback failed', e);
+          } finally {
+            setTimeout(() => { try { document.body.removeChild(iframe); } catch(_) {} }, 500);
+          }
+        }, 300);
+      } catch (ex) {
+        console.error('Unable to open print window and fallback failed', ex);
+      }
+    }
+  }
+
 
 
   private _filter(value: string): string[] {

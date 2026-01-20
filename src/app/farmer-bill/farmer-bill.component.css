@@ -165,6 +165,46 @@
 	overflow-y: auto;
 }
 
+.sidebar-details {
+	margin-top: 12px;
+	background: #fff;
+	border: 1px solid #e6e6e6;
+	padding: 8px;
+	max-height: 64vh;
+	overflow-y: auto;
+}
+
+.details-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 8px 4px;
+}
+
+.details-item {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.details-label {
+	background: #fafafa;
+	border: 1px solid #eee;
+	padding: 10px 12px;
+	border-radius: 6px;
+	min-width: 110px;
+	font-weight: 600;
+	text-align: left;
+}
+
+.details-value input.mat-input-element {
+	padding: 8px 10px;
+	height: 36px;
+	width: 120px;
+	box-sizing: border-box;
+	border-radius: 6px;
+}
+
 .sidebar-title {
 	background: #f5f5f5;
 	color: #333;

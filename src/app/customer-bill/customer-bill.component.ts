@@ -405,6 +405,128 @@ export class CustomerBillComponent implements AfterViewInit {
     });
   }
 
+  printCustomerBill() {
+    const rows = (this.dataSource && Array.isArray(this.dataSource.data)) ? this.dataSource.data : this.saleDetails || [];
+    const totalQty = this.getTotalQty();
+    const totalWeight = this.getTotalWeight();
+    const totalAmt = this.getTotalCost();
+
+    const head = `
+      <style>
+        body{font-family: Arial, Helvetica, sans-serif; margin:20px}
+        .bill-header{text-align:center;margin-bottom:12px}
+        .bill-header h1{margin:0;font-size:20px}
+        .bill-header p{margin:0;font-size:12px}
+        table{width:100%;border-collapse:collapse;margin-top:12px}
+        th,td{border:1px solid #ddd;padding:6px;font-size:12px}
+        th{background:#f5f5f5}
+        tfoot td{font-weight:700}
+        .bill-footer{margin-top:18px;font-size:13px}
+      </style>`;
+
+    const rowsHtml = rows.map(r => `
+      <tr>
+        <td>${r.customerName || ''}</td>
+        <td>${r.particularName || ''}</td>
+        <td>${r.customerBillDate ? new Date(r.customerBillDate).toLocaleDateString('en-GB') : ''}</td>
+        <td style="text-align:right">${Number(r.qty || 0)}</td>
+        <td>${r.unit || ''}</td>
+        <td style="text-align:right">${Number(r.weight || 0)}</td>
+        <td style="text-align:right">${Number(r.rate || 0)}</td>
+        <td style="text-align:right">${Number(r.comissionPercent || 0)}</td>
+        <td style="text-align:right">${Number(r.comissionAmt || 0)}</td>
+        <td style="text-align:right">${Number(r.taxAmt || 0)}</td>
+        <td style="text-align:right">${Number(r.amt || 0)}</td>
+      </tr>`).join('');
+
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Customer Bill</title>${head}</head><body>
+      <div class="bill-header">
+        <h1>Customer Bill</h1>
+        <p>Company / Address (replace with real header)</p>
+        <p>Date: ${new Date().toLocaleDateString('en-GB')}</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Particular</th>
+            <th>Bill Date</th>
+            <th>Qty</th>
+            <th>Unit</th>
+            <th>Weight</th>
+            <th>Rate</th>
+            <th>Commission %</th>
+            <th>Commission Amt</th>
+            <th>Tax Amt</th>
+            <th>Amt</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3">Total</td>
+            <td style="text-align:right">${totalQty}</td>
+            <td></td>
+            <td style="text-align:right">${totalWeight}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align:right">${totalAmt}</td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="bill-footer">
+        <p>Prepared by: ____________________</p>
+        <p>Signature: ______________________</p>
+      </div>
+    </body></html>`;
+
+    const w = window.open('', '_blank', 'noopener');
+    if (w) {
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+      setTimeout(() => { w.focus(); w.print(); }, 300);
+    } else {
+      // fallback: create hidden iframe, write content and print
+      try {
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        iframe.style.visibility = 'hidden';
+        document.body.appendChild(iframe);
+        const idoc = iframe.contentDocument || (iframe.contentWindow && iframe.contentWindow.document);
+        if (idoc) {
+          idoc.open();
+          idoc.write(html);
+          idoc.close();
+        }
+        setTimeout(() => {
+          try {
+            const win = iframe.contentWindow as Window | null;
+            if (win) {
+              win.focus();
+              win.print();
+            }
+          } catch (e) {
+            console.error('Print fallback failed', e);
+          } finally {
+            setTimeout(() => { try { document.body.removeChild(iframe); } catch(_) {} }, 500);
+          }
+        }, 300);
+      } catch (ex) {
+        console.error('Unable to open print window and fallback failed', ex);
+      }
+    }
+  }
+
   clearFooterForm() { 
     this.saleDetailsobj = {} as SaleDetails;
     this.selectedCustomerId = null;

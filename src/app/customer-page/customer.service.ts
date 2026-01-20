@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginServiceService } from '../login-page/login-service.service';
 
+import { RuntimeConfigService } from '../runtime-config.service';
 import { environment } from '../../environments/environment';
-const localurl = environment.apiUrl;
 
 export interface Customer {
   customerId: number;
@@ -27,12 +27,15 @@ export interface Customer {
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
+  private baseUrl: string = '';
 
-  constructor(private http: HttpClient, private loginService: LoginServiceService) { }
+  constructor(private http: HttpClient, private loginService: LoginServiceService, private runtimeConfig: RuntimeConfigService) {
+    this.baseUrl = this.runtimeConfig.get('apiUrl', environment.apiUrl);
+  }
 
   getCustomers(): Observable<Customer[]> {
     const companyId = this.loginService?.getCompanyId() ?? 10001;
-    const apiUrl = `${localurl}/Customer/GetCustomerList?CompanyId=${companyId}`;
+    const apiUrl = `${this.baseUrl}/Customer/GetCustomerList?CompanyId=${companyId}`;
     try {
       return this.http.get<Customer[]>(apiUrl);
     } catch (error) {
@@ -43,24 +46,24 @@ export class CustomerService {
   }
 
   getCustomerById(customerId: number): Observable<Customer> {
-    const url = `${localurl}/Customer/GetCustomerById?CustomerId=${customerId}`;
+    const url = `${this.baseUrl}/Customer/GetCustomerById?CustomerId=${customerId}`;
     return this.http.post<Customer>(url, {});
   }
 
   insertCustomer(customer: Customer): Observable<Customer> {
 
-    const insertUrl = `${localurl}/Customer/InsertCustomer`;
+    const insertUrl = `${this.baseUrl}/Customer/InsertCustomer`;
 
     return this.http.post<Customer>(insertUrl, customer);
   }
 
   updateCustomer(customer: Customer): Observable<Customer> {
-    const UpdateUrl = `${localurl}/Customer/SaveCustomer`;
+    const UpdateUrl = `${this.baseUrl}/Customer/SaveCustomer`;
 
     return this.http.put<Customer>(UpdateUrl, customer);
   }
   deleteCustomer(customerId: number): Observable<void> {
-    const deleteUrl = `${localurl}/Customer/DeleteCustomerById?UserId=${customerId}`;
+    const deleteUrl = `${this.baseUrl}/Customer/DeleteCustomerById?UserId=${customerId}`;
     return this.http.delete<void>(deleteUrl);
   }
 }

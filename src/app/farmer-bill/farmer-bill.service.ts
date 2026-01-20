@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RuntimeConfigService } from '../runtime-config.service';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginServiceService } from '../login-page/login-service.service';
@@ -6,18 +7,20 @@ import { VendorPaymentInterface, VendorInterface } from '../vendor-payment/vendo
 import { Observable } from 'rxjs';
 import { FarmerBillDetailModel, farmerBill } from './farmer-bill-interface';
 
-const localurl = environment.apiUrl;
 @Injectable({
   providedIn: 'root'
 })
 export class FarmerBillService {
+  private baseUrl: string = '';
 
-  constructor(private http: HttpClient, private loginService: LoginServiceService) { }
+  constructor(private http: HttpClient, private loginService: LoginServiceService, private runtimeConfig: RuntimeConfigService) { 
+    this.baseUrl = this.runtimeConfig.get('apiUrl', environment.apiUrl);
+  }
 
   private getListUrl(): string {
     // Try to read company id from login service (sessionStorage). Fallback to 10001 if missing.
     const companyId = this.loginService?.getCompanyId() ?? 10001;
-    return `${localurl}/Vendor/GetVendorList?CompanyId=${companyId}`;
+    return `${this.baseUrl}/Vendor/GetVendorList?CompanyId=${companyId}`;
   }
 
   getVendors(): Observable<VendorInterface[]> {
@@ -27,19 +30,19 @@ export class FarmerBillService {
 
   GetFarmerBill(ComissionBillId: number): Observable<any[]> {
     const companyId = this.loginService?.getCompanyId() ?? 10001;
-    const url = `${localurl}/FarmerBill/GetFarmerBill?ComissionBillId=${ComissionBillId}&CompanyId=${companyId}`;
+    const url = `${this.baseUrl}/FarmerBill/GetFarmerBill?ComissionBillId=${ComissionBillId}&CompanyId=${companyId}`;
     return this.http.get<any[]>(url);
   }
 
   GetFarmerBillDetails(ComissionBillId: number): Observable<any[]> {
     const companyId = this.loginService?.getCompanyId() ?? 10001;
-    const url = `${localurl}/FarmerBill/GetFarmerBillDetails?ComissionBillId=${ComissionBillId}&CompanyId=${companyId}`;
+    const url = `${this.baseUrl}/FarmerBill/GetFarmerBillDetails?ComissionBillId=${ComissionBillId}&CompanyId=${companyId}`;
     return this.http.get<any[]>(url);
   }
 
   GetNewComissionBillId(): Observable<any[]> {
     const companyId = this.loginService?.getCompanyId() ?? 10001;
-    const url = `${localurl}/FarmerBill/GetNewComissionBillId?CompanyId=${companyId}`;
+    const url = `${this.baseUrl}/FarmerBill/GetNewComissionBillId?CompanyId=${companyId}`;
     return this.http.get<any[]>(url);
   }
 
@@ -47,7 +50,7 @@ export class FarmerBillService {
 
   InsertFarmerBillDetails(FarmerBillModel: farmerBill, FarmerBillDetail: FarmerBillDetailModel, FarmerBillExpenses?: Array<{ label: string; value: number }>): Observable<number> {
    
-    const url = `${localurl}/FarmerBill/InsertFarmerBillDetails`;
+    const url = `${this.baseUrl}/FarmerBill/InsertFarmerBillDetails`;
 
     const companyId = this.loginService?.getCompanyId() ?? 0;
     // ensure companyId is assigned on the model sent to the API
@@ -116,7 +119,7 @@ export class FarmerBillService {
 
   InsertFarmerBill(FarmerBillModel: farmerBill, FarmerBillDetail: FarmerBillDetailModel, FarmerBillExpenses?: Array<{ label: string; value: number }>): Observable<number> {
    
-    const url = `${localurl}/FarmerBill/InsertFarmerBill`;
+    const url = `${this.baseUrl}/FarmerBill/InsertFarmerBill`;
 
     const companyId = this.loginService?.getCompanyId() ?? 0;
     // ensure companyId is assigned on the model sent to the API
@@ -179,7 +182,7 @@ export class FarmerBillService {
 
   
   delete(farmerBillDetailId: number): Observable<any> {
-    const url = `${localurl}/FarmerBill/DeleteFarmerBillDetails?farmerBillDetailId=${farmerBillDetailId}`;
+    const url = `${this.baseUrl}/FarmerBill/DeleteFarmerBillDetails?farmerBillDetailId=${farmerBillDetailId}`;
     return this.http.delete<any>(url, {});
   }
 
@@ -206,7 +209,7 @@ export class FarmerBillService {
     });
 
 
-    const apiUrl = `${localurl}/FarmerBill/GetDDLFarmerValues?FarmerBillModel=${ mapFarmerBillToServer }&CompanyId=${companyId}`;
+    const apiUrl = `${this.baseUrl}/FarmerBill/GetDDLFarmerValues?FarmerBillModel=${ mapFarmerBillToServer }&CompanyId=${companyId}`;
     try {
       return this.http.post<any[]>(apiUrl,{});
     } catch (error) {
