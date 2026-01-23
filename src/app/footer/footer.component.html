@@ -1,3 +1,9 @@
 <footer class="app-footer">
   <p>&copy; 2025 My App Footer</p>
+  <p>
+    Logged in as: {{ userInfo.userFullName || 'Not available' }} |
+    Company: {{ userInfo.companyName || 'Not available' }} |
+    Login Time : {{ userInfo.loginTime || 'Not available' | date:'short' }}
+
+  </p>
 </footer>

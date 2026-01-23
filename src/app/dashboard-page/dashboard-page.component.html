@@ -36,6 +36,10 @@
                   <strong>Login Time:</strong> 
                   <span>{{ userInfo.loginTime || 'Not available' }}</span>
                 </div>
+                  <div class="info-item">
+                  <strong>Company Name:</strong> 
+                  <span>{{ userInfo.companyName || 'Not available' }}</span>
+                </div>
                 <div class="info-item">
                   <strong>Auth Token:</strong> 
                   <span class="token-display">{{ userInfo.authToken ? (userInfo.authToken.length > 50 ? userInfo.authToken.substring(0, 50) + '...' : userInfo.authToken) : 'Not available' }}</span>

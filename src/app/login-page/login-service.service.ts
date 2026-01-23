@@ -66,13 +66,7 @@ export class LoginServiceService {
   constructor(private http: HttpClient, private runtimeConfig: RuntimeConfigService) {
     this.apiUrl = this.runtimeConfig.get('apiUrl', environment.apiUrl);
   }
-
-  /**
-   * Login function that calls the API and stores token in session
-   * @param username - User's username
-   * @param password - User's password
-   * @returns Observable<LoginResult>
-   */
+ 
   login(username: string, password: string): Observable<LoginResult> {
     const loginUrl = `${this.apiUrl}/UserMaster/login?UserName=${(username)}&Password=${(password)}`;
     
@@ -93,6 +87,7 @@ export class LoginServiceService {
             sessionStorage.setItem('userFullName', responseData.userFullName || '');
             sessionStorage.setItem('companyId', responseData.companyId?.toString() || '');
             sessionStorage.setItem('roleId', responseData.roleId?.toString() || '');
+            sessionStorage.setItem('companyName', responseData.companyName || '');
           }
 
           return {
@@ -238,10 +233,20 @@ export class LoginServiceService {
     if (typeof window !== 'undefined' && window.sessionStorage) {
       const companyId = sessionStorage.getItem('companyId');
       return companyId ? parseInt(companyId, 10) : null;
+
     }
     return null;
   }
 
+
+  public getCompanyName(): string | null {
+    if (typeof window !== 'undefined' && window.sessionStorage) {
+      const companyName = sessionStorage.getItem('companyName');
+      return  companyName ? companyName : null;
+
+    }
+    return null;
+  }
   /**
    * Get stored role ID from session storage
    * @returns number | null
@@ -274,6 +279,8 @@ export class LoginServiceService {
       sessionStorage.removeItem('userFullName');
       sessionStorage.removeItem('companyId');
       sessionStorage.removeItem('roleId');
+      sessionStorage.removeItem('companyName');
+
     }
   }
 

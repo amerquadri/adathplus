@@ -1,0 +1,29 @@
+:host {
+	display: block;
+}
+
+.center-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	padding: 24px;
+	box-sizing: border-box;
+}
+
+.company-card {
+	width: 480px;
+	max-width: 100%;
+}
+
+.company-select {
+	width: 100%;
+}
+
+.actions {
+	margin-top: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}

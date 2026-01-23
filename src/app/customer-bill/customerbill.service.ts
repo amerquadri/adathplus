@@ -14,10 +14,13 @@ export class CustomerbillService {
   public createdById: number | null = null;
   private baseUrl: string = '';
 
-    constructor(private http: HttpClient, private loginService: LoginServiceService, private runtimeConfig: RuntimeConfigService) { 
+    constructor(private http: HttpClient,
+     private loginService: LoginServiceService,
+     private runtimeConfig: RuntimeConfigService) { 
+      
      this.companyId = this.loginService?.getCompanyId() ?? 0;
      this.createdById = this.loginService?.getUserId() ?? 0;
-      this.baseUrl = this.runtimeConfig.get('apiUrl', environment.apiUrl);
+     this.baseUrl = this.runtimeConfig.get('apiUrl', environment.apiUrl);
 
   }
 

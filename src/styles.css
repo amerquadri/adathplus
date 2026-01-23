@@ -14,26 +14,20 @@ app-root {
 /* App scaling helper - apply to `html` or `app-root` to scale the entire UI */
 .app-scale-80 {
   transform: scale(0.8);
-  transform-origin: top left;
+  transform-origin: top center;
   transition: transform 200ms ease-in-out;
-  /* To prevent layout overflow when scaling, make container origin at 0,0 */
 }
 
-/* When scaling, ensure the app container keeps a white background and doesn't show scroll artifacts */
+/* Keep a clean background when scaled */
 .app-scale-80, .app-scale-80 body, .app-scale-80 app-root {
   background-color: #fff;
 }
 
-/* Make the scaled container larger (inverse of 0.8) so the visual UI docks to all sides
-   instead of leaving empty space on the right/bottom. We increase the inner container's
-   logical size by 1/scale (1.25) so after scale it fills the viewport. */
+/* After scaling, increase the inner container's logical width and center it horizontally so
+   header and top-right controls remain visible. Allow scrolling instead of hiding overflow. */
 .app-scale-80 body, .app-scale-80 app-root {
-  width: calc(100% / 0.8);
-  height: calc(100% / 0.8);
-  overflow: hidden;
-}
-
-/* Ensure html/doc doesn't introduce extra scrollbars when scaled */
-.app-scale-80 {
-  overflow: hidden;
+  /* width: calc(100% / 0.8); */
+  margin: 0 auto;
+  /* height: calc(100% / 0.8); */
+  overflow: auto;
 }

@@ -14,6 +14,7 @@ import { CustomerPaymentComponent } from './customer-payment/customer-payment.co
 import { FarmerBillComponent } from './farmer-bill/farmer-bill.component';
 import { ListOfValuesComponent } from './list-of-values/list-of-values.component';
 import { CustomerBillComponent } from './customer-bill/customer-bill.component';
+import { CompanySelectionComponent } from './company-selection/company-selection.component';
 
 
 export const routes: Routes = [
@@ -81,6 +82,12 @@ export const routes: Routes = [
 		path:'customer-bill',
 		component: CustomerBillComponent,
 		data: { breadcrumb:'Master / Customer Bill'}
+	},
+	{
+		path:'company-selection',
+		component: CompanySelectionComponent,
+		data: { breadcrumb:'Company Selection'}
+
 	}
 
 ];

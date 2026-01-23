@@ -62,7 +62,8 @@ export class LoginPageComponent {
             });
             
             // Redirect to dashboard
-            this.router.navigate(['/dashboard-page']);
+            //this.router.navigate(['/dashboard-page']);
+            this.router.navigate(['/company-selection']);
           } else {
             // Show error message
             this.errorMessage = result.message;

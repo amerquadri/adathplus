@@ -32,7 +32,9 @@ export class DashboardPageComponent implements OnInit {
       userId: this.loginService.getUserId(),
       userFullName: this.loginService.getUserFullName(),
       companyId: this.loginService.getCompanyId(),
+      companyName: this.loginService.getCompanyName(),
       roleId: this.loginService.getRoleId()
+      
     };
   }
 
