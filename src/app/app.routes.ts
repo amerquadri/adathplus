@@ -15,6 +15,8 @@ import { FarmerBillComponent } from './farmer-bill/farmer-bill.component';
 import { ListOfValuesComponent } from './list-of-values/list-of-values.component';
 import { CustomerBillComponent } from './customer-bill/customer-bill.component';
 import { CompanySelectionComponent } from './company-selection/company-selection.component';
+import { UserMasterComponent } from './user-master/user-master.component';
+import { CompanyMasterComponent } from './company-master/company-master.component';
 
 
 export const routes: Routes = [
@@ -36,17 +38,17 @@ export const routes: Routes = [
 	{
 		path: 'customer-page-test',
 		component: CustomerPageTestComponent,
-		data: { breadcrumb: 'Customer Test' }
+		data: { breadcrumb: 'Master / Customer Master' }
 	},
 		{
 		path: 'customer-page',
 		component: CustomerPageComponent,
-		data: { breadcrumb: 'Master / Customer' }
+		data: { breadcrumb: 'Master / Customer Detail Master' }
 	},
 	{
 		path: 'vendor-page',
 		component: VendorPageComponent,
-		data: { breadcrumb: 'Master / Vendor' }
+		data: { breadcrumb: 'Master / Farmer Master' }
 	},
 	{
 		path: 'item-master-page',
@@ -87,7 +89,21 @@ export const routes: Routes = [
 		path:'company-selection',
 		component: CompanySelectionComponent,
 		data: { breadcrumb:'Company Selection'}
-
+	},
+	{
+		path:'user-master',
+		component: UserMasterComponent,
+		data: { breadcrumb:'Master / User Master'}
+	},
+	// {
+	// 	path: '**',
+	// 	component: ErrorPageComponent,
+	// 	data: { breadcrumb: 'Error' }	
+	// },
+	{
+		path: "company-master",
+		component: CompanyMasterComponent,
+		data: { breadcrumb: "Master / Company Master" }
 	}
 
 ];

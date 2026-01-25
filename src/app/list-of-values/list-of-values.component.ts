@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,9 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MasterPageComponent } from "../master-page.component";
 import { ListofValuesService } from './listof-values.service';
-
+import { MatPaginator } from '@angular/material/paginator';
+import { catchError, timeout } from 'rxjs';
+ 
 interface ListValue {
   ValuesId: number;
   Form: string;
@@ -28,7 +30,8 @@ interface ListValue {
     MatButtonModule,
     MatTableModule,
     MatIconModule,
-    MasterPageComponent
+    MasterPageComponent,
+    MatPaginator
 ],
   templateUrl: './list-of-values.component.html',
   styleUrls: ['./list-of-values.component.css']
@@ -40,6 +43,7 @@ export class ListOfValuesComponent {
   editingId: number | null = null;
   displayedColumns: string[] = ['ValuesId', 'Form', 'Name', 'Values', 'Details', 'Actions'];
   dataSource: MatTableDataSource<ListValue>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private fb: FormBuilder, private lovService: ListofValuesService) {
     this.form = this.fb.group({
@@ -50,6 +54,7 @@ export class ListOfValuesComponent {
     });
     this.dataSource = new MatTableDataSource<ListValue>(this.items);
     this.loadListOfValues();
+    this.fetchVendors();
   }
 
 
@@ -70,6 +75,24 @@ loadListOfValues() {
 
 }
 
+  fetchVendors() {
+    this.lovService.getListOfValues()
+      .subscribe((data: any[]) => {
+       // this.dataSource.data = data.data || data || [];
+        this.items = (data || []).map(d => {
+              const src = d || {};
+              return {
+                ValuesId: src.ValuesId ?? src.valuesId ?? src.valuesID ?? 0,
+                Form: src.Form ?? src.form ?? '',
+                Name: src.Name ?? src.name ?? '',
+                Values: src.Values ?? src.values ?? null,
+                Details: src.Details ?? src.details ?? null
+              } as ListValue;
+            });
+        this.dataSource.data = this.items;
+        if (this.paginator) this.dataSource.paginator = this.paginator;
+      });
+  }
 
   addOrUpdate() {
     if (this.form.invalid) return;

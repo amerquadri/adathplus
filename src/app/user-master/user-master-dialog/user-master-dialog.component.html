@@ -1,0 +1,54 @@
+<div class="dialog-header">
+    <div class="dialog-title">User Master</div>
+    <div class="dialog-header-actions">
+        <button mat-mini-fab color="primary" aria-label="Save" (click)="save()">
+            <mat-icon>save</mat-icon>
+        </button>
+
+        <button mat-icon-button aria-label="Close" (click)="dialogRef.close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+<form class="user-master-dialog">
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <input matInput name="userName" [(ngModel)]="userMaster.userName" placeholder="Enter username">
+        </mat-form-field>
+
+    </div>
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput name="userFullName" [(ngModel)]="userMaster.userFullName" placeholder="Enter full name">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput name="password" type="password" [(ngModel)]="userMaster.password"
+                placeholder="Enter password">
+        </mat-form-field>
+    </div>
+
+
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput name="email" type="email" [(ngModel)]="userMaster.email" placeholder="Enter email">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Mobile</mat-label>
+            <input matInput name="mobile" [(ngModel)]="userMaster.mobile" placeholder="Enter mobile">
+        </mat-form-field>
+    </div>
+
+
+    <div class="row">
+        <mat-form-field appearance="outline">
+            <mat-label>Designation</mat-label>
+            <input matInput name="designation" [(ngModel)]="userMaster.designation" placeholder="Enter designation">
+        </mat-form-field>
+    </div>
+
+
+</form>

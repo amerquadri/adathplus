@@ -5,9 +5,7 @@
     <button mat-mini-fab color="primary" aria-label="Save" (click)="onSaveVendor()">
       <mat-icon>save</mat-icon>
     </button>
-    <button *ngIf="vendor && vendor.vendorId" mat-mini-fab color="warn" aria-label="Delete" (click)="onDeleteVendor()">
-      <mat-icon>delete</mat-icon>
-    </button>
+
     <button mat-icon-button aria-label="Close" (click)="dialogRef.close()">
       <mat-icon>close</mat-icon>
     </button>
@@ -20,6 +18,9 @@
         <mat-label>Vendor Name</mat-label>
         <input matInput [(ngModel)]="vendor.vendorName" name="vendorName" placeholder="Vendor Name">
       </mat-form-field>
+    </div>
+    <div class="form-row">
+
       <mat-form-field appearance="outline">
         <mat-label>Phone 1</mat-label>
         <input matInput [(ngModel)]="vendor.phone1" name="phone1" placeholder="Phone 1">
@@ -48,17 +49,20 @@
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Credit</mat-label>
-        <input matInput type="number" [(ngModel)]="vendor.credit" name="credit" placeholder="Credit">
+        <input matInput type="number" [(ngModel)]="vendor.credit" name="credit" placeholder="Credit" min="0">
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Debit</mat-label>
-        <input matInput type="number" [(ngModel)]="vendor.debit" name="debit" placeholder="Debit">
+        <input matInput type="number" [(ngModel)]="vendor.debit" name="debit" placeholder="Debit" min="0">
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Opening Amount</mat-label>
-        <input matInput type="number" [(ngModel)]="vendor.openingAmt" name="openingAmt" placeholder="Opening Amount">
+        <input matInput type="number" [(ngModel)]="vendor.openingAmt" name="openingAmt" placeholder="Opening Amount"
+          min="0" [defaultValue]="0">
       </mat-form-field>
     </div>
+
+    <!-- 
     <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Created By ID</mat-label>
@@ -92,9 +96,9 @@
         <input matInput type="number" [(ngModel)]="vendor.companyId" name="companyId" placeholder="Company ID">
       </mat-form-field>
     </div>
+ -->
+
+
+
   </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="onSaveVendor()" type="button">Save</button>
-  <button mat-button mat-dialog-close type="button">Close</button>
-</mat-dialog-actions>

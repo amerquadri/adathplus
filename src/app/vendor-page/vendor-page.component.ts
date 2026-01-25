@@ -24,6 +24,8 @@ import { timeout, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 // import { VendorPaymentInterface } from '../vendor-payment/vendor-payment-interface';
 import { VendorInterface } from '../vendor-payment/vendor-payment-interface';
+import { MatIcon } from '@angular/material/icon';
+
 
 @Component({
   selector: 'app-vendor-page',
@@ -31,7 +33,7 @@ import { VendorInterface } from '../vendor-payment/vendor-payment-interface';
   imports: [MasterPageComponent, ReactiveFormsModule, FormsModule, MatInputModule,
     MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule,
     MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,
-    CommonModule, HttpClientModule],
+    CommonModule, MatIcon],
   templateUrl: './vendor-page.component.html',
   styleUrls: ['./vendor-page.component.css']
 })
@@ -39,6 +41,7 @@ export class VendorPageComponent {
   // expose dialog classes for ngComponentOutlet
   public VendorDialog = VendorDialogComponent;
   public ConfirmDialog = ConfirmDialogComponent;
+  public vendor: any;
 
   vendorForm: FormGroup;
   vendors: VendorInterface[] = [];
@@ -46,9 +49,7 @@ export class VendorPageComponent {
   searchValue: string = '';
   isUsingTestData: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  displayedColumns: string[] = [
-    'vendorId', 'vendorName', 'credit', 'debit', 'openingAmt', 'isActive', 'view'
-  ];
+  displayedColumns: string[] = ['vendorId', 'vendorName', 'credit', 'debit', 'openingAmt', 'isActive', 'view'];
 
   constructor(private fb: FormBuilder, private dialog: MatDialog, private vendorService: VendorService) {
     this.vendorForm = this.fb.group({

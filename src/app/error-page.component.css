@@ -1,10 +1,28 @@
 .error-container {
-  padding: 48px;
-  text-align: center;
+  padding: 24px;
   color: #c00;
-  background: #fff0f0;
+  background: #fff6f6;
   border-radius: 8px;
-  margin: 40px auto;
-  max-width: 400px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin: 24px auto;
+  max-width: 900px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
+
+.error-container h2 {
+  margin-top: 0;
+}
+
+.error-container p { margin: 6px 0; color: #600; }
+
+.error-container .stack,
+.error-container .details {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 12px;
+  color: #333;
+  max-height: 320px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.error-container .actions { margin-top: 12px; }

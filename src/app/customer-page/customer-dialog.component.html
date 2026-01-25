@@ -5,9 +5,7 @@
     <button mat-mini-fab color="primary" aria-label="Save" (click)="onSaveCustomer()">
       <mat-icon>save</mat-icon>
     </button>
-    <button *ngIf="customer && customer.customerId" mat-mini-fab color="warn" aria-label="Delete" (click)="onDeleteCustomer()">
-      <mat-icon>delete</mat-icon>
-    </button>
+    
     <button mat-icon-button  color="danger" aria-label="Close" (click)="dialogRef.close()">
       <mat-icon>close</mat-icon>
     </button>
@@ -21,6 +19,8 @@
         <input matInput [(ngModel)]="customer.customerName" name="customerName" id="customerName"
           placeholder="Customer Name">
       </mat-form-field>
+       </div>
+    <div class="form-row">
       <mat-form-field appearance="outline">
         <mat-label>Phone 1</mat-label>
         <input matInput [(ngModel)]="customer.phone1" name="phone1" id="phone1" placeholder="Phone 1">
@@ -60,7 +60,10 @@
         <input matInput type="number" [(ngModel)]="customer.openingAmt" name="openingAmt" placeholder="Opening Amount">
       </mat-form-field>
     </div>
+
+
     <div class="form-row">
+<!-- 
       <mat-form-field appearance="outline">
         <mat-label>Created By ID</mat-label>
         <input matInput type="number" [(ngModel)]="customer.createdById" name="createdById" placeholder="Created By ID">
@@ -89,15 +92,11 @@
           <mat-option [value]="true">True</mat-option>
           <mat-option [value]="false">False</mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field> 
       <mat-form-field appearance="outline">
         <mat-label>Company ID</mat-label>
         <input matInput type="number" [(ngModel)]="customer.companyId" name="companyId" placeholder="Company ID">
-      </mat-form-field>
+      </mat-form-field>-->
     </div>
   </form>
-</mat-dialog-content>
-<!-- <mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="onSaveCustomer()" type="button">Save</button>
-  <button mat-button mat-dialog-close type="button">Close</button>
-</mat-dialog-actions> -->
+</mat-dialog-content> 

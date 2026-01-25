@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment.prod';
 import { RuntimeConfigService } from '../runtime-config.service';
 import { LoginServiceService } from '../login-page/login-service.service';
-//import { CompanyInterface } from '../common-fields/company-interface';
+import { CompanyInterface } from '../common-fields/company-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +20,105 @@ export class CompanyService {
    }
 
   public getCompanyList(): Observable<any[]> {
+    const url = `${this.baseUrl}/CompanyMaster`;
+    const token = this.loginService.getToken() ?? '';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    });
+
+    return this.http.get<CompanyInterface[]>(url, { headers }).pipe(
+      catchError(err => {
+        console.error('Error fetching companies:', err);
+        return throwError(() => err);
+      })
+    );
+  } 
+
+  public getCompanyById(companyId: number): Observable<CompanyInterface> {
+    const url = `${this.baseUrl}/CompanyMaster?CompanyId=${companyId}`;
+    const token = this.loginService.getToken() ?? '';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    });
+
+    // backend expects a POST with CompanyId (server-side signature is GetCompanyById(int CompanyId))
+    return this.http.post<CompanyInterface>(url, {},{ headers }).pipe(
+      catchError(err => {
+        console.error('Error fetching company by id', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  public saveCompanyChanges(company: CompanyInterface): Observable<CompanyInterface> {
+    const url = `${this.baseUrl}/CompanyMaster`;
+    const token = this.loginService.getToken() ?? '';
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    });
+
+    return this.http.put<CompanyInterface>(url, company, { headers }).pipe(
+      catchError(err => {
+        console.error('Error saving company changes', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  /**
+   * Save the default company for the currently logged-in user.
+   * Mirrors the original jQuery `_SaveDefaultCompany` behaviour.
+   */
+  public saveDefaultCompany(companyId: number): Observable<any> {
+    const url = `${this.baseUrl}/UserMaster`;
+    const userId = this.loginService.getUserId() ?? 0;
+    const token = this.loginService.getToken() ?? '';
+
+    const payload = {
+      UserId: userId,
+      UserName: '',
+      UserFullName: '',
+      Password: '',
+      Email: '',
+      Mobile: '',
+      Status: 0,
+      IsAdmin: false,
+      RoleId: 0,
+      Designation: '',
+      CreatedById: 0,
+      IsActive: 0,
+      CompanyId: companyId,
+      CompanyName: ''
+    };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    });
+
+    return this.http.put(url, payload, { headers }).pipe(
+      catchError(err => {
+        console.error('Error saving default company', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+
+
+  public getCompanySelectionList(): Observable<any[]> {
     const apiUrl = `${this.baseUrl}/CompanyMaster`;
+    const token = this.loginService.getToken() ?? '';
+
+     const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    });
      try{
-      return this.http.get<any[]>(apiUrl);
+      return this.http.get<any[]>(apiUrl, { headers });
      }catch(error){
       console.error('Error fetching companies:', error);
       throw error;
@@ -33,7 +129,7 @@ export class CompanyService {
    * Save the default company for the currently logged-in user.
    * Mirrors the original jQuery `_SaveDefaultCompany` behaviour.
    */
-  public saveDefaultCompany(companyId: number): Observable<any> {
+  public saveDefaultSelectionCompany(companyId: number): Observable<any> {
     const url = `${this.baseUrl}/UserMaster/InsertOrUpdateUserById`;
 
     const userId = this.loginService.getUserId() ?? 0;
@@ -68,6 +164,9 @@ export class CompanyService {
       })
     );
   }
+  
+
+
 }
 
 

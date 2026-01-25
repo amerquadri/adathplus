@@ -202,8 +202,8 @@ export class CustomerBillComponent implements AfterViewInit {
         // if valueChanges already set up, update filteredOptions so autocomplete shows suggestions
         this.filteredOptionsFarmer = of(this.optionsFarmer);
         this.filteredOptionsFarmerBill = of(this.optionsFarmerBill);
-        console.log('getFarmerBillDateList...........:', this.farmerbilldateddlList, 'items');
-        console.log('optionsFarmerBill...........:', this.optionsFarmerBill, 'items');
+       // console.log('getFarmerBillDateList...........:', this.farmerbilldateddlList, 'items');
+       // console.log('optionsFarmerBill...........:', this.optionsFarmerBill, 'items');
       },
         error => {
           console.error('Error loading customer list:', error);
@@ -247,7 +247,7 @@ export class CustomerBillComponent implements AfterViewInit {
         this.farmerList = dataList;
         this.optionsFarmers = this.farmerList.map(v => (v.vendorName || '').trim());
         this.filteredOptionsFarmers = of(this.optionsFarmers);
-        console.log('Vendor/farmer list loaded:', this.farmerList.length, 'items');
+        //console.log('Vendor/farmer list loaded:', this.farmerList.length, 'items');
       }, error => {
         console.error('Error loading vendor list:', error);
       });
@@ -266,7 +266,7 @@ export class CustomerBillComponent implements AfterViewInit {
       const names = (dataList || []).map(i => (i.Name || i.name || '').toString().trim()).filter(v => v !== '');
       this.optionsParticular = Array.from(new Set(names));
       this.filteredOptionsParticular = of(this.optionsParticular);
-      console.log('Particular options loaded:', this.optionsParticular.length);
+      //console.log('Particular options loaded:', this.optionsParticular.length);
     }, error => console.error('Error loading list-of-values for particulars', error));
   }
 

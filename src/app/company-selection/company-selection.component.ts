@@ -41,8 +41,10 @@ export class CompanySelectionComponent {
     this.getCompanyList();
   }
 
+
+  
   getCompanyList() {
-    this.companyService.getCompanyList().subscribe({
+    this.companyService.getCompanySelectionList().subscribe({
       next: (data: CompanyInterface[]) => {
         this.companylist = data;
         console.log('Company List:', this.companylist);
@@ -62,7 +64,7 @@ export class CompanySelectionComponent {
   confirmSelection() {
     if (this.companyId !== null) {
 
-      this.companyService.saveDefaultCompany(this.companyId).subscribe({
+      this.companyService.saveDefaultSelectionCompany(this.companyId).subscribe({
         next: () => {
           console.log('Default company saved successfully');
           //this.companyService.companyId = this.selectedCompany.companyId;

@@ -22,6 +22,7 @@ import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.componen
 import { CustomerDialogComponent } from '../customer-page/customer-dialog.component';
 import { timeout, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-customer-page-test',
@@ -29,7 +30,7 @@ import { of } from 'rxjs';
   imports: [MasterPageComponent, ReactiveFormsModule, FormsModule, MatInputModule,
     MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule,
     MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,
-  DatePipe, CommonModule, HttpClientModule],
+    DatePipe, CommonModule, MatIcon],
   templateUrl: './customer-page-test.component.html',
   styleUrl: './customer-page-test.component.css'
 })
@@ -37,20 +38,20 @@ export class CustomerPageTestComponent {
   // Expose dialog component classes to template for ngComponentOutlet if needed
   public CustomerDialog = CustomerDialogComponent;
   public ConfirmDialog = ConfirmDialogComponent;
- customerForm: FormGroup;
-   customers: Customer[] = [];
+  customerForm: FormGroup;
+  customers: Customer[] = [];
   dataSource = new MatTableDataSource<Customer>([]);
   searchValue: string = '';
   isUsingTestData: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-displayedColumns: string[] = [
-    'customerId', 'customerName', 
-    'credit', 'debit', 'openingAmt',  'isActive',  'view'
+  displayedColumns: string[] = [
+    'customerId', 'customerName',
+    'credit', 'debit', 'openingAmt', 'isActive', 'view'
   ];
 
   //'companyId','phone1', 'phone2', 'email', 'address', 'detail','createdById', 'createdDate', 'updatedById', 'updatedDate',
-constructor(private fb: FormBuilder, private dialog: MatDialog, private customerService: CustomerService) {
-  this.customerForm = this.fb.group({
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private customerService: CustomerService) {
+    this.customerForm = this.fb.group({
       customerId: [null],
       customerName: ['', Validators.required],
       phone1: [''],
@@ -71,25 +72,25 @@ constructor(private fb: FormBuilder, private dialog: MatDialog, private customer
 
     this.fetchCustomers();
   }
- 
 
 
-fetchCustomers() {
-  this.customerService.getCustomers()
-    .pipe(
-      timeout(15000), // 15 seconds timeout
-      catchError(err => {
-        console.error('Fetch customers failed or timed out:', err);
-        return of({ data: [] });
-      })
-    )
-    .subscribe((data: any) => {
-      this.dataSource.data = data.data;
-      if (this.paginator) {
-        this.dataSource.paginator = this.paginator;
-      }
-    });
-}
+
+  fetchCustomers() {
+    this.customerService.getCustomers()
+      .pipe(
+        timeout(15000), // 15 seconds timeout
+        catchError(err => {
+          console.error('Fetch customers failed or timed out:', err);
+          return of({ data: [] });
+        })
+      )
+      .subscribe((data: any) => {
+        this.dataSource.data = data.data;
+        if (this.paginator) {
+          this.dataSource.paginator = this.paginator;
+        }
+      });
+  }
 
 
 
@@ -112,7 +113,7 @@ fetchCustomers() {
   }
 
 
-   openNewCustomerDialog() {
+  openNewCustomerDialog() {
     const emptyCustomer = {
       customerId: null,
       customerName: '',
@@ -146,7 +147,7 @@ fetchCustomers() {
     });
   }
 
-  
+
   // Modified viewCustomer to fetch by id and show dialog with fetched data
   viewCustomer(customer: Customer) {
     this.customerService.getCustomerById(customer.customerId).subscribe({
@@ -176,7 +177,7 @@ fetchCustomers() {
   }
 
 
-  
+
   onSubmit() {
     if (this.customerForm.valid) {
       // Handle form submission
@@ -185,7 +186,7 @@ fetchCustomers() {
   }
 
 
-  
+
   // Call insert customer service
   insertCustomer() {
     if (this.customerForm.valid) {
@@ -194,7 +195,7 @@ fetchCustomers() {
         next: (result: any) => {
           this.customers.push(result);
           this.dataSource.data = [...this.customers];
-           this.fetchCustomers();
+          this.fetchCustomers();
         },
         error: (err: any) => {
           console.error('Insert failed', err);
@@ -204,17 +205,18 @@ fetchCustomers() {
   }
 
 
-  
+
   // Call update customer service
   updateCustomer(customerId: number) {
     if (this.customerForm.valid) {
       const customer: Customer = this.customerForm.value;
+
       this.customerService.updateCustomer(customer).subscribe({
         next: (result: any) => {
           const idx = this.customers.findIndex(c => c.customerId === customerId);
           if (idx > -1) this.customers[idx] = result;
           this.dataSource.data = [...this.customers];
-           this.fetchCustomers();
+          this.fetchCustomers();
         },
         error: (err: any) => {
           console.error('Update failed', err);
@@ -225,14 +227,14 @@ fetchCustomers() {
 
 
 
-  
+
   // Call delete customer service
   deleteCustomer(customerId: number) {
     this.customerService.deleteCustomer(customerId).subscribe({
       next: () => {
         this.customers = this.customers.filter(c => c.customerId !== customerId);
         this.dataSource.data = [...this.customers];
-         this.fetchCustomers();
+        this.fetchCustomers();
       },
       error: (err: any) => {
         console.error('Delete failed', err);
@@ -241,10 +243,10 @@ fetchCustomers() {
   }
 
 
-  
+
   // Generate 100 temporary customer records
   generateTemporaryCustomers() {
-  this.customers = Array.from({ length: 100 }, (_, i) => ({
+    this.customers = Array.from({ length: 100 }, (_, i) => ({
       customerId: i + 1,
       customerName: `Customer ${i + 1}`,
       phone1: `123456789${i % 10}`,
@@ -275,11 +277,11 @@ fetchCustomers() {
   }
 
   applyFilter() {
-     this.fetchCustomers();
+    this.fetchCustomers();
     this.dataSource.filter = this.searchValue.trim().toLowerCase();
   }
 
-   // Call getCustomerById service
+  // Call getCustomerById service
   getCustomerById(customerId: number) {
     this.customerService.getCustomerById(customerId).subscribe({
       next: (customer: Customer) => {
@@ -306,9 +308,9 @@ fetchCustomers() {
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'confirm') {
         this.deleteCustomer(customer.customerId);
-         const idx = this.customers.findIndex(c => c.customerId === customer.customerId);
-          if (idx > -1) this.customers[idx] = result;
-          this.dataSource.data = [...this.customers];
+        const idx = this.customers.findIndex(c => c.customerId === customer.customerId);
+        if (idx > -1) this.customers[idx] = result;
+        this.dataSource.data = [...this.customers];
       }
     });
   }

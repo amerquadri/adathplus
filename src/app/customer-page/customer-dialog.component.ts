@@ -43,27 +43,33 @@ export class CustomerDialogComponent {
     public dialogRef: MatDialogRef<CustomerDialogComponent>
   ) {
     this.customer = data && data.customer ? data.customer : {};
-    this.initializeDates();
+    //this.initializeDates();
   }
 
   /**
    * Initialize date fields - convert string dates to Date objects for mat-datepicker
    */
-  initializeDates() {
-    if (this.customer.createdDate && typeof this.customer.createdDate === 'string') {
-      this.customer.createdDate = new Date(this.customer.createdDate);
-    }
-    if (this.customer.updatedDate && typeof this.customer.updatedDate === 'string') {
-      this.customer.updatedDate = new Date(this.customer.updatedDate);
-    }
-  }
+  // initializeDates() {
+  //   if (this.customer.createdDate && typeof this.customer.createdDate === 'string') {
+  //     this.customer.createdDate = new Date(this.customer.createdDate);
+  //   }
+  //   if (this.customer.updatedDate && typeof this.customer.updatedDate === 'string') {
+  //     this.customer.updatedDate = new Date(this.customer.updatedDate);
+  //   }
+  // }
 
   /**
    * Convert Date objects back to ISO string format before saving
    */
   prepareDatesForSave() {
     const customerToSave = { ...this.customer };
-    
+      customerToSave.createdById = Number(sessionStorage.getItem('userId')) || 0;; // Example static value
+      customerToSave.createdDate = new Date().toISOString(); // Current date-time
+      customerToSave.isActive = true; // Default to active
+      customerToSave.companyId = Number(sessionStorage.getItem('companyId')) || 0;
+      customerToSave.updatedById = Number(sessionStorage.getItem('userId')) || 0;; // Example static value
+      customerToSave.updatedDate = new Date().toISOString(); // Current date-time
+
     if (customerToSave.createdDate instanceof Date) {
       customerToSave.createdDate = customerToSave.createdDate.toISOString();
     }

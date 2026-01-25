@@ -1,0 +1,131 @@
+<div class="dialog-header">
+	<div class="dialog-title">Company Details</div>
+	<div class="dialog-header-actions">
+		<button mat-mini-fab color="primary" aria-label="Save" (click)="save()">
+			<mat-icon>save</mat-icon>
+		</button>
+		<button mat-icon-button aria-label="Close" (click)="cancel()">
+			<mat-icon>close</mat-icon>
+		</button>
+	</div>
+</div>
+
+<form class="company-dialog">
+	<div class="row">
+		<mat-form-field appearance="outline">
+			<mat-label>Company ID</mat-label>
+			<input matInput name="companyID" [(ngModel)]="company.companyID" type="number" readonly>
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Company Name</mat-label>
+			<input matInput name="companyName" [(ngModel)]="company.companyName">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Detail</mat-label>
+			<input matInput name="detail" [(ngModel)]="company.detail">
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<mat-form-field appearance="outline" class="span-2">
+			<mat-label>Address 1</mat-label>
+			<input matInput name="address1" [(ngModel)]="company.address1">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Address 2</mat-label>
+			<input matInput name="address2" [(ngModel)]="company.address2">
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<mat-form-field appearance="outline">
+			<mat-label>Address 3</mat-label>
+			<input matInput name="address3" [(ngModel)]="company.address3">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>City</mat-label>
+			<input matInput name="city" [(ngModel)]="company.city">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>State</mat-label>
+			<input matInput name="state" [(ngModel)]="company.state">
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<mat-form-field appearance="outline">
+			<mat-label>Zip Code</mat-label>
+			<input matInput name="zipCode" [(ngModel)]="company.zipCode">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Country</mat-label>
+			<input matInput name="country" [(ngModel)]="company.country">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Website</mat-label>
+			<input matInput name="website" [(ngModel)]="company.website">
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<mat-form-field appearance="outline">
+			<mat-label>Phone 1</mat-label>
+			<input matInput name="phone1" [(ngModel)]="company.phone1">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Phone 2</mat-label>
+			<input matInput name="phone2" [(ngModel)]="company.phone2">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Phone 3</mat-label>
+			<input matInput name="phone3" [(ngModel)]="company.phone3">
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<mat-form-field appearance="outline">
+			<mat-label>Phone 4</mat-label>
+			<input matInput name="phone4" [(ngModel)]="company.phone4">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Email 1</mat-label>
+			<input matInput name="email1" [(ngModel)]="company.email1" type="email">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Email 2</mat-label>
+			<input matInput name="email2" [(ngModel)]="company.email2" type="email">
+		</mat-form-field>
+	</div>
+<!-- 
+	<div class="row">
+		<mat-form-field appearance="outline">
+			<mat-label>Financial Year</mat-label>
+			<input matInput name="financialYear" [(ngModel)]="company.financialYear">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Created Date</mat-label>
+			<input matInput [matDatepicker]="createdPicker" name="createdDate" [(ngModel)]="company.createdDate">
+			<mat-datepicker-toggle matSuffix [for]="createdPicker"></mat-datepicker-toggle>
+			<mat-datepicker #createdPicker></mat-datepicker>
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Modified Date</mat-label>
+			<input matInput [matDatepicker]="modifiedPicker" name="modifiedDate" [(ngModel)]="company.modifiedDate">
+			<mat-datepicker-toggle matSuffix [for]="modifiedPicker"></mat-datepicker-toggle>
+			<mat-datepicker #modifiedPicker></mat-datepicker>
+		</mat-form-field>
+	</div>
+
+	<div class="row">
+		<mat-form-field appearance="outline">
+			<mat-label>Created By</mat-label>
+			<input matInput name="createdBy" [(ngModel)]="company.createdBy" type="number">
+		</mat-form-field>
+		<mat-form-field appearance="outline">
+			<mat-label>Modified By</mat-label>
+			<input matInput name="modifiedDateBy" [(ngModel)]="company.modifiedDateBy" type="number">
+		</mat-form-field>
+		<mat-checkbox name="isActive" [(ngModel)]="company.isActive">Is Active</mat-checkbox>
+	</div> -->
+
+</form>

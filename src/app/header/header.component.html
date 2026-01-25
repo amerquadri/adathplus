@@ -3,9 +3,10 @@
     <div class="header-content">
       <nav class="nav-buttons">
 
-        <h1> {{     this.companyName || 'Not available' }}</h1>
+        <h1>     {{     this.companyName || 'Not available' }}  </h1>
         <!-- <button mat-button (click)="goToHome()"> Dashboard</button> -->
         <button mat-flat-button [matMenuTriggerFor]="menu1">Master</button>
+
         <mat-menu #menu1="matMenu">
           <button mat-menu-item (click)="goToCustomer()">Customer Detail</button>
           <button mat-menu-item (click)="goToCustomertest()">Customer</button>
@@ -29,10 +30,13 @@
           <button mat-menu-item (click)="goToCustomerPayment()">Customer Payment</button>
         </mat-menu>
 
-        <button mat-button [matMenuTriggerFor]="Payment">Setting</button>
-        <mat-menu #Payment="matMenu">
-          <button mat-menu-item (click)="goToVendorPayment()">Farmer Payment</button>
-          <button mat-menu-item (click)="goToCustomerPayment()">Customer Payment</button>
+        <button mat-button [matMenuTriggerFor]="Setting">Setting</button>
+        <mat-menu #Setting="matMenu">
+          <button mat-menu-item (click)="goToUserMaster()">User Master</button>
+          <button mat-menu-item (click)="goToCompanyMaster()">Company Master</button>
+          <button mat-menu-item (click)="goToCustomerPayment()">Role Master</button>
+          <button mat-menu-item (click)="goToCustomerPayment()">Profile</button>
+          <button mat-menu-item (click)="goToCustomerPayment()">Premium</button>
         </mat-menu>
       </nav>
 

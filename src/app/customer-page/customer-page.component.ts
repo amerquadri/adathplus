@@ -157,15 +157,15 @@ fetchCustomers() {
         console.log('Using customers property');
       }
       
-      console.log('Processed customer data:', customerData);
-      console.log('Customer count:', customerData.length);
+      //console.log('Processed customer data:', customerData);
+     // console.log('Customer count:', customerData.length);
       
       if (customerData && customerData.length > 0) {
         this.dataSource.data = customerData;
         this.customers = customerData;
         this.isUsingTestData = false;
-        console.log('✅ Successfully loaded real customer data from API');
-        console.log('First customer:', customerData[0]);
+        //console.log('✅ Successfully loaded real customer data from API');
+        //console.log('First customer:', customerData[0]);
       } else if (!this.isUsingTestData) {
         console.log('❌ No customer data received from API');
         this.dataSource.data = [];

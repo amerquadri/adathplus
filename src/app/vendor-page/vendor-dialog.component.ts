@@ -41,17 +41,17 @@ export class VendorDialogComponent {
     public dialogRef: MatDialogRef<VendorDialogComponent>
   ) {
     this.vendor = data && data.vendor ? data.vendor : {};
-    this.initializeDates();
+    // this.initializeDates();
   }
 
-  initializeDates() {
-    if (this.vendor.createdDate && typeof this.vendor.createdDate === 'string') {
-      this.vendor.createdDate = new Date(this.vendor.createdDate);
-    }
-    if (this.vendor.updatedDate && typeof this.vendor.updatedDate === 'string') {
-      this.vendor.updatedDate = new Date(this.vendor.updatedDate);
-    }
-  }
+  // initializeDates() {
+  //   if (this.vendor.createdDate && typeof this.vendor.createdDate === 'string') {
+  //     this.vendor.createdDate = new Date(this.vendor.createdDate);
+  //   }
+  //   if (this.vendor.updatedDate && typeof this.vendor.updatedDate === 'string') {
+  //     this.vendor.updatedDate = new Date(this.vendor.updatedDate);
+  //   }
+  // }
 
   prepareDatesForSave() {
     const vendorToSave = { ...this.vendor };
@@ -76,7 +76,17 @@ export class VendorDialogComponent {
   }
 
   onSaveVendor() {
-    const vendorToSave = this.prepareDatesForSave();
+    
+   // const vendorToSave = this.prepareDatesForSave();
+    const vendorToSave = { ...this.vendor };
+
+    vendorToSave.updatedDate = new Date().toISOString();
+    vendorToSave.updatedById = Number(sessionStorage.getItem('userId')) || 0;
+    vendorToSave.companyId = Number(sessionStorage.getItem('companyId')) || 0;
+    vendorToSave.isActive =  true;
+    vendorToSave.createdById = vendorToSave.createdById || Number(sessionStorage.getItem('userId')) || 0;
+    vendorToSave.createdDate = vendorToSave.createdDate || new Date().toISOString();
+
     if (vendorToSave && vendorToSave.vendorId) {
       this.vendorService.updateVendor(vendorToSave).subscribe({
         next: () => this.dialogRef.close('saved'),

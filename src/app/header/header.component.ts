@@ -108,6 +108,14 @@ export class HeaderComponent {
     this.router.navigate(['/customer-bill']);
   }
 
+   goToUserMaster() {
+    this.router.navigate(['/user-master']);
+  }
+
+   goToCompanyMaster() {
+    this.router.navigate(['/company-master']);
+  }
+
   logout() {
     // Clear session storage token/user and update UI
     console.log('Logout clicked');

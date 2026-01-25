@@ -25,20 +25,20 @@ export class VendorService {
   }
 
   getVendorById(vendorId: number): Observable<VendorPaymentInterface> {
-    const companyId = this.loginService?.getCompanyId() ?? 10001;
+    const companyId = this.loginService?.getCompanyId() ?? 0;
     const url = `${this.baseUrl}/Vendor/GetVendorById?VendorId=${vendorId}&CompanyId=${companyId}`;
     return this.http.post<VendorPaymentInterface>(url, {});
   }
 
   insertVendor(vendor: VendorPaymentInterface): Observable<VendorPaymentInterface> {
-    const companyId = this.loginService?.getCompanyId() ?? 10001;
+    const companyId = this.loginService?.getCompanyId() ?? 0;
     vendor.companyId = companyId;
     const insertUrl = `${this.baseUrl}/Vendor/SaveVendor`;
     return this.http.put<VendorPaymentInterface>(insertUrl, vendor);
   }
 
   updateVendor(vendor: VendorPaymentInterface): Observable<VendorPaymentInterface> {
-    const companyId = this.loginService?.getCompanyId() ?? 10001;
+    const companyId = this.loginService?.getCompanyId() ?? 0;
     vendor.companyId = companyId;
     const updateUrl = `${this.baseUrl}/Vendor/SaveVendor`;
     return this.http.put<VendorPaymentInterface >(updateUrl, vendor);

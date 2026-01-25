@@ -8,7 +8,6 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:adathplus": "node dist/adathplus/server/server.mjs"
-    
   },
   "private": true,
   "dependencies": {
@@ -25,6 +24,8 @@
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.20",
     "express": "^4.18.2",
+    "primeicons": "^7.0.0",
+    "primeng": "^18.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

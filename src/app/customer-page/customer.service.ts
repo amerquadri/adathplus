@@ -34,7 +34,7 @@ export class CustomerService {
   }
 
   getCustomers(): Observable<Customer[]> {
-    const companyId = this.loginService?.getCompanyId() ?? 10001;
+    const companyId = this.loginService?.getCompanyId() ?? 0;
     const apiUrl = `${this.baseUrl}/Customer/GetCustomerList?CompanyId=${companyId}`;
     try {
       return this.http.get<Customer[]>(apiUrl);
@@ -51,17 +51,15 @@ export class CustomerService {
   }
 
   insertCustomer(customer: Customer): Observable<Customer> {
-
     const insertUrl = `${this.baseUrl}/Customer/InsertCustomer`;
-
     return this.http.post<Customer>(insertUrl, customer);
   }
 
   updateCustomer(customer: Customer): Observable<Customer> {
     const UpdateUrl = `${this.baseUrl}/Customer/SaveCustomer`;
-
     return this.http.put<Customer>(UpdateUrl, customer);
   }
+  
   deleteCustomer(customerId: number): Observable<void> {
     const deleteUrl = `${this.baseUrl}/Customer/DeleteCustomerById?UserId=${customerId}`;
     return this.http.delete<void>(deleteUrl);

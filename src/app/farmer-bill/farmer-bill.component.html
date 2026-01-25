@@ -62,7 +62,6 @@
 							</ng-container>
 							<ng-container matColumnDef="view"  >
 								<th mat-header-cell *matHeaderCellDef> View </th>
-
 								<td mat-cell *matCellDef="let _farmerBillDetail">
 									<button mat-button color="warn" (click)="confirmDelete(_farmerBillDetail.farmerBillDetailId)">
 										<mat-icon>delete</mat-icon>
@@ -117,28 +116,22 @@
 								<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.amt}} </td>
 							</ng-container>
 
-							<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
-							<!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
 							<tr *ngIf="dataSource.data.length === 0">
 								<td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
 							</tr>
 							<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 							<tr mat-row *matRowDef="let _farmerBillDetail; columns: displayedColumns;"></tr>
-
 						</table>
-						<!-- <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
-					showFirstLastButtons>
-				</mat-paginator> -->
 					</section>
 				</mat-card>
 
 				<mat-card>
 					<div class="entry-controls">
 						<div class="entry-left">
-							<div class="entry-label">Total</div>
-							<div class="entry-records">Records : {{dataSource.data.length}}</div>
+							<div class="entry-label">Select</div>
+							<!-- <div class="entry-records">Records : {{dataSource.data.length}}</div> -->
 						</div>
-						<mat-form-field appearance="outline" class="entry-select">
+						<mat-form-field appearance="outline" class="col medium">
 							<mat-select [(value)]="selectedParticular" placeholder="Select Particular" required>
 								<mat-option *ngFor="let p of particularOptions" [value]="p">{{ p }}</mat-option>
 								<mat-option *ngIf="particularOptions.length === 0" value="">(no particulars)</mat-option>
