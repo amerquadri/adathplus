@@ -7,6 +7,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MatCardModule } from "@angular/material/card";
 
+import { LoginServiceService } from '../login-page/login-service.service';
 
 @Component({
   selector: 'app-header',
@@ -22,10 +23,12 @@ export class HeaderComponent {
   public formname: string = 'header-form';
   public companyName: string | null = null;
   
-  constructor(private router: Router) {
+  constructor(private router: Router, private loginService: LoginServiceService) {
     this.loadAuthState();
     // Refresh auth state on route changes (useful after login redirects)
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => this.loadAuthState());
+
+
   }
 
   private loadAuthState() {

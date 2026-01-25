@@ -9,6 +9,9 @@ import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationErr
 import { OnInit, OnDestroy } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { LoginServiceService } from './login-page/login-service.service';
+
+
 
 @Component({
   selector: 'app-master-page',
@@ -23,7 +26,13 @@ export class MasterPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(HeaderComponent) headerComponent!: HeaderComponent;
   public formname: string = 'master-page';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private loginService: LoginServiceService) { 
+    if (this.loginService.getToken() === null || this.loginService.getToken() === '' || this.loginService.getCompanyName() === null) {
+          alert('Session Expired. Please login again.');
+          this.router.navigate(['/login']);
+        }
+
+  }
 
   ngOnInit(): void {
     this.routerSub = this.router.events.subscribe((event: RouterEvent) => {
@@ -33,6 +42,8 @@ export class MasterPageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isLoading = false;
       }
     });
+
+   
   }
 
   ngAfterViewInit(): void {
