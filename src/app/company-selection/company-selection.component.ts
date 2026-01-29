@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,7 @@ import { CompanyService } from './company.service';
 import { CompanyInterface } from '../common-fields/company-interface';
 import { HeaderComponent } from '../header/header.component';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-company-selection',
@@ -29,6 +30,8 @@ import { Router } from '@angular/router';
 })
 export class CompanySelectionComponent {
 
+  private isBrowser: boolean = false;
+
   companylist: CompanyInterface[] = [];
   selectedCompany: CompanyInterface | null = null;
   loginPageComponent = LoginPageComponent;
@@ -37,8 +40,11 @@ export class CompanySelectionComponent {
   companyName: string | null = null;
 
 
-  constructor(public companyService: CompanyService,private router: Router) {
-    this.getCompanyList();
+  constructor(public companyService: CompanyService,private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    if (this.isBrowser) {
+      this.getCompanyList();
+    }
   }
 
 
@@ -68,8 +74,10 @@ export class CompanySelectionComponent {
         next: () => {
           console.log('Default company saved successfully');
           //this.companyService.companyId = this.selectedCompany.companyId;
-          sessionStorage.setItem('companyId', this.companyId?.toString() || '');
-          sessionStorage.setItem('companyName', this.companyName || '');
+          if (this.isBrowser) {
+            sessionStorage.setItem('companyId', this.companyId?.toString() || '');
+            sessionStorage.setItem('companyName', this.companyName || '');
+          }
           this.router.navigate(['/dashboard-page']);
         },
         error: (error) => {

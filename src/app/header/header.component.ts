@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { NgIf } from '@angular/common';
+import { NgIf, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MatCardModule } from "@angular/material/card";
@@ -22,16 +22,29 @@ export class HeaderComponent {
   public isScaled80: boolean = false;
   public formname: string = 'header-form';
   public companyName: string | null = null;
+  private isBrowser: boolean = false;
   
-  constructor(private router: Router, private loginService: LoginServiceService) {
-    this.loadAuthState();
+  constructor(private router: Router, private loginService: LoginServiceService, @Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    if (this.isBrowser) {
+      this.loadAuthState();
+    }
     // Refresh auth state on route changes (useful after login redirects)
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => this.loadAuthState());
-
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
+      if (this.isBrowser) this.loadAuthState();
+    });
 
   }
 
   private loadAuthState() {
+    // Avoid accessing browser-only APIs during server-side rendering
+    if (!this.isBrowser) {
+      this.isSignedIn = false;
+      this.userName = null;
+      this.companyName = null;
+      return;
+    }
+
     // The project stores token (and possibly user info) in sessionStorage via LoginServiceService
     const token = sessionStorage.getItem('authToken');
     // login-service stores 'username' and 'userFullName'
@@ -122,16 +135,18 @@ export class HeaderComponent {
   logout() {
     // Clear session storage token/user and update UI
     console.log('Logout clicked');
-    sessionStorage.removeItem('authToken');
-    sessionStorage.removeItem('userName');
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('loginTime');
-    sessionStorage.removeItem('userId');
-    sessionStorage.removeItem('userFullName');
-    sessionStorage.removeItem('companyId');
-    sessionStorage.removeItem('roleId');
-    sessionStorage.removeItem('companyName');
+    if (this.isBrowser) {
+      sessionStorage.removeItem('authToken');
+      sessionStorage.removeItem('userName');
+      sessionStorage.removeItem('user');
+      sessionStorage.removeItem('username');
+      sessionStorage.removeItem('loginTime');
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('userFullName');
+      sessionStorage.removeItem('companyId');
+      sessionStorage.removeItem('roleId');
+      sessionStorage.removeItem('companyName');
+    }
     // Optionally clear everything: sessionStorage.clear();
     this.isSignedIn = false;
     this.userName = null;

@@ -90,6 +90,9 @@ export class CompanyMasterComponent {
             result.createdDate = new Date();
             result.isActive = true;
             result.financialYear ="";
+            if(result.companyID !== undefined && result.companyID !== null && result.companyID <=0){
+              result.companyID = 0;
+            } 
           this.companyService.saveCompanyChanges(result as CompanyInterface).subscribe({ next: ()=> this.fetchCompanies(), error: err=> console.error('Save failed', err) });
           }
         });

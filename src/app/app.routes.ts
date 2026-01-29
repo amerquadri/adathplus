@@ -56,11 +56,6 @@ export const routes: Routes = [
 		data: { breadcrumb: 'Master / Item Master' }
 	},
 	{
-		path: 'error-page',
-		component: ErrorPageComponent,
-		data: { breadcrumb: 'Error' }
-	},
-	{
 		path:'vendor-payment',
 		component: VendorPaymentComponent,
 		data: { breadcrumb:'Master / Vendor Payment'}
