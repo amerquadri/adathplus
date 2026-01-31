@@ -8,7 +8,7 @@ import { VendorPageComponent } from './vendor-page/vendor-page.component';
 import { ItemMasterPageComponent } from './item-master-page/item-master-page.component';
 import { ErrorPageComponent } from './error-page.component';
 import { DashboardPageTestComponent } from './dashboard-page-test/dashboard-page-test.component';
-import { CustomerPageTestComponent } from './customer-page-test/customer-page-test.component';
+import { CustomerMasterComponent } from './customer-master/customer-master.component';
 import { VendorPaymentComponent } from './vendor-payment/vendor-payment.component';
 import { CustomerPaymentComponent } from './customer-payment/customer-payment.component';
 import { FarmerBillComponent } from './farmer-bill/farmer-bill.component';
@@ -36,8 +36,8 @@ export const routes: Routes = [
 		data: { breadcrumb: 'Dashboard' }
 	},
 	{
-		path: 'customer-page-test',
-		component: CustomerPageTestComponent,
+		path: 'customer-master',
+		component: CustomerMasterComponent,
 		data: { breadcrumb: 'Master / Customer Master' }
 	},
 		{

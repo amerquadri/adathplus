@@ -136,9 +136,9 @@ fetchCustomers() {
       })
     )
     .subscribe((data: any) => {
-      console.log('API Response received:', data);
-      console.log('Response type:', typeof data);
-      console.log('Is array?', Array.isArray(data));
+     // console.log('API Response received:', data);
+      //console.log('Response type:', typeof data);
+      //console.log('Is array?', Array.isArray(data));
       
       // Handle different API response formats
       let customerData = [];
@@ -146,15 +146,15 @@ fetchCustomers() {
       if (Array.isArray(data)) {
         // Direct array response
         customerData = data;
-        console.log('Using direct array response');
+        //console.log('Using direct array response');
       } else if (data && data.data && Array.isArray(data.data)) {
         // Nested data property
         customerData = data.data;
-        console.log('Using nested data property');
+        //console.log('Using nested data property');
       } else if (data && Array.isArray(data.customers)) {
         // Different property name
         customerData = data.customers;
-        console.log('Using customers property');
+       // console.log('Using customers property');
       }
       
       //console.log('Processed customer data:', customerData);

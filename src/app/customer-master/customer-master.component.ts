@@ -25,16 +25,16 @@ import { of } from 'rxjs';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-customer-page-test',
+  selector: 'app-customer-master',
   standalone: true,
   imports: [MasterPageComponent, ReactiveFormsModule, FormsModule, MatInputModule,
     MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule,
     MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,
     DatePipe, CommonModule, MatIcon],
-  templateUrl: './customer-page-test.component.html',
-  styleUrl: './customer-page-test.component.css'
+  templateUrl: './customer-master.component.html',
+  styleUrl: './customer-master.component.css'
 })
-export class CustomerPageTestComponent {
+export class CustomerMasterComponent {
   // Expose dialog component classes to template for ngComponentOutlet if needed
   public CustomerDialog = CustomerDialogComponent;
   public ConfirmDialog = ConfirmDialogComponent;

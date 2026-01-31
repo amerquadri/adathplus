@@ -92,8 +92,8 @@ export class HeaderComponent {
   goToCustomer() {
     this.router.navigate(['/customer-page']);
   }
-  goToCustomertest() {
-    this.router.navigate(['/customer-page-test']);
+  goToCustomerMaster() {
+    this.router.navigate(['/customer-master']);
   }
   goToVendor() {
     this.router.navigate(['/vendor-page']);

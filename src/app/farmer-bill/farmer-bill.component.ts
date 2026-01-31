@@ -14,14 +14,13 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { map, startWith } from 'rxjs/operators';
+import {  startWith } from 'rxjs/operators';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FormControl } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, timeout } from 'rxjs';
 import { MasterPageComponent } from "../master-page.component";
-
 import { VendorInterface } from './farmer-bill-interface';
 import { FarmerBillService } from './farmer-bill.service';
 import { FarmerBillDetailModel, farmerBill, FarmerBillExpensesModel } from './farmer-bill-interface';
@@ -62,6 +61,8 @@ export class FarmerBillComponent implements OnInit {
   displayedColumns: string[] = ['sr',
      'particularName', 'qty', 'unit', 'rate', 'weight', 'comissionPercent', 'comissionAmount', 'amt', 'view'
   ];
+
+  
 
   constructor(private dialog: MatDialog, private FarmerBillService: FarmerBillService, private fb: FormBuilder, private snackBar: MatSnackBar, private lovService: ListofValuesService, private marathiName: MarathiName) {
     this.farmerBillControls = this.fb.group({
@@ -127,6 +128,21 @@ export class FarmerBillComponent implements OnInit {
     });
   }
 
+
+  
+  // getTotalCost() {
+  //   const arr = (this.dataSource && Array.isArray(this.dataSource) ? this.dataSource : this._farmerBillDetail || []);
+  //   return arr.map(t => Number(t.amt || 0)).reduce((acc, value) => acc + value, 0);
+  // }
+
+  // getTotalQty() {
+  //   const arr = (this.dataSource && Array.isArray(this.dataSource.data) ? this.dataSource.data : this._farmerBillDetail || []);
+  //   return arr.map(t => Number(t.qty || 0)).reduce((acc, value) => acc + value, 0);
+  // }
+  // getTotalWeight() {    
+  //   const arr = (this.dataSource && Array.isArray(this.dataSource.data) ? this.dataSource.data : this._farmerBillDetail || []);
+  //   return arr.map(t => Number(t.weight || 0)).reduce((acc, value) => acc + value, 0);
+  // }
 
   private blurActiveElement(): void {
     try {

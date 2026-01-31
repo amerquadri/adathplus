@@ -117,8 +117,21 @@
 	color: #666;
 }
 
+.hidecontrol{
+	display:none;
+}
 .table-content {
-	overflow-x: auto;
+	overflow-x: scroll;
+	/* default (desktop/tablet) max width */
+	max-width: 1200px;
+	white-space: nowrap;
+}
+
+/* On smaller screens reduce the max-width so table scroll fits mobile */
+@media (max-width: 900px) {
+	.table-content {
+		max-width: 300px;
+	}
 }
 
 .table-footer {
@@ -337,6 +350,7 @@
 	align-items: center;
 	gap: 6px;
 	flex: 1;
+	margin-top: 20px;
 }
 
 .entry-select {
@@ -396,10 +410,7 @@ input.mat-input-element[type="number"] {
 	overflow: auto;
 	min-width: 1000px;
 }
-
-table {
-	width: 100%;
-}
+ 
 
 .mat-mdc-mini-fab {
 	width: 28px;
