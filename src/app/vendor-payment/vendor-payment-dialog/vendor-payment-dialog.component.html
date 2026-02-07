@@ -1,14 +1,14 @@
 <!-- Dialog header bar -->
 <div class="dialog-header">
-    <div class="dialog-title">Vendor Payment Details</div>
+    <div class="dialog-title">Farmer Payment Details</div>
     <div class="dialog-header-actions">
         <button mat-mini-fab color="primary" aria-label="Save" (click)="onSaveVendor()">
             <mat-icon>save</mat-icon>
         </button>
-        <button *ngIf="vendor && vendor.vendorId" mat-mini-fab color="warn" aria-label="Delete"
+        <!-- <button *ngIf="vendor && vendor.vendorId" mat-mini-fab color="warn" aria-label="Delete"
             (click)="onDeleteVendor()">
             <mat-icon>delete</mat-icon>
-        </button>
+        </button> -->
         <button mat-icon-button aria-label="Close" (click)="dialogRef.close()">
             <mat-icon>close</mat-icon>
         </button>
@@ -20,17 +20,15 @@
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Farmer Name</mat-label>
-
                 <mat-select [(ngModel)]="vendor.vendorId" name="vendorId" placeholder="Farmer Name"
                     (selectionChange)="onVendorSelected($event)">
                     <mat-option *ngFor="let vendorItem of vendorList" [value]="vendorItem.vendorId">{{
                         vendorItem.vendorName }}</mat-option>
                 </mat-select>
-
             </mat-form-field>
 
 
-            <mat-form-field appearance="outline">
+            <!-- <mat-form-field appearance="outline">
                 <mat-label>Number</mat-label>
                 <input type="text" placeholder="Pick one" aria-label="Farmer Name" matInput [formControl]="myControl"
                     [matAutocomplete]="auto">
@@ -40,20 +38,10 @@
                     <mat-option [value]="option">{{option}}</mat-option>
                     }
                 </mat-autocomplete>
-            </mat-form-field>
+            </mat-form-field> -->
 
 
-            <mat-form-field appearance="outline">
-                <mat-label>Transaction Amount</mat-label>
-                <input matInput [(ngModel)]="vendor.transactionAmount" name="transactionAmount"
-                    placeholder="Transaction Amount">
-            </mat-form-field>
-        </div>
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Discount Amount</mat-label>
-                <input matInput [(ngModel)]="vendor.discountAmount" name="discountAmount" placeholder="Discount Amount">
-            </mat-form-field>
+
             <mat-form-field appearance="outline" class="address-field">
 
                 <mat-label>Transaction Date</mat-label>
@@ -65,10 +53,35 @@
         </div>
         <div class="form-row">
             <mat-form-field appearance="outline">
+                <mat-label>Total Amount</mat-label>
+                <input matInput name="transactionAmount" disabled placeholder="Total Amount">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Paying Amount</mat-label>
+                <input matInput [(ngModel)]="vendor.transactionAmount" name="transactionAmount"
+                    placeholder="Total Amount">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Discount Amount</mat-label>
+                <input matInput [(ngModel)]="vendor.discountAmount" name="discountAmount" placeholder="Discount Amount">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Balance Amount</mat-label>
+                <input matInput name="balanceAmount" placeholder="Balance Amount" disabled>
+            </mat-form-field>
+
+        </div>
+
+
+        <div class="form-row">
+            <mat-form-field appearance="outline">
                 <mat-label>Notes</mat-label>
                 <textarea matInput [(ngModel)]="vendor.notes" rows="2" name="notes" placeholder="Notes"></textarea>
             </mat-form-field>
         </div>
+
+
+
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Payment Method</mat-label>
@@ -98,6 +111,8 @@
                 <mat-datepicker #paymentMethodChequeDate></mat-datepicker>
             </mat-form-field>
         </div>
+
+        <!-- 
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Created By ID</mat-label>
@@ -134,9 +149,14 @@
                 <mat-label>Company ID</mat-label>
                 <input matInput type="number" [(ngModel)]="vendor.companyId" name="companyId" placeholder="Company ID">
             </mat-form-field>
-        </div>
+        </div> -->
+
+
     </form>
 </mat-dialog-content>
+
+
+
 <!-- <mat-dialog-actions align="end">
   <button mat-raised-button color="primary" (click)="onSaveVendor()" type="button">Save</button>
   <button mat-button mat-dialog-close type="button">Close</button>

@@ -5,10 +5,10 @@
         <button mat-mini-fab color="primary" aria-label="Save" (click)="onSaveCustomer()">
             <mat-icon>save</mat-icon>
         </button>
-        <button *ngIf="customer && customer.customerId" mat-mini-fab color="warn" aria-label="Delete"
+        <!-- <button *ngIf="customer && customer.customerId" mat-mini-fab color="warn" aria-label="Delete"
             (click)="onDeleteCustomer()">
             <mat-icon>delete</mat-icon>
-        </button>
+        </button> -->
         <button mat-icon-button aria-label="Close" (click)="dialogRef.close()">
             <mat-icon>close</mat-icon>
         </button>
@@ -20,7 +20,6 @@
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Customer Name</mat-label>
-
                 <mat-select [(ngModel)]="customer.customerId" name="customerId" placeholder="Customer Name"
                     (selectionChange)="onCustomerSelected($event)">
                     <mat-option *ngFor="let customerItem of customerList" [value]="customerItem.customerId">{{
@@ -29,31 +28,6 @@
 
             </mat-form-field>
 
-
-            <mat-form-field appearance="outline">
-                <mat-label>Number</mat-label>
-                <input type="text" placeholder="Pick one" aria-label="Customer Name" matInput [formControl]="myControl"
-                    [matAutocomplete]="auto">
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [(ngModel)]="customer.customerId"
-                    name="customerId" placeholder="Customer Name">
-                    @for (option of filteredOptions | async; track option) {
-                    <mat-option [value]="option">{{option}}</mat-option>
-                    }
-                </mat-autocomplete>
-            </mat-form-field>
-
-
-            <mat-form-field appearance="outline">
-                <mat-label>Transaction Amount</mat-label>
-                <input matInput [(ngModel)]="customer.transactionAmount" name="transactionAmount"
-                    placeholder="Transaction Amount">
-            </mat-form-field>
-        </div>
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Discount Amount</mat-label>
-                <input matInput [(ngModel)]="customer.discountAmount" name="discountAmount" placeholder="Discount Amount">
-            </mat-form-field>
             <mat-form-field appearance="outline" class="address-field">
 
                 <mat-label>Transaction Date</mat-label>
@@ -62,6 +36,21 @@
                 <mat-datepicker-toggle matIconSuffix [for]="transactionDate"></mat-datepicker-toggle>
                 <mat-datepicker #transactionDate></mat-datepicker>
             </mat-form-field>
+
+
+        </div>
+        <div class="form-row">
+            
+            <mat-form-field appearance="outline">
+                <mat-label>Transaction Amount</mat-label>
+                <input matInput [(ngModel)]="customer.transactionAmount" name="transactionAmount"
+                    placeholder="Transaction Amount">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Discount Amount</mat-label>
+                <input matInput [(ngModel)]="customer.discountAmount" name="discountAmount" placeholder="Discount Amount">
+            </mat-form-field>
+          
         </div>
         <div class="form-row">
             <mat-form-field appearance="outline">
@@ -98,6 +87,9 @@
                 <mat-datepicker #paymentMethodChequeDate></mat-datepicker>
             </mat-form-field>
         </div>
+
+<!-- 
+
         <div class="form-row">
             <mat-form-field appearance="outline">
                 <mat-label>Created By ID</mat-label>
@@ -134,6 +126,14 @@
                 <mat-label>Company ID</mat-label>
                 <input matInput type="number" [(ngModel)]="customer.companyId" name="companyId" placeholder="Company ID">
             </mat-form-field>
-        </div>
+
+
+
+        </div> 
+-->
+
+
+
+
     </form>
 </mat-dialog-content> 

@@ -1,6 +1,6 @@
 <app-master-page>
 	<mat-card class="farmer-card">
-		<div class="title-bar">Farmer /// {{ marathiNameObj.farmer }} Bill </div>
+		<div class="title-bar">Farmer / {{ marathiNameObj.farmer }} Bill </div>
 
 		<div class="controls">
 			<div class="row">
@@ -53,7 +53,6 @@
 		<div class="content">
 			<mat-card >
 				<div class="table-content">
-				
 					<mat-card>
 						<section class="example-container mat-elevation-z8" tabindex="0">
 							<table mat-table [dataSource]="dataSource" class="mat-elevation-z25">
@@ -103,7 +102,7 @@
 								<ng-container matColumnDef="qty">
 									<th mat-header-cell *matHeaderCellDef> Qty </th>
 									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.qty}} </td>
-									<td mat-footer-cell *matFooterCellDef> {{ dataSource.data.indexOf(_farmerBillDetail) }} </td>
+									<td mat-footer-cell *matFooterCellDef> {{ getTotalQty() }} </td>
 				
 								</ng-container>
 				
@@ -117,12 +116,12 @@
 								<ng-container matColumnDef="weight">
 									<th mat-header-cell *matHeaderCellDef> Weight </th>
 									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.weight}} </td>
-									<td mat-footer-cell *matFooterCellDef> _____ </td>
+									<td mat-footer-cell *matFooterCellDef> {{getTotalWeight()}} </td>
 				
 								</ng-container>
 				
 								<ng-container matColumnDef="comissionPercent">
-									<th mat-header-cell *matHeaderCellDef> Commission Percent </th>
+									<th mat-header-cell *matHeaderCellDef> Com % </th>
 									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionPercent}}
 									</td>
 									<td mat-footer-cell *matFooterCellDef> _____ </td>
@@ -130,16 +129,16 @@
 								</ng-container>
 				
 								<ng-container matColumnDef="comissionAmount">
-									<th mat-header-cell *matHeaderCellDef> Commission Amount </th>
+									<th mat-header-cell *matHeaderCellDef> Com Amt </th>
 									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionAmount}}
 									</td>
-									<td mat-footer-cell *matFooterCellDef> _____ </td>
+									<td mat-footer-cell *matFooterCellDef> {{ getTotalComAmt()}} </td>
 				
 								</ng-container>
 								<ng-container matColumnDef="amt">
 									<th mat-header-cell *matHeaderCellDef> Amount </th>
 									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.amt}} </td>
-									<td mat-footer-cell *matFooterCellDef> _____ </td>
+									<td mat-footer-cell *matFooterCellDef> {{ this.getTotalCost() }} </td>
 				
 								</ng-container>
 				
@@ -198,20 +197,29 @@
 							<input matInput placeholder="Com %" type="number"
 								[(ngModel)]="_farmerBillDetail.comissionPercent" required />
 						</mat-form-field>
-						<div class="entry-amount">
-							{{ 
+						<mat-form-field appearance="outline" class="entry-field">
+							<mat-label>Amt</mat-label>
+
+							<input matInput placeholder="Com %" type="number" disabled value="{{ 
 							(calculationType.value === 'weightRate')
 								? ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.weight || 0))
 								: ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.qty || 0))
-							}}
-							
-							
+							}}"/>
+						</mat-form-field>
+						<mat-form-field appearance="outline" class="entry-field">
+							<mat-label>Com Amt</mat-label>
+							<input matInput placeholder="Com %" type="number" disabled value="{{ 
+							((calculationType.value === 'weightRate')
+								? ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.weight || 0))
+								: ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.qty || 0)))/100 *
+							(_farmerBillDetail.comissionPercent || 0)
+							}}"/>
+						</mat-form-field>
+						<div class="width-80">
+							<button mat-icon-button color="accent" class="save-entry" (click)="insertFarmerBillDetails()">
+								<mat-icon>save</mat-icon>
+							</button>
 						</div>
-						<button mat-icon-button color="accent" class="save-entry" (click)="insertFarmerBillDetails()">
-							<mat-icon>save</mat-icon>
-
-						</button>
-
 					</div>
 				</mat-card>
 
@@ -252,7 +260,7 @@
 
 
 		<div class="bottom-bar">
-			<div class="grand-total">Total:0</div>
+			<div class="grand-total">Total: {{  this.getTotalCost()  - sidebarTotal }}</div>
 			<mat-form-field appearance="outline" class="col medium">
 				<mat-label>Calculation</mat-label>
 				<mat-select placeholder="Calculation" #calculationType>

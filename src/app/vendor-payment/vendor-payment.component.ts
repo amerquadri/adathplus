@@ -23,13 +23,16 @@ import { VendorDialogComponent } from '../vendor-page/vendor-dialog.component';
 import{ VendorPaymentDialogComponent } from './vendor-payment-dialog/vendor-payment-dialog.component';
 import { timeout, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
+
+
 
 @Component({
   selector: 'app-vendor-payment',
   standalone: true,
    imports: [MasterPageComponent, ReactiveFormsModule, FormsModule, MatInputModule,
     MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule,
-    MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,
+    MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,MatIcon,
     CommonModule ],
   templateUrl: './vendor-payment.component.html',
   styleUrl: './vendor-payment.component.css'

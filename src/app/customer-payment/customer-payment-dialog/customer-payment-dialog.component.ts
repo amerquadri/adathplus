@@ -72,7 +72,7 @@ export class CustomerPaymentDialogComponent {
     public dialogRef: MatDialogRef<CustomerPaymentDialogComponent>
   ) {
     this.customer = data && data.customer ? data.customer : {};
-    this.initializeDates();
+    // this.initializeDates();
   }
 
 
@@ -89,23 +89,24 @@ export class CustomerPaymentDialogComponent {
     }
   }
 
-  initializeDates() {
-    if (this.customer.createdDate && typeof this.customer.createdDate === 'string') {
-      this.customer.createdDate = new Date(this.customer.createdDate);
-    }
-    if (this.customer.updatedDate && typeof this.customer.updatedDate === 'string') {
-      this.customer.updatedDate = new Date(this.customer.updatedDate);
-    }
-  }
+  // initializeDates() {
+  //   if (this.customer.createdDate && typeof this.customer.createdDate === 'string') {
+  //     this.customer.createdDate = new Date(this.customer.createdDate);
+  //   }
+  //   if (this.customer.updatedDate && typeof this.customer.updatedDate === 'string') {
+  //     this.customer.updatedDate = new Date(this.customer.updatedDate);
+  //   }
+  // }
 
   prepareDatesForSave() {
     const customerToSave = { ...this.customer };
-    if (customerToSave.createdDate instanceof Date) {
-      customerToSave.createdDate = customerToSave.createdDate.toISOString();
-    }
-    if (customerToSave.updatedDate instanceof Date) {
-      customerToSave.updatedDate = customerToSave.updatedDate.toISOString();
-    }
+    // if (customerToSave.createdDate instanceof Date) {
+    //   customerToSave.createdDate = customerToSave.createdDate.toISOString();
+    // }
+    // if (customerToSave.updatedDate instanceof Date) {
+    //   customerToSave.updatedDate = customerToSave.updatedDate.toISOString();
+    // }
+
     // Ensure customerName is set when customerId is present by looking up the loaded customer list.
     if ((!customerToSave.customerName || customerToSave.customerName === '') && customerToSave.customerId) {
       const found = this.customerList.find(v => v.customerId === customerToSave.customerId);
@@ -130,6 +131,7 @@ export class CustomerPaymentDialogComponent {
   onSaveCustomer() {
     const customerToSave = this.prepareDatesForSave();
     if (customerToSave && customerToSave.customerId) {
+      
       this.customerService.insertCustomerPayment(customerToSave).subscribe({
         next: () => this.dialogRef.close('saved'),
         error: (err: any) => console.error('Save failed', err)

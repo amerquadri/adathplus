@@ -31,6 +31,11 @@ export class CustomerPaymentService {
   }
 
   insertCustomerPayment(customer: CustomerPaymentInterface): Observable<CustomerPaymentInterface> {
+    customer.companyId = this.loginService?.getCompanyId() ?? 0;
+    customer.createdById = this.loginService?.getUserId() ?? 0;
+    customer.createdDate = new Date();
+    
+   
     const companyId = this.loginService?.getCompanyId() ?? 0;
     customer.companyId = companyId;
     customer.createdById = this.loginService?.getUserId() ?? 0;

@@ -13,7 +13,6 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
-//import { VendorPaymentInterface } from '../vendor-payment/vendor-payment-interface';
 import { CustomerPaymentInterface } from '../customer-payment/customer-payment';
 import { CustomerPaymentService } from './customer-payment.service';
 import { MatPaginator } from '@angular/material/paginator';
@@ -23,13 +22,16 @@ import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.componen
 import { CustomerPaymentDialogComponent } from './customer-payment-dialog/customer-payment-dialog.component';
 import { timeout, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { MatIcon } from '@angular/material/icon';
+
+
 
 @Component({
   selector: 'app-customer-payment',
   standalone: true,
   imports: [MasterPageComponent, ReactiveFormsModule, FormsModule, MatInputModule,
     MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule,
-    MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,
+    MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,MatIcon,
     CommonModule],
   templateUrl: './customer-payment.component.html',
   styleUrl: './customer-payment.component.css'

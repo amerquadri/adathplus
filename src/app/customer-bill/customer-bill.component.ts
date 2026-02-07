@@ -158,7 +158,8 @@ export class CustomerBillComponent implements AfterViewInit {
 
 
   GetCustomerBillDetails() {
-    if (this.selectedComissionBillId !== null && this.selectedComissionBillId !== undefined) {
+    
+    if (this.selectedComissionBillId !== null && this.selectedComissionBillId !== undefined && this.selectedComissionBillId > 0) {
       this.customerbillService.GetCustomerBillDetails(this.selectedComissionBillId).subscribe({
         next: (data: any) => {
           this.dataSource.data = data.data || data || [];

@@ -76,7 +76,7 @@ export class VendorPaymentDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<VendorPaymentDialogComponent>
   ) {
     this.vendor = data && data.vendor ? data.vendor : {};
-    this.initializeDates();
+    //this.initializeDates();
   }
 
 
@@ -93,23 +93,23 @@ export class VendorPaymentDialogComponent implements OnInit {
     }
   }
 
-initializeDates() {
-    if (this.vendor.createdDate && typeof this.vendor.createdDate === 'string') {
-      this.vendor.createdDate = new Date(this.vendor.createdDate);
-    }
-    if (this.vendor.updatedDate && typeof this.vendor.updatedDate === 'string') {
-      this.vendor.updatedDate = new Date(this.vendor.updatedDate);
-    }
-  }
+// initializeDates() {
+//     if (this.vendor.createdDate && typeof this.vendor.createdDate === 'string') {
+//       this.vendor.createdDate = new Date(this.vendor.createdDate);
+//     }
+//     if (this.vendor.updatedDate && typeof this.vendor.updatedDate === 'string') {
+//       this.vendor.updatedDate = new Date(this.vendor.updatedDate);
+//     }
+//   }
 
 prepareDatesForSave() {
     const vendorToSave = { ...this.vendor };
-    if (vendorToSave.createdDate instanceof Date) {
-      vendorToSave.createdDate = vendorToSave.createdDate.toISOString();
-    }
-    if (vendorToSave.updatedDate instanceof Date) {
-      vendorToSave.updatedDate = vendorToSave.updatedDate.toISOString();
-    }
+    // if (vendorToSave.createdDate instanceof Date) {
+    //   vendorToSave.createdDate = vendorToSave.createdDate.toISOString();
+    // }
+    // if (vendorToSave.updatedDate instanceof Date) {
+    //   vendorToSave.updatedDate = vendorToSave.updatedDate.toISOString();
+    // }
     // Ensure vendorName is set when vendorId is present by looking up the loaded vendor list.
     if ((!vendorToSave.vendorName || vendorToSave.vendorName === '') && vendorToSave.vendorId) {
       const found = this.vendorList.find(v => v.vendorId === vendorToSave.vendorId);

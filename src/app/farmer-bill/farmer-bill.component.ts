@@ -59,7 +59,7 @@ import { MarathiName } from '../common-fields/marathi-name';
 export class FarmerBillComponent implements OnInit {
   farmerBillControls: FormGroup;
   displayedColumns: string[] = ['sr',
-     'particularName', 'qty', 'unit', 'rate', 'weight', 'comissionPercent', 'comissionAmount', 'amt', 'view'
+     'particularName', 'qty', 'unit', 'rate', 'weight', 'comissionPercent',  'amt', 'view'
   ];
 
   
@@ -130,19 +130,40 @@ export class FarmerBillComponent implements OnInit {
 
 
   
-  // getTotalCost() {
-  //   const arr = (this.dataSource && Array.isArray(this.dataSource) ? this.dataSource : this._farmerBillDetail || []);
-  //   return arr.map(t => Number(t.amt || 0)).reduce((acc, value) => acc + value, 0);
-  // }
 
-  // getTotalQty() {
-  //   const arr = (this.dataSource && Array.isArray(this.dataSource.data) ? this.dataSource.data : this._farmerBillDetail || []);
-  //   return arr.map(t => Number(t.qty || 0)).reduce((acc, value) => acc + value, 0);
-  // }
-  // getTotalWeight() {    
-  //   const arr = (this.dataSource && Array.isArray(this.dataSource.data) ? this.dataSource.data : this._farmerBillDetail || []);
-  //   return arr.map(t => Number(t.weight || 0)).reduce((acc, value) => acc + value, 0);
-  // }
+  getTotalCost(): number {
+    const arr = Array.isArray(this.dataSource?.data)
+      ? this.dataSource.data : (Array.isArray(this._farmerBillDetail) ? this._farmerBillDetail : [] as any[]);
+    if (!arr || arr.length === 0) return 0;
+
+    return arr.reduce((acc, t: any) => acc + (Number(t?.amt) || 0), 0);
+  }
+
+  getTotalQty() {
+   const arr = Array.isArray(this.dataSource?.data)
+      ? this.dataSource.data : (Array.isArray(this._farmerBillDetail) ? this._farmerBillDetail : [] as any[]);
+    if (!arr || arr.length === 0) return 0;
+
+    return arr.reduce((acc, t: any) => acc + (Number(t?.qty) || 0), 0);
+  }
+
+  getTotalWeight() {    
+    const arr = Array.isArray(this.dataSource?.data)
+      ? this.dataSource.data : (Array.isArray(this._farmerBillDetail) ? this._farmerBillDetail : [] as any[]);
+    if (!arr || arr.length === 0) return 0;
+
+    return arr.reduce((acc, t: any) => acc + (Number(t?.weight) || 0), 0);
+  }
+
+
+  getTotalComAmt() {    
+    const arr = Array.isArray(this.dataSource?.data)
+      ? this.dataSource.data : (Array.isArray(this._farmerBillDetail) ? this._farmerBillDetail : [] as any[]);
+    if (!arr || arr.length === 0) return 0;
+
+    return arr.reduce((acc, t: any) => acc + (Number(t?.comissionAmount) || 0), 0);
+  }
+
 
   private blurActiveElement(): void {
     try {

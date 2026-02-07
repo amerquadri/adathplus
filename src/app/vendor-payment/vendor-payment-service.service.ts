@@ -32,14 +32,9 @@ export class VendorPaymentServiceService {
     const companyId = this.loginService?.getCompanyId() ?? 0;
     vendor.companyId = companyId;
     vendor.createdById = this.loginService?.getUserId() ?? 0;
-  
-
 
     const insertUrl = `${this.baseUrl}/AmtTransactions/SaveTransaction`;
-    // Some APIs expect the transaction payload wrapped under a `transaction` key.
-    // Wrap the vendor payment object to match that shape so validation keys like
-    // 'transaction' and 'vendorName' are present server-side.
-    const payload = { transaction: vendor };
+    //const payload = { transaction: vendor };
     return this.http.post<VendorPaymentInterface>(insertUrl, vendor);
   }
 

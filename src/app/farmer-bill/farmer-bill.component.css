@@ -121,10 +121,16 @@
 	display:none;
 }
 .table-content {
-	overflow-x: scroll;
+	overflow-x: auto;
 	/* default (desktop/tablet) max width */
-	max-width: 1200px;
-	white-space: nowrap;
+	max-width: 1500px;
+	
+}
+
+.width-80 {
+	width: 80px;
+	margin:auto;
+	padding: auto;
 }
 
 /* On smaller screens reduce the max-width so table scroll fits mobile */
