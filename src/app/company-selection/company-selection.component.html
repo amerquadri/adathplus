@@ -1,21 +1,93 @@
-<div class="center-container">
-  <mat-card class="company-card">
-    <mat-card-header>
-      <mat-card-title>Company Selection</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-form-field appearance="fill" class="company-select">
-        <mat-label>Company</mat-label>
-        <mat-select [(ngModel)]="selectedCompany">
-          <mat-option *ngFor="let company of companylist" value="company.companyID" (onSelectionChange)="onCompanySelected(company)" >
-            {{ company.companyName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <div class="actions">
-        <button mat-raised-button color="primary" (click)="confirmSelection()">Confirm</button>
-        <button mat-raised-button color="primary" (click)="loginPage()">Login Again</button>
-      </div>
-    </mat-card-content>
-  </mat-card>
+<div class="selection-page">
+	<!-- Animated background shapes -->
+	<div class="bg-shapes">
+		<div class="shape shape-1"></div>
+		<div class="shape shape-2"></div>
+		<div class="shape shape-3"></div>
+	</div>
+
+	<div class="selection-container">
+		<!-- Left side - Branding -->
+		<div class="selection-branding">
+			<div class="branding-content">
+				<div class="logo-icon">
+					<svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" fill="rgba(255,255,255,0.9)"/>
+					</svg>
+				</div>
+				<h1 class="brand-title">Select Company</h1>
+				<p class="brand-subtitle">Choose your workspace to continue</p>
+				<div class="features">
+					<div class="feature-item">
+						<span class="feature-icon">🏢</span>
+						<span>Multi-company Support</span>
+					</div>
+					<div class="feature-item">
+						<span class="feature-icon">🔒</span>
+						<span>Secure Access</span>
+					</div>
+					<div class="feature-item">
+						<span class="feature-icon">⚡</span>
+						<span>Quick Switch</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Right side - Selection Form -->
+		<div class="selection-form-section">
+			<mat-card class="selection-card">
+				<div class="selection-header">
+					<div class="icon-container">
+						<svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" fill="url(#companyGradient)"/>
+							<defs>
+								<linearGradient id="companyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+									<stop offset="0%" style="stop-color:#667eea"/>
+									<stop offset="100%" style="stop-color:#764ba2"/>
+								</linearGradient>
+							</defs>
+						</svg>
+					</div>
+					<h2 class="selection-title">Company Selection</h2>
+					<p class="selection-subtitle">Select your company to access the dashboard</p>
+				</div>
+
+				<div class="selection-form">
+					<mat-form-field appearance="outline" class="company-select">
+						<mat-label>Select Company</mat-label>
+						<mat-icon matPrefix class="input-icon">business</mat-icon>
+						<mat-select [(ngModel)]="selectedCompany" placeholder="Choose a company">
+							<mat-option *ngFor="let company of companylist" [value]="company.companyID" (onSelectionChange)="onCompanySelected(company)">
+								<div class="company-option">
+									<mat-icon class="option-icon">apartment</mat-icon>
+									<span>{{ company.companyName }}</span>
+								</div>
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+
+					<div class="selected-info" *ngIf="companyName">
+						<mat-icon>check_circle</mat-icon>
+						<span>Selected: <strong>{{ companyName }}</strong></span>
+					</div>
+
+					<div class="actions">
+						<button mat-raised-button class="confirm-button" (click)="confirmSelection()" [disabled]="!companyId">
+							<mat-icon>check</mat-icon>
+							<span>Confirm & Continue</span>
+						</button>
+						<button mat-stroked-button class="back-button" (click)="loginPage()">
+							<mat-icon>arrow_back</mat-icon>
+							<span>Back to Login</span>
+						</button>
+					</div>
+				</div>
+
+				<div class="selection-footer">
+					<p>© 2026 Adath Plus. All rights reserved.</p>
+				</div>
+			</mat-card>
+		</div>
+	</div>
 </div>

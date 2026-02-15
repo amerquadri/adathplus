@@ -10,6 +10,9 @@ import { Router } from '@angular/router';
 import { LoginServiceService } from './login-service.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-login-page',
@@ -22,15 +25,29 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatCardModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule,
+    MatCheckboxModule
   ],
   templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.css'
+  styleUrl: './login-page.component.css',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-10px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ opacity: 0, transform: 'translateY(-10px)' }))
+      ])
+    ])
+  ]
 })
 export class LoginPageComponent {
   loginForm: FormGroup;
   isLoading = false;
   errorMessage = '';
+  hidePassword = true;
 
   constructor(
     private fb: FormBuilder,

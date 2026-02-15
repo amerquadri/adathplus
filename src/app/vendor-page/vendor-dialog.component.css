@@ -1,67 +1,329 @@
-/* Reuse dialog styles similar to customer dialog */
-.customer-dialog-form {
+﻿/* Dialog Container - Remove default scrollbar */
+::ng-deep .mat-mdc-dialog-surface {
+  overflow: hidden !important;
+}
+
+/* Dialog Header with Gradient */
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin: -24px -24px 0 -24px;
+  border-radius: 8px 8px 0 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.header-text {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 16px 0;
-  max-width: 100%;
 }
 
+.dialog-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.dialog-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.close-btn {
+  color: white !important;
+  transition: background 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Dialog Content */
+mat-dialog-content {
+  padding: 24px !important;
+  max-height: 65vh !important;
+  overflow-y: auto !important;
+}
+
+/* Form Styling */
+.vendor-dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Section Styling */
+.form-section {
+  background: #f8f9fc;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 8px;
+  border: 1px solid #e8eaf6;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e8eaf6;
+  color: #667eea;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.section-header mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Form Row Layout */
 .form-row {
   display: flex;
-  flex-direction: row;
   gap: 16px;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  margin-bottom: 8px;
 }
 
-.form-row mat-form-field {
+.form-row.two-col mat-form-field {
   flex: 1;
-  min-width: 200px;
 }
 
-.address-field {
-  flex: 2;
+.form-row.three-col mat-form-field {
+  flex: 1;
 }
 
-mat-form-field {
+.full-width {
   width: 100%;
 }
 
-mat-dialog-content {
-  max-height: 70vh;
-  overflow-y: auto;
-  padding: 0 24px;
+/* Field Icons */
+.field-icon {
+  color: #667eea;
+  margin-right: 8px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
-mat-dialog-actions {
-  padding: 16px 24px;
-  margin: 0;
+/* Currency Prefix */
+.currency-prefix {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 16px;
+  margin-right: 8px;
 }
 
-@media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
-  }
-  
-  .form-row mat-form-field {
-    min-width: 100%;
-  }
+/* Financial Fields Coloring */
+.credit-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.credit-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.credit-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: #4caf50 !important;
 }
 
-.dialog-header {
+.credit-field .currency-prefix {
+  color: #4caf50;
+}
+
+.debit-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.debit-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.debit-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: #f44336 !important;
+}
+
+.debit-field .currency-prefix {
+  color: #f44336;
+}
+
+.opening-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.opening-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.opening-field ::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: #667eea !important;
+}
+
+.opening-field .currency-prefix {
+  color: #667eea;
+}
+
+/* Form Field Focus State */
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: #667eea !important;
+  border-width: 2px !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: #667eea !important;
+}
+
+/* Dialog Actions */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px !important;
+  background: #f5f5f5;
+  margin: 0 -24px -24px -24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.cancel-btn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 20px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  background: #ffffff;
-  position: sticky;
-  top: 0;
-  z-index: 20;
+  gap: 6px;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0 20px;
+  height: 42px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
-.dialog-title { font-size: 20px; font-weight: 700; }
-.dialog-header-actions { display:flex; gap:8px; align-items:center; }
+.cancel-btn:hover {
+  background: #fff;
+  border-color: #667eea;
+  color: #667eea;
+}
 
+.cancel-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 0 24px;
+  height: 42px;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+  transition: all 0.3s ease;
+}
+
+.save-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+}
+
+.save-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .dialog-header {
+    padding: 16px 20px;
+    margin: -24px -24px 0 -24px;
+  }
+
+  .header-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .header-icon mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .dialog-title {
+    font-size: 18px;
+  }
+
+  .dialog-subtitle {
+    font-size: 12px;
+  }
+
+  mat-dialog-content {
+    padding: 16px !important;
+    max-height: 60vh !important;
+  }
+
+  .form-section {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .section-header {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-row.two-col,
+  .form-row.three-col {
+    flex-direction: column;
+  }
+
+  .dialog-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+    padding: 12px 16px !important;
+  }
+
+  .cancel-btn,
+  .save-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Scrollbar Styling */
+mat-dialog-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+mat-dialog-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+mat-dialog-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 3px;
+}
+
+mat-dialog-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
+}

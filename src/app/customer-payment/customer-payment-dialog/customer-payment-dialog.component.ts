@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -40,30 +39,72 @@ import { Observable, of } from 'rxjs';
   templateUrl: './customer-payment-dialog.component.html',
   styleUrl: './customer-payment-dialog.component.css'
 })
-export class CustomerPaymentDialogComponent {
+export class CustomerPaymentDialogComponent implements OnInit {
   public customer: any;
   public PaymentMethod = PaymentMethod; // Expose enum to template
   public customerList: CustomerInterface[] = [];
- 
-  myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
 
-  filteredOptions: Observable<string[]> = of(this.options);
+  // Autocomplete for customer selection
+  customerControl = new FormControl('');
+  customerOptions: string[] = [];
+  filteredCustomers: Observable<string[]> = of([]);
 
   ngOnInit(): void {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
-
-
     this.loadCustomerList();
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  private _filterCustomers(value: string): string[] {
+    const filterValue = (value || '').toLowerCase();
+    return this.customerOptions.filter(option => option.toLowerCase().includes(filterValue));
+  }
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  private initCustomerAutocomplete(): void {
+    // Populate options from customerList - customerName may be string or array
+    this.customerOptions = this.customerList.map(c => {
+      const name = c.customerName;
+      if (Array.isArray(name)) {
+        return name[0] || '';
+      }
+      return (name as unknown as string) || '';
+    });
+    
+    // Set initial value if customer already has a name
+    if (this.customer && this.customer.customerName) {
+      const existingName = Array.isArray(this.customer.customerName) 
+        ? this.customer.customerName[0] 
+        : this.customer.customerName;
+      this.customerControl.setValue(existingName || '');
+    } else if (this.customer && this.customer.customerId) {
+      const found = this.customerList.find(c => c.customerId === this.customer.customerId);
+      if (found) {
+        const foundName = Array.isArray(found.customerName) 
+          ? found.customerName[0] 
+          : (found.customerName as unknown as string);
+        this.customerControl.setValue(foundName || '');
+      }
+    }
+    
+    // Setup filtered observable
+    this.filteredCustomers = this.customerControl.valueChanges.pipe(
+      startWith(this.customerControl.value || ''),
+      map(value => this._filterCustomers(value || ''))
+    );
+  }
+
+  onCustomerAutoSelected(selectedName: string): void {
+    const target = (selectedName || '').trim();
+    const found = this.customerList.find(c => {
+      const name = c.customerName;
+      const nameStr = Array.isArray(name) ? name[0] : (name as unknown as string);
+      return (nameStr || '').trim() === target;
+    });
+    if (found) {
+      this.customer.customerId = found.customerId;
+      this.customer.customerName = found.customerName;
+    } else {
+      this.customer.customerId = null;
+      this.customer.customerName = '';
+    }
   }
 
   constructor(
@@ -72,31 +113,7 @@ export class CustomerPaymentDialogComponent {
     public dialogRef: MatDialogRef<CustomerPaymentDialogComponent>
   ) {
     this.customer = data && data.customer ? data.customer : {};
-    // this.initializeDates();
   }
-
-
-  onCustomerSelected(event: MatSelectChange) {
-    // event.value is the selected customerId (could be string or number)
-    const selectedId = Number(event.value);
-    const found = this.customerList.find(v => Number(v.customerId) === selectedId);
-    if (found) {
-      this.customer.customerId = found.customerId;
-      this.customer.customerName = found.customerName;
-    } else {
-      // If not found, clear name but keep id
-      this.customer.customerName = '';
-    }
-  }
-
-  // initializeDates() {
-  //   if (this.customer.createdDate && typeof this.customer.createdDate === 'string') {
-  //     this.customer.createdDate = new Date(this.customer.createdDate);
-  //   }
-  //   if (this.customer.updatedDate && typeof this.customer.updatedDate === 'string') {
-  //     this.customer.updatedDate = new Date(this.customer.updatedDate);
-  //   }
-  // }
 
   prepareDatesForSave() {
     const customerToSave = { ...this.customer };
@@ -149,6 +166,7 @@ export class CustomerPaymentDialogComponent {
     this.customerService.getCustomerNameList().subscribe({
       next: (response: CustomerInterface[]) => {
         this.customerList = response || [];
+        this.initCustomerAutocomplete();
       },
       error: (err: any) => console.error('Failed to load customer list', err)
     });

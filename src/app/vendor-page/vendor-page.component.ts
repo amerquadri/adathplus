@@ -11,7 +11,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { VendorService } from './vendor.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -24,7 +24,8 @@ import { timeout, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 // import { VendorPaymentInterface } from '../vendor-payment/vendor-payment-interface';
 import { VendorInterface } from '../vendor-payment/vendor-payment-interface';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @Component({
@@ -33,7 +34,7 @@ import { MatIcon } from '@angular/material/icon';
   imports: [MasterPageComponent, ReactiveFormsModule, FormsModule, MatInputModule,
     MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule,
     MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,
-    CommonModule, MatIcon],
+    CommonModule, DecimalPipe, MatIconModule, MatTooltipModule],
   templateUrl: './vendor-page.component.html',
   styleUrls: ['./vendor-page.component.css']
 })
@@ -41,6 +42,7 @@ export class VendorPageComponent {
   // expose dialog classes for ngComponentOutlet
   public VendorDialog = VendorDialogComponent;
   public ConfirmDialog = ConfirmDialogComponent;
+  public Math = Math; // For template usage
   public vendor: any;
 
   vendorForm: FormGroup;
@@ -50,6 +52,11 @@ export class VendorPageComponent {
   isUsingTestData: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   displayedColumns: string[] = ['vendorId', 'vendorName', 'credit', 'debit', 'openingAmt', 'isActive', 'view'];
+
+  // Mobile pagination properties
+  mobilePageIndex: number = 0;
+  mobilePageSize: number = 10;
+  mobilePageSizeOptions: number[] = [5, 10, 20, 50];
 
   constructor(private fb: FormBuilder, private dialog: MatDialog, private vendorService: VendorService) {
     this.vendorForm = this.fb.group({
@@ -123,7 +130,33 @@ export class VendorPageComponent {
 
   ngAfterViewInit() { if (this.paginator) this.dataSource.paginator = this.paginator; }
 
-  applyFilter() { this.fetchVendors(); this.dataSource.filter = this.searchValue.trim().toLowerCase(); }
+  // Mobile pagination methods
+  get paginatedMobileData(): VendorInterface[] {
+    const filtered = this.dataSource.filteredData;
+    const startIndex = this.mobilePageIndex * this.mobilePageSize;
+    return filtered.slice(startIndex, startIndex + this.mobilePageSize);
+  }
+
+  get totalMobilePages(): number {
+    return Math.ceil(this.dataSource.filteredData.length / this.mobilePageSize);
+  }
+
+  onMobilePageChange(event: any): void {
+    this.mobilePageIndex = event.pageIndex;
+    this.mobilePageSize = event.pageSize;
+  }
+
+  applyFilter() {
+    this.dataSource.filter = this.searchValue.trim().toLowerCase();
+    
+    // Reset to first page after filtering
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+    
+    // Reset mobile pagination as well
+    this.mobilePageIndex = 0;
+  }
 
   confirmDeleteVendor(vendor: VendorInterface): void {
     this.blurActiveElement();

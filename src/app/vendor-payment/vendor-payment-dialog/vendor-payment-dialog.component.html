@@ -1,163 +1,166 @@
-<!-- Dialog header bar -->
+<!-- Dialog Header -->
 <div class="dialog-header">
-    <div class="dialog-title">Farmer Payment Details</div>
-    <div class="dialog-header-actions">
-        <button mat-mini-fab color="primary" aria-label="Save" (click)="onSaveVendor()">
-            <mat-icon>save</mat-icon>
-        </button>
-        <!-- <button *ngIf="vendor && vendor.vendorId" mat-mini-fab color="warn" aria-label="Delete"
-            (click)="onDeleteVendor()">
-            <mat-icon>delete</mat-icon>
-        </button> -->
-        <button mat-icon-button aria-label="Close" (click)="dialogRef.close()">
-            <mat-icon>close</mat-icon>
-        </button>
+    <div class="header-content">
+        <div class="header-icon">
+            <mat-icon>payments</mat-icon>
+        </div>
+        <div class="header-text">
+            <h2 class="dialog-title">Farmer Payment Details</h2>
+            <p class="dialog-subtitle">Manage payment transaction</p>
+        </div>
     </div>
+    <button mat-icon-button class="close-btn" (click)="dialogRef.close()">
+        <mat-icon>close</mat-icon>
+    </button>
 </div>
+
 <mat-dialog-content>
+    <form class="vendor-dialog-form">
+        <!-- Farmer & Date Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <mat-icon>person</mat-icon>
+                <span>Farmer Information</span>
+            </div>
+            <div class="form-row two-col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Farmer Name</mat-label>
+                    <mat-icon matPrefix class="field-icon">agriculture</mat-icon>
+                    <input type="text" name="vendorName" placeholder="Select Farmer" matInput
+                        [formControl]="farmerControl" [matAutocomplete]="autoFarmer">
+                    <mat-autocomplete #autoFarmer="matAutocomplete" (optionSelected)="onFarmerSelected($event.option.value)">
+                        <mat-option *ngFor="let option of (filteredFarmers | async)" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
 
-    <form class="customer-dialog-form">
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Farmer Name</mat-label>
-                <mat-select [(ngModel)]="vendor.vendorId" name="vendorId" placeholder="Farmer Name"
-                    (selectionChange)="onVendorSelected($event)">
-                    <mat-option *ngFor="let vendorItem of vendorList" [value]="vendorItem.vendorId">{{
-                        vendorItem.vendorName }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-
-
-            <!-- <mat-form-field appearance="outline">
-                <mat-label>Number</mat-label>
-                <input type="text" placeholder="Pick one" aria-label="Farmer Name" matInput [formControl]="myControl"
-                    [matAutocomplete]="auto">
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [(ngModel)]="vendor.vendorId"
-                    name="vendorId" placeholder="Farmer Name">
-                    @for (option of filteredOptions | async; track option) {
-                    <mat-option [value]="option">{{option}}</mat-option>
-                    }
-                </mat-autocomplete>
-            </mat-form-field> -->
-
-
-
-            <mat-form-field appearance="outline" class="address-field">
-
-                <mat-label>Transaction Date</mat-label>
-                <input matInput [matDatepicker]="transactionDate" [(ngModel)]="vendor.transactionDate"
-                    name="transactionDate" placeholder="Select date" readonly>
-                <mat-datepicker-toggle matIconSuffix [for]="transactionDate"></mat-datepicker-toggle>
-                <mat-datepicker #transactionDate></mat-datepicker>
-            </mat-form-field>
-        </div>
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Total Amount</mat-label>
-                <input matInput name="transactionAmount" disabled placeholder="Total Amount">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Paying Amount</mat-label>
-                <input matInput [(ngModel)]="vendor.transactionAmount" name="transactionAmount"
-                    placeholder="Total Amount">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Discount Amount</mat-label>
-                <input matInput [(ngModel)]="vendor.discountAmount" name="discountAmount" placeholder="Discount Amount">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Balance Amount</mat-label>
-                <input matInput name="balanceAmount" placeholder="Balance Amount" disabled>
-            </mat-form-field>
-
+                <mat-form-field appearance="outline">
+                    <mat-label>Transaction Date</mat-label>
+                    <mat-icon matPrefix class="field-icon">event</mat-icon>
+                    <input matInput [matDatepicker]="transactionDate" [(ngModel)]="vendor.transactionDate"
+                        name="transactionDate" placeholder="Select date" readonly>
+                    <mat-datepicker-toggle matIconSuffix [for]="transactionDate"></mat-datepicker-toggle>
+                    <mat-datepicker #transactionDate></mat-datepicker>
+                </mat-form-field>
+            </div>
         </div>
 
+        <!-- Amount Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <mat-icon>account_balance_wallet</mat-icon>
+                <span>Amount Details</span>
+            </div>
+            <div class="form-row four-col">
+                <mat-form-field appearance="outline" class="amount-field total-field">
+                    <mat-label>Total Amount</mat-label>
+                    <span matPrefix class="currency-prefix">₹</span>
+                    <input matInput name="totalAmount" disabled placeholder="0.00">
+                </mat-form-field>
 
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Notes</mat-label>
-                <textarea matInput [(ngModel)]="vendor.notes" rows="2" name="notes" placeholder="Notes"></textarea>
-            </mat-form-field>
+                <mat-form-field appearance="outline" class="amount-field paying-field">
+                    <mat-label>Paying Amount</mat-label>
+                    <span matPrefix class="currency-prefix">₹</span>
+                    <input matInput [(ngModel)]="vendor.transactionAmount" name="transactionAmount"
+                        placeholder="0.00" type="number">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="amount-field discount-field">
+                    <mat-label>Discount Amount</mat-label>
+                    <span matPrefix class="currency-prefix">₹</span>
+                    <input matInput [(ngModel)]="vendor.discountAmount" name="discountAmount" 
+                        placeholder="0.00" type="number">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="amount-field balance-field">
+                    <mat-label>Balance Amount</mat-label>
+                    <span matPrefix class="currency-prefix">₹</span>
+                    <input matInput name="balanceAmount" placeholder="0.00" disabled>
+                </mat-form-field>
+            </div>
         </div>
 
-
-
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Payment Method</mat-label>
-                <mat-select [(ngModel)]="vendor.paymentMethod" name="paymentMethod" placeholder="Payment Method">
-                    <mat-option [value]="PaymentMethod.Cash">Cash</mat-option>
-                    <mat-option [value]="PaymentMethod.Draft">Draft</mat-option>
-                    <mat-option [value]="PaymentMethod.Cheque">Cheque</mat-option>
-                    <mat-option [value]="PaymentMethod.Online">Online</mat-option>
-                    <mat-option [value]="PaymentMethod.UPI">UPI</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Payment Method No</mat-label>
-                <input matInput type="string" [(ngModel)]="vendor.paymentMethodNo" name="paymentMethodNo"
-                    placeholder="Payment Method No">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Payment Method Bank</mat-label>
-                <input matInput type="string" [(ngModel)]="vendor.paymentMethodBank" name="paymentMethodBank"
-                    placeholder="Payment Method Bank">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Payment Method Cheque Date</mat-label>
-                <input matInput [matDatepicker]="paymentMethodChequeDate" [(ngModel)]="vendor.paymentMethodChequeDate"
-                    name="paymentMethodChequeDate" placeholder="Select created date" readonly>
-                <mat-datepicker-toggle matIconSuffix [for]="paymentMethodChequeDate"></mat-datepicker-toggle>
-                <mat-datepicker #paymentMethodChequeDate></mat-datepicker>
+        <!-- Notes Section -->
+        <div class="form-section notes-section">
+            <div class="section-header">
+                <mat-icon>notes</mat-icon>
+                <span>Notes</span>
+            </div>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Payment Notes</mat-label>
+                <mat-icon matPrefix class="field-icon">edit_note</mat-icon>
+                <textarea matInput [(ngModel)]="vendor.notes" rows="3" name="notes" 
+                    placeholder="Enter any additional notes..."></textarea>
             </mat-form-field>
         </div>
 
-        <!-- 
-        <div class="form-row">
-            <mat-form-field appearance="outline">
-                <mat-label>Created By ID</mat-label>
-                <input matInput type="number" [(ngModel)]="vendor.createdById" name="createdById"
-                    placeholder="Created By ID">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Created Date</mat-label>
-                <input matInput [matDatepicker]="createdDatePicker" [(ngModel)]="vendor.createdDate" name="createdDate"
-                    placeholder="Select created date" readonly>
-                <mat-datepicker-toggle matIconSuffix [for]="createdDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #createdDatePicker></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Updated By ID</mat-label>
-                <input matInput type="number" [(ngModel)]="vendor.updatedById" name="updatedById"
-                    placeholder="Updated By ID">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Updated Date</mat-label>
-                <input matInput [matDatepicker]="updatedDatePicker" [(ngModel)]="vendor.updatedDate" name="updatedDate"
-                    placeholder="Select updated date" readonly>
-                <mat-datepicker-toggle matIconSuffix [for]="updatedDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #updatedDatePicker></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Is Active</mat-label>
-                <mat-select [(ngModel)]="vendor.isActive" name="isActive" placeholder="Is Active">
-                    <mat-option [value]="true">True</mat-option>
-                    <mat-option [value]="false">False</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-                <mat-label>Company ID</mat-label>
-                <input matInput type="number" [(ngModel)]="vendor.companyId" name="companyId" placeholder="Company ID">
-            </mat-form-field>
-        </div> -->
+        <!-- Payment Method Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <mat-icon>credit_card</mat-icon>
+                <span>Payment Method</span>
+            </div>
+            <div class="form-row two-col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Payment Method</mat-label>
+                    <mat-icon matPrefix class="field-icon">payment</mat-icon>
+                    <mat-select [(ngModel)]="vendor.paymentMethod" name="paymentMethod" placeholder="Select Method">
+                        <mat-option [value]="PaymentMethod.Cash">
+                            <mat-icon class="option-icon">money</mat-icon> Cash
+                        </mat-option>
+                        <mat-option [value]="PaymentMethod.Draft">
+                            <mat-icon class="option-icon">description</mat-icon> Draft
+                        </mat-option>
+                        <mat-option [value]="PaymentMethod.Cheque">
+                            <mat-icon class="option-icon">receipt</mat-icon> Cheque
+                        </mat-option>
+                        <mat-option [value]="PaymentMethod.Online">
+                            <mat-icon class="option-icon">language</mat-icon> Online
+                        </mat-option>
+                        <mat-option [value]="PaymentMethod.UPI">
+                            <mat-icon class="option-icon">qr_code</mat-icon> UPI
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
+                <mat-form-field appearance="outline">
+                    <mat-label>Reference Number</mat-label>
+                    <mat-icon matPrefix class="field-icon">tag</mat-icon>
+                    <input matInput type="text" [(ngModel)]="vendor.paymentMethodNo" name="paymentMethodNo"
+                        placeholder="Enter reference number">
+                </mat-form-field>
+            </div>
 
+            <div class="form-row two-col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Bank Name</mat-label>
+                    <mat-icon matPrefix class="field-icon">account_balance</mat-icon>
+                    <input matInput type="text" [(ngModel)]="vendor.paymentMethodBank" name="paymentMethodBank"
+                        placeholder="Enter bank name">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Cheque Date</mat-label>
+                    <mat-icon matPrefix class="field-icon">date_range</mat-icon>
+                    <input matInput [matDatepicker]="paymentMethodChequeDate" [(ngModel)]="vendor.paymentMethodChequeDate"
+                        name="paymentMethodChequeDate" placeholder="Select date" readonly>
+                    <mat-datepicker-toggle matIconSuffix [for]="paymentMethodChequeDate"></mat-datepicker-toggle>
+                    <mat-datepicker #paymentMethodChequeDate></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
     </form>
 </mat-dialog-content>
 
-
-
-<!-- <mat-dialog-actions align="end">
-  <button mat-raised-button color="primary" (click)="onSaveVendor()" type="button">Save</button>
-  <button mat-button mat-dialog-close type="button">Close</button>
-</mat-dialog-actions> -->
+<!-- Dialog Actions -->
+<div class="dialog-actions">
+    <button mat-button class="cancel-btn" (click)="dialogRef.close()">
+        <mat-icon>close</mat-icon>
+        Cancel
+    </button>
+    <button mat-raised-button class="save-btn" (click)="onSaveVendor()">
+        <mat-icon>save</mat-icon>
+        Save Payment
+    </button>
+</div>

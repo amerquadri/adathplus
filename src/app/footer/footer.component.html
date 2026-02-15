@@ -1,9 +1,41 @@
 <footer class="app-footer">
-  <p>&copy; 2025 My App Footer</p>
-  <p>
-    Logged in as: {{ userInfo.userFullName || 'Not available' }} |
-    Company: {{ userInfo.companyName || 'Not available' }} |
-    Login Time : {{ userInfo.loginTime || 'Not available' | date:'short' }}
+  <div class="footer-content">
+    <!-- Left Section - Copyright -->
+    <div class="footer-left">
+      <div class="brand-info">
+        <span class="brand-icon">📊</span>
+        <span class="brand-name">AdathPlus</span>
+      </div>
+      <span class="copyright">© {{ currentYear }} All rights reserved</span>
+    </div>
 
-  </p>
+    <!-- Center Section - Quick Links (optional) -->
+    <div class="footer-center">
+      <span class="footer-link">Privacy Policy</span>
+      <span class="separator">•</span>
+      <span class="footer-link">Terms of Service</span>
+      <span class="separator">•</span>
+      <span class="footer-link">Help</span>
+    </div>
+
+    <!-- Right Section - User Info -->
+    <div class="footer-right">
+      <div class="user-session">
+        <div class="session-item">
+          <span class="session-icon">👤</span>
+          <span class="session-value">{{ userInfo.userFullName || 'Guest' }}</span>
+        </div>
+        <div class="session-divider"></div>
+        <div class="session-item">
+          <span class="session-icon">🏢</span>
+          <span class="session-value">{{ userInfo.companyName || 'N/A' }}</span>
+        </div>
+        <div class="session-divider"></div>
+        <div class="session-item">
+          <span class="session-icon">🕐</span>
+          <span class="session-value">{{ userInfo.loginTime | date:'short' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </footer>

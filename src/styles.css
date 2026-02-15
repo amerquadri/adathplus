@@ -11,6 +11,39 @@ app-root {
   min-height: 100vh;
 }
 
+/* ==================== Zoom Level Classes ==================== */
+/* Using CSS zoom property for proper page scaling */
+html.zoom-75 { zoom: 0.75; }
+html.zoom-80 { zoom: 0.80; }
+html.zoom-90 { zoom: 0.90; }
+html.zoom-100 { zoom: 1; }
+html.zoom-110 { zoom: 1.10; }
+html.zoom-125 { zoom: 1.25; }
+
+/* Fix dropdown/overlay positioning when zoomed */
+html.zoom-75 .cdk-overlay-container { zoom: calc(1 / 0.75); }
+html.zoom-80 .cdk-overlay-container { zoom: calc(1 / 0.80); }
+html.zoom-90 .cdk-overlay-container { zoom: calc(1 / 0.90); }
+html.zoom-110 .cdk-overlay-container { zoom: calc(1 / 1.10); }
+html.zoom-125 .cdk-overlay-container { zoom: calc(1 / 1.25); }
+
+/* Common zoom styles - expand all containers to full width when not at 100% */
+html:not(.zoom-100) .page-container,
+html:not(.zoom-100) .header-container,
+html:not(.zoom-100) .breadcrumb-container,
+html:not(.zoom-100) .page-header,
+html:not(.zoom-100) .controls-card,
+html:not(.zoom-100) .table-card,
+html:not(.zoom-100) .content-wrapper,
+html:not(.zoom-100) .main-content,
+html:not(.zoom-100) .master-page-content,
+html:not(.zoom-100) .mat-mdc-card,
+html:not(.zoom-100) mat-card,
+html:not(.zoom-100) .form-container,
+html:not(.zoom-100) table {
+  max-width: 100% !important;
+}
+
 /* App scaling helper - apply to `html` or `app-root` to scale the entire UI */
 .app-scale-80 {
   transform: scale(0.8);
@@ -30,4 +63,80 @@ app-root {
   margin: 0 auto;
   /* height: calc(100% / 0.8); */
   overflow: auto;
+}
+
+/* Vendor Payment Dialog - Remove outer scrollbar */
+.vendor-payment-dialog-panel .mat-mdc-dialog-container {
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.vendor-payment-dialog-panel .mat-mdc-dialog-surface {
+  overflow: hidden !important;
+  border-radius: 16px !important;
+}
+
+.vendor-payment-dialog-panel .mdc-dialog__surface {
+  overflow: hidden !important;
+}
+
+.vendor-payment-dialog-panel .mdc-dialog__content {
+  padding: 0 !important;
+}
+
+/* Customer Payment Dialog - Remove outer scrollbar */
+.customer-payment-dialog-panel .mat-mdc-dialog-container {
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.customer-payment-dialog-panel .mat-mdc-dialog-surface {
+  overflow: hidden !important;
+  border-radius: 16px !important;
+}
+
+.customer-payment-dialog-panel .mdc-dialog__surface {
+  overflow: hidden !important;
+}
+
+.customer-payment-dialog-panel .mdc-dialog__content {
+  padding: 0 !important;
+}
+
+/* User Master Dialog - Remove outer scrollbar */
+.user-master-dialog-panel .mat-mdc-dialog-container {
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.user-master-dialog-panel .mat-mdc-dialog-surface {
+  overflow: hidden !important;
+  border-radius: 16px !important;
+}
+
+.user-master-dialog-panel .mdc-dialog__surface {
+  overflow: hidden !important;
+}
+
+.user-master-dialog-panel .mdc-dialog__content {
+  padding: 0 !important;
+}
+
+/* Company Master Dialog - Remove outer scrollbar */
+.company-master-dialog-panel .mat-mdc-dialog-container {
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.company-master-dialog-panel .mat-mdc-dialog-surface {
+  overflow: hidden !important;
+  border-radius: 16px !important;
+}
+
+.company-master-dialog-panel .mdc-dialog__surface {
+  overflow: hidden !important;
+}
+
+.company-master-dialog-panel .mdc-dialog__content {
+  padding: 0 !important;
 }

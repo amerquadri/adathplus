@@ -1,95 +1,171 @@
 <app-master-page>
-	<mat-card>
-		<mat-card-header>
-			<mat-card-title>User Master</mat-card-title>
-		</mat-card-header>
-		<mat-dialog-content>
-			<form class="customer-dialog-form">
-				<div class="form-row">
-					<mat-form-field appearance="outline" class="full-width-field">
-						<mat-label>Search</mat-label>
-						<input matInput placeholder="Search customers..." [(ngModel)]="searchValue" (keyup)="applyFilter()">
-
-					</mat-form-field>
-					<div class="phone2-field">
-						<button type="button" mat-stroked-button color="primary" (click)="applyFilter()">Search</button>
-						<button type="button" mat-raised-button color="accent" (click)="openNew()">New</button>
+	<div class="page-container">
+		<!-- Page Header -->
+		<div class="page-header">
+			<div class="header-content">
+				<div class="title-section">
+					<div class="title-icon">
+						<mat-icon>people</mat-icon>
+					</div>
+					<div class="title-text">
+						<h1>User Management</h1>
+						<p>Master / User Administration</p>
 					</div>
 				</div>
-				<div class="form-row">
-					<div class="user-table">
-						<table mat-table [dataSource]="dataSource" class="mat-elevation-z1"  >
-
-							<!-- ID Column -->
-							<ng-container matColumnDef="userId">
-								<th mat-header-cell *matHeaderCellDef> ID </th>
-								<td mat-cell *matCellDef="let user"> {{user.userId}} </td>
-							</ng-container>
-
-							<!-- Username Column -->
-							<ng-container matColumnDef="userName">
-								<th mat-header-cell *matHeaderCellDef> Username </th>
-								<td mat-cell *matCellDef="let user"> {{user.userName}} </td>
-							</ng-container>
-
-							<!-- Full Name -->
-							<ng-container matColumnDef="userFullName">
-								<th mat-header-cell *matHeaderCellDef> Name </th>
-								<td mat-cell *matCellDef="let user"> {{user.userFullName}} </td>
-							</ng-container>
-
-							<!-- Email -->
-							<ng-container matColumnDef="email">
-								<th mat-header-cell *matHeaderCellDef> Email </th>
-								<td mat-cell *matCellDef="let user"> {{user.email}} </td>
-							</ng-container>
-
-							<!-- Mobile -->
-							<ng-container matColumnDef="mobile">
-								<th mat-header-cell *matHeaderCellDef> Mobile </th>
-								<td mat-cell *matCellDef="let user"> {{user.mobile}} </td>
-							</ng-container>
-
-							<!-- Admin -->
-							<ng-container matColumnDef="isAdmin">
-								<th mat-header-cell *matHeaderCellDef> Admin </th>
-								<td mat-cell *matCellDef="let user"> {{user.isAdmin ? 'Yes' : 'No'}} </td>
-							</ng-container>
-
-							<!-- Status -->
-							<ng-container matColumnDef="status">
-								<th mat-header-cell *matHeaderCellDef> Status </th>
-								<td mat-cell *matCellDef="let user"> {{user.status}} </td>
-							</ng-container>
-
-							<!-- Company -->
-							<ng-container matColumnDef="companyName">
-								<th mat-header-cell *matHeaderCellDef> Company </th>
-								<td mat-cell *matCellDef="let user"> {{user.companyName}} </td>
-							</ng-container>
-
-							<!-- isactve -->
-							<ng-container matColumnDef="isActive">
-								<th mat-header-cell *matHeaderCellDef> Is Active </th>
-								<td mat-cell *matCellDef="let user"> {{user.isActive}} </td>
-							</ng-container>
-						 
-
-							<!-- Actions -->
-							<ng-container matColumnDef="actions" >
-								<th mat-header-cell *matHeaderCellDef> Actions </th>
-								<td mat-cell *matCellDef="let user">
-									<button type="button" mat-icon-button aria-label="Edit user" (click)="openEdit(user)"><mat-icon>edit</mat-icon></button>
-									<button type="button" mat-icon-button aria-label="Delete user" (click)="deleteUser(user.userId)"><mat-icon>delete</mat-icon></button>
-								</td>
-							</ng-container>
-
-							<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-							<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-						</table>
+				<div class="header-stats">
+					<div class="stat-badge">
+						<mat-icon>badge</mat-icon>
+						<span>{{ dataSource.data.length }} Users</span>
 					</div>
 				</div>
-			</form>
-		</mat-dialog-content>
-	</mat-card>
+			</div>
+		</div>
+
+		<!-- Controls Card -->
+		<div class="controls-card">
+			<div class="controls-row">
+				<mat-form-field appearance="outline" class="search-field">
+					<mat-label>Search</mat-label>
+					<mat-icon matPrefix class="field-icon">search</mat-icon>
+					<input matInput [(ngModel)]="searchValue" (keyup)="applyFilter()" placeholder="Search users...">
+				</mat-form-field>
+
+				<button mat-raised-button class="print-btn" (click)="printReport()" matTooltip="Print Report">
+					<mat-icon>print</mat-icon>
+					Print
+				</button>
+
+				<button mat-raised-button class="new-btn" (click)="openNew()">
+					<mat-icon>person_add</mat-icon>
+					New User
+				</button>
+			</div>
+		</div>
+
+		<!-- Table Card -->
+		<div class="table-card">
+			<div class="table-header-bar">
+				<div class="table-title">
+					<mat-icon>group</mat-icon>
+					<span>User List</span>
+				</div>
+				<div class="records-badge">
+					<mat-icon>inventory_2</mat-icon>
+					{{ dataSource.data.length }} Records
+				</div>
+			</div>
+
+			<div class="table-wrapper">
+				<table mat-table [dataSource]="dataSource" class="user-table">
+					<!-- ID Column -->
+					<ng-container matColumnDef="userId">
+						<th mat-header-cell *matHeaderCellDef>ID</th>
+						<td mat-cell *matCellDef="let user">
+							<span class="id-badge">#{{ user.userId }}</span>
+						</td>
+					</ng-container>
+
+					<!-- Username Column -->
+					<ng-container matColumnDef="userName">
+						<th mat-header-cell *matHeaderCellDef>Username</th>
+						<td mat-cell *matCellDef="let user">
+							<div class="user-info">
+								<div class="user-avatar">{{ user.userName?.charAt(0)?.toUpperCase() || 'U' }}</div>
+								<span class="username">{{ user.userName }}</span>
+							</div>
+						</td>
+					</ng-container>
+
+					<!-- Full Name -->
+					<ng-container matColumnDef="userFullName">
+						<th mat-header-cell *matHeaderCellDef>Full Name</th>
+						<td mat-cell *matCellDef="let user">
+							<span class="fullname">{{ user.userFullName }}</span>
+						</td>
+					</ng-container>
+
+					<!-- Email -->
+					<ng-container matColumnDef="email">
+						<th mat-header-cell *matHeaderCellDef>Email</th>
+						<td mat-cell *matCellDef="let user">
+							<span class="email-cell">{{ user.email }}</span>
+						</td>
+					</ng-container>
+
+					<!-- Mobile -->
+					<ng-container matColumnDef="mobile">
+						<th mat-header-cell *matHeaderCellDef>Mobile</th>
+						<td mat-cell *matCellDef="let user">
+							<span class="mobile-cell">{{ user.mobile }}</span>
+						</td>
+					</ng-container>
+
+					<!-- Admin -->
+					<ng-container matColumnDef="isAdmin">
+						<th mat-header-cell *matHeaderCellDef>Role</th>
+						<td mat-cell *matCellDef="let user">
+							<span class="role-badge" [ngClass]="user.isAdmin ? 'admin' : 'user'">
+								{{ user.isAdmin ? 'Admin' : 'User' }}
+							</span>
+						</td>
+					</ng-container>
+
+					<!-- Status -->
+					<ng-container matColumnDef="status">
+						<th mat-header-cell *matHeaderCellDef>Status</th>
+						<td mat-cell *matCellDef="let user">
+							<span class="status-badge" [ngClass]="user.status === 1 ? 'active' : 'inactive'">
+								{{ user.status === 1 ? 'Active' : 'Inactive' }}
+							</span>
+						</td>
+					</ng-container>
+
+					<!-- Company -->
+					<ng-container matColumnDef="companyName">
+						<th mat-header-cell *matHeaderCellDef>Company</th>
+						<td mat-cell *matCellDef="let user">
+							<span class="company-cell">{{ user.companyName }}</span>
+						</td>
+					</ng-container>
+
+					<!-- isActive -->
+					<ng-container matColumnDef="isActive">
+						<th mat-header-cell *matHeaderCellDef>Active</th>
+						<td mat-cell *matCellDef="let user">
+							<mat-icon class="active-icon" [ngClass]="user.isActive ? 'yes' : 'no'">
+								{{ user.isActive ? 'check_circle' : 'cancel' }}
+							</mat-icon>
+						</td>
+					</ng-container>
+
+					<!-- Actions -->
+					<ng-container matColumnDef="actions">
+						<th mat-header-cell *matHeaderCellDef>Actions</th>
+						<td mat-cell *matCellDef="let user">
+							<div class="action-buttons">
+								<button mat-icon-button class="edit-btn" (click)="openEdit(user)" matTooltip="Edit">
+									<mat-icon>edit</mat-icon>
+								</button>
+								<button mat-icon-button class="delete-btn" (click)="deleteUser(user.userId)" matTooltip="Delete">
+									<mat-icon>delete</mat-icon>
+								</button>
+							</div>
+						</td>
+					</ng-container>
+
+					<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+				</table>
+
+				<!-- Empty State -->
+				<div class="empty-state" *ngIf="dataSource.data.length === 0">
+					<mat-icon>person_off</mat-icon>
+					<p>No users found</p>
+				</div>
+			</div>
+
+			<mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5,10,20,50]"
+				showFirstLastButtons></mat-paginator>
+		</div>
+	</div>
 </app-master-page>

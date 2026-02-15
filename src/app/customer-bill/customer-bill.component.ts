@@ -11,6 +11,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { CdkTableModule } from '@angular/cdk/table';
 import { MasterPageComponent } from "../master-page.component";
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomerbillService } from './customerbill.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,6 +27,7 @@ import { HeaderComponent } from '../header/header.component';
 import { farmerBill, FarmerBillModel } from '../farmer-bill/farmer-bill-interface';
 import { VendorInterface } from '../vendor-payment/vendor-payment-interface';
 import { FarmerBillService } from '../farmer-bill/farmer-bill.service';
+import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.component';
 
 @Component({
   selector: 'app-customer-bill',
@@ -43,6 +45,7 @@ import { FarmerBillService } from '../farmer-bill/farmer-bill.service';
     CdkTableModule,
     MasterPageComponent,
     MatIconModule,
+    MatTooltipModule,
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
@@ -359,17 +362,29 @@ export class CustomerBillComponent implements AfterViewInit {
   }
 
   DeleteCustomerBillDetails(saleDetailsId: number, customername: string) {
-    this.customerbillService.DeleteCustomerBillDetails(saleDetailsId).subscribe({
-      next: (data: any) => {
-        this.snackBar.open('Customer Bill Detail deleted successfully -' + customername, 'Close', {
-          duration: 3000,
-        });
-        this.GetCustomerBillDetails();
-      },
-      error: (err: any) => {
-        console.error('Delete Customer Bill Detail failed:', err);
-        this.snackBar.open('Error deleting Customer Bill Detail', 'Close', {
-          duration: 3000,
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirm Delete',
+        message: `Are you sure you want to delete the bill record for "${customername}"?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'confirm') {
+        this.customerbillService.DeleteCustomerBillDetails(saleDetailsId).subscribe({
+          next: (data: any) => {
+            this.snackBar.open('Customer Bill Detail deleted successfully - ' + customername, 'Close', {
+              duration: 3000,
+            });
+            this.GetCustomerBillDetails();
+          },
+          error: (err: any) => {
+            console.error('Delete Customer Bill Detail failed:', err);
+            this.snackBar.open('Error deleting Customer Bill Detail', 'Close', {
+              duration: 3000,
+            });
+          }
         });
       }
     });
@@ -411,86 +426,356 @@ export class CustomerBillComponent implements AfterViewInit {
     const totalQty = this.getTotalQty();
     const totalWeight = this.getTotalWeight();
     const totalAmt = this.getTotalCost();
+    const totalComAmt = rows.reduce((sum, r) => sum + Number(r.comissionAmt || 0), 0);
+    const totalTaxAmt = rows.reduce((sum, r) => sum + Number(r.taxAmt || 0), 0);
+    const currentDate = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const customerName = rows.length > 0 ? rows[0].customerName : 'N/A';
 
-    const head = `
+    const styles = `
       <style>
-        body{font-family: Arial, Helvetica, sans-serif; margin:20px}
-        .bill-header{text-align:center;margin-bottom:12px}
-        .bill-header h1{margin:0;font-size:20px}
-        .bill-header p{margin:0;font-size:12px}
-        table{width:100%;border-collapse:collapse;margin-top:12px}
-        th,td{border:1px solid #ddd;padding:6px;font-size:12px}
-        th{background:#f5f5f5}
-        tfoot td{font-weight:700}
-        .bill-footer{margin-top:18px;font-size:13px}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+          font-family: 'Segoe UI', Arial, sans-serif; 
+          padding: 20px; 
+          background: #fff;
+          color: #333;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+        .bill-container {
+          max-width: 900px;
+          margin: 0 auto;
+          border: 2px solid #667eea;
+          border-radius: 12px;
+          overflow: hidden;
+        }
+        .bill-header {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 24px 30px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .company-info h1 {
+          font-size: 1.8rem;
+          font-weight: 700;
+          margin-bottom: 4px;
+        }
+        .company-info p {
+          opacity: 0.9;
+          font-size: 0.9rem;
+        }
+        .bill-title {
+          text-align: right;
+        }
+        .bill-title h2 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+        }
+        .bill-title .bill-date {
+          margin-top: 8px;
+          background: rgba(255,255,255,0.2);
+          padding: 6px 16px;
+          border-radius: 20px;
+          font-size: 0.85rem;
+        }
+        .bill-info-bar {
+          background: #f8f9fc;
+          padding: 16px 30px;
+          display: flex;
+          justify-content: space-between;
+          border-bottom: 1px solid #e2e8f0;
+        }
+        .info-item {
+          display: flex;
+          flex-direction: column;
+        }
+        .info-item label {
+          font-size: 0.75rem;
+          color: #718096;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 4px;
+        }
+        .info-item span {
+          font-weight: 600;
+          color: #2d3748;
+          font-size: 1rem;
+        }
+        .table-section {
+          padding: 20px 30px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.9rem;
+        }
+        thead th {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 12px 10px;
+          text-align: left;
+          font-weight: 600;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        thead th:first-child { border-radius: 8px 0 0 0; }
+        thead th:last-child { border-radius: 0 8px 0 0; }
+        tbody td {
+          padding: 12px 10px;
+          border-bottom: 1px solid #e2e8f0;
+          color: #4a5568;
+        }
+        tbody tr:nth-child(even) {
+          background: #f8f9fc;
+        }
+        tbody tr:hover {
+          background: #f0f1ff;
+        }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .sr-cell {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          width: 28px;
+          height: 28px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 0.8rem;
+        }
+        tfoot td {
+          padding: 14px 10px;
+          font-weight: 700;
+          background: #f8f9fc;
+          border-top: 2px solid #667eea;
+        }
+        tfoot .total-label {
+          color: #667eea;
+          font-size: 1rem;
+        }
+        tfoot .total-value {
+          color: #667eea;
+          font-size: 1.1rem;
+        }
+        .summary-section {
+          padding: 20px 30px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          border-top: 1px solid #e2e8f0;
+        }
+        .summary-box {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 20px 30px;
+          border-radius: 12px;
+          text-align: right;
+        }
+        .summary-box label {
+          font-size: 0.85rem;
+          opacity: 0.9;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+        .summary-box .amount {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-top: 6px;
+        }
+        .deductions {
+          background: #f8f9fc;
+          padding: 16px 20px;
+          border-radius: 10px;
+        }
+        .deductions h4 {
+          font-size: 0.85rem;
+          color: #667eea;
+          margin-bottom: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        .deduction-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 6px 0;
+          border-bottom: 1px dashed #e2e8f0;
+        }
+        .deduction-row:last-child {
+          border-bottom: none;
+        }
+        .deduction-row span {
+          color: #4a5568;
+          font-size: 0.9rem;
+        }
+        .deduction-row strong {
+          color: #2d3748;
+        }
+        .footer-section {
+          padding: 20px 30px;
+          display: flex;
+          justify-content: space-between;
+          border-top: 1px solid #e2e8f0;
+        }
+        .signature-box {
+          text-align: center;
+          min-width: 180px;
+        }
+        .signature-box .line {
+          border-top: 2px solid #4a5568;
+          margin-bottom: 8px;
+          margin-top: 50px;
+        }
+        .signature-box p {
+          font-size: 0.85rem;
+          color: #718096;
+        }
+        @media print {
+          body { padding: 0; }
+          .bill-container { border: 1px solid #667eea; }
+        }
       </style>`;
 
-    const rowsHtml = rows.map(r => `
+    const rowsHtml = rows.map((r, index) => `
       <tr>
+        <td><span class="sr-cell">${index + 1}</span></td>
         <td>${r.customerName || ''}</td>
         <td>${r.particularName || ''}</td>
-        <td>${r.customerBillDate ? new Date(r.customerBillDate).toLocaleDateString('en-GB') : ''}</td>
-        <td style="text-align:right">${Number(r.qty || 0)}</td>
-        <td>${r.unit || ''}</td>
-        <td style="text-align:right">${Number(r.weight || 0)}</td>
-        <td style="text-align:right">${Number(r.rate || 0)}</td>
-        <td style="text-align:right">${Number(r.comissionPercent || 0)}</td>
-        <td style="text-align:right">${Number(r.comissionAmt || 0)}</td>
-        <td style="text-align:right">${Number(r.taxAmt || 0)}</td>
-        <td style="text-align:right">${Number(r.amt || 0)}</td>
+        <td>${r.customerBillDate ? new Date(r.customerBillDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}</td>
+        <td class="text-right">${Number(r.qty || 0)}</td>
+        <td class="text-center">${r.unit || ''}</td>
+        <td class="text-right">${Number(r.weight || 0).toFixed(2)}</td>
+        <td class="text-right">${Number(r.rate || 0).toFixed(2)}</td>
+        <td class="text-right">${(Number(r.comissionPercent || 0) * 100).toFixed(1)}%</td>
+        <td class="text-right">${Number(r.comissionAmt || 0).toFixed(2)}</td>
+        <td class="text-right">${Number(r.taxAmt || 0).toFixed(2)}</td>
+        <td class="text-right" style="font-weight:600;color:#667eea">${Number(r.amt || 0).toFixed(2)}</td>
       </tr>`).join('');
 
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Customer Bill</title>${head}</head><body>
-      <div class="bill-header">
-        <h1>Customer Bill</h1>
-        <p>Company / Address (replace with real header)</p>
-        <p>Date: ${new Date().toLocaleDateString('en-GB')}</p>
+    const html = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Customer Bill - ${customerName}</title>
+      ${styles}
+    </head>
+    <body>
+      <div class="bill-container">
+        <div class="bill-header">
+          <div class="company-info">
+            <h1>Adath Plus</h1>
+            <p>Agricultural Trading & Commission</p>
+          </div>
+          <div class="bill-title">
+            <h2>Customer Bill</h2>
+            <div class="bill-date">${currentDate}</div>
+          </div>
+        </div>
+
+        <div class="bill-info-bar">
+          <div class="info-item">
+            <label>Customer</label>
+            <span>${customerName}</span>
+          </div>
+          <div class="info-item">
+            <label>Total Items</label>
+            <span>${rows.length}</span>
+          </div>
+          <div class="info-item">
+            <label>Total Weight</label>
+            <span>${totalWeight.toFixed(2)} Kg</span>
+          </div>
+          <div class="info-item">
+            <label>Bill Status</label>
+            <span style="color: #10b981;">Generated</span>
+          </div>
+        </div>
+
+        <div class="table-section">
+          <table>
+            <thead>
+              <tr>
+                <th>Sr</th>
+                <th>Customer</th>
+                <th>Particular</th>
+                <th>Date</th>
+                <th class="text-right">Qty</th>
+                <th class="text-center">Unit</th>
+                <th class="text-right">Weight</th>
+                <th class="text-right">Rate</th>
+                <th class="text-right">Com %</th>
+                <th class="text-right">Com Amt</th>
+                <th class="text-right">Tax</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="total-label">TOTALS</td>
+                <td class="text-right total-value">${totalQty}</td>
+                <td></td>
+                <td class="text-right total-value">${totalWeight.toFixed(2)}</td>
+                <td colspan="2"></td>
+                <td class="text-right total-value">${totalComAmt.toFixed(2)}</td>
+                <td class="text-right total-value">${totalTaxAmt.toFixed(2)}</td>
+                <td class="text-right total-value">${totalAmt.toFixed(2)}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="summary-section">
+          <div class="deductions">
+            <h4>Summary</h4>
+            <div class="deduction-row">
+              <span>Gross Amount</span>
+              <strong>₹ ${totalAmt.toFixed(2)}</strong>
+            </div>
+            <div class="deduction-row">
+              <span>Commission Amount</span>
+              <strong>₹ ${totalComAmt.toFixed(2)}</strong>
+            </div>
+            <div class="deduction-row">
+              <span>Tax / Market Fee</span>
+              <strong>₹ ${totalTaxAmt.toFixed(2)}</strong>
+            </div>
+          </div>
+          <div class="summary-box">
+            <label>Net Payable</label>
+            <div class="amount">₹ ${totalAmt.toFixed(2)}</div>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <div class="signature-box">
+            <div class="line"></div>
+            <p>Customer Signature</p>
+          </div>
+          <div class="signature-box">
+            <div class="line"></div>
+            <p>Authorized Signature</p>
+          </div>
+        </div>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Customer</th>
-            <th>Particular</th>
-            <th>Bill Date</th>
-            <th>Qty</th>
-            <th>Unit</th>
-            <th>Weight</th>
-            <th>Rate</th>
-            <th>Commission %</th>
-            <th>Commission Amt</th>
-            <th>Tax Amt</th>
-            <th>Amt</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rowsHtml}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="3">Total</td>
-            <td style="text-align:right">${totalQty}</td>
-            <td></td>
-            <td style="text-align:right">${totalWeight}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td style="text-align:right">${totalAmt}</td>
-          </tr>
-        </tfoot>
-      </table>
-      <div class="bill-footer">
-        <p>Prepared by: ____________________</p>
-        <p>Signature: ______________________</p>
-      </div>
-    </body></html>`;
+      <script>window.onload = function() { setTimeout(function() { window.print(); }, 300); }</script>
+    </body>
+    </html>`;
 
     const w = window.open('', '_blank', 'noopener');
     if (w) {
       w.document.open();
       w.document.write(html);
       w.document.close();
-      setTimeout(() => { w.focus(); w.print(); }, 300);
     } else {
       // fallback: create hidden iframe, write content and print
       try {

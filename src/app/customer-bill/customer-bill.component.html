@@ -1,278 +1,330 @@
-<app-master-page>
-
-    <mat-card class="customer-bill-card">
-        <div class="filters">
-            <div class="filter-item">
-                <div class="entry-cell farmer-select">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Farmer Bill Date</mat-label>
-                        <input type="text"   placeholder="Pick one" aria-label="Number" matInput
-                            [formControl]="farmerbilldateddl" [matAutocomplete]="autoFarmer">
-                        <mat-autocomplete #autoFarmer="matAutocomplete" (optionSelected)="onFarmerDateSelected($event.option.value)">
-                            <mat-option *ngFor="let option of (filteredOptionsFarmer | async)" [value]="option" >
-                                {{ option | date:'dd/MMM/yyyy'}}</mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
+﻿<app-master-page>
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <div class="title-icon">
+                        <mat-icon>receipt</mat-icon>
+                    </div>
+                    <div class="title-text">
+                        <h1>Customer Bill</h1>
+                        <p>Master / Customer Bill Management</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <mat-icon>shopping_cart</mat-icon>
+                        <span>{{ dataSource.data.length }} Records</span>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="entry-cell farmer-select">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Select Farmer</mat-label>
-                        <input type="text" placeholder="Pick one" aria-label="Farmer Name" matInput
-                            [formControl]="farmerListddl" [matAutocomplete]="autoVendor">
-                        <mat-autocomplete #autoVendor="matAutocomplete" (optionSelected)="onFarmerNameSelected($event.option.value)">
-                            <mat-option *ngFor="let option of (filteredOptionsFarmers | async)" [value]="option">
-                                {{ option }}</mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-            </div>
+        <!-- Filter Controls -->
+        <div class="controls-card">
+            <div class="controls-row">
+                <!-- Farmer Bill Date -->
+                <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>Farmer Bill Date</mat-label>
+                    <mat-icon matPrefix class="field-icon">event</mat-icon>
+                    <input type="text" placeholder="Pick one" matInput
+                        [formControl]="farmerbilldateddl" [matAutocomplete]="autoFarmer">
+                    <mat-autocomplete #autoFarmer="matAutocomplete" (optionSelected)="onFarmerDateSelected($event.option.value)">
+                        <mat-option *ngFor="let option of (filteredOptionsFarmer | async)" [value]="option">
+                            {{ option | date:'dd/MMM/yyyy' }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
 
-            <div class="filter-Particular">
-                <mat-form-field appearance="outline">
+                <!-- Select Farmer -->
+                <mat-form-field appearance="outline" class="filter-field farmer-field">
+                    <mat-label>Select Farmer</mat-label>
+                    <mat-icon matPrefix class="field-icon">agriculture</mat-icon>
+                    <input type="text" placeholder="Pick one" matInput
+                        [formControl]="farmerListddl" [matAutocomplete]="autoVendor">
+                    <mat-autocomplete #autoVendor="matAutocomplete" (optionSelected)="onFarmerNameSelected($event.option.value)">
+                        <mat-option *ngFor="let option of (filteredOptionsFarmers | async)" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <!-- Select Particular -->
+                <mat-form-field appearance="outline" class="filter-field">
                     <mat-label>Select Particular</mat-label>
-                    <input type="text" placeholder="Pick one" aria-label="Particular" matInput
+                    <mat-icon matPrefix class="field-icon">category</mat-icon>
+                    <input type="text" placeholder="Pick one" matInput
                         [formControl]="particularListddl" [matAutocomplete]="autoParticular">
                     <mat-autocomplete #autoParticular="matAutocomplete" (optionSelected)="onParticularSelected($event.option.value)">
-                        <mat-option *ngFor="let option of (filteredOptionsParticular | async)" [value]="option">{{ option }}</mat-option>
+                        <mat-option *ngFor="let option of (filteredOptionsParticular | async)" [value]="option">
+                            {{ option }}
+                        </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
-            </div>
 
-            <div class="filter-item">
-                <mat-form-field appearance="outline">
+                <!-- Farmer Bill -->
+                <mat-form-field appearance="outline" class="filter-field bill-field">
                     <mat-label>Farmer Bill</mat-label>
-                    <input type="text" placeholder="Pick one" aria-label="Farmer Bill" matInput
+                    <mat-icon matPrefix class="field-icon">tag</mat-icon>
+                    <input type="text" placeholder="Pick one" matInput
                         [formControl]="farmerBillddl" [matAutocomplete]="autoFarmerBill">
                     <mat-autocomplete #autoFarmerBill="matAutocomplete" (optionSelected)="onFarmerBillSelected($event.option.value)">
-                        <mat-option *ngFor="let option of (filteredOptionsFarmerBill | async)" [value]="option">{{ option }}</mat-option>
+                        <mat-option *ngFor="let option of (filteredOptionsFarmerBill | async)" [value]="option">
+                            {{ option }}
+                        </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
-            </div>
 
-            <div class="filter-item">
-                <button  mat-mini-fab color="primary" (click)="GetCustomerBillDetails()"  class="view-btn"> 
+                <!-- Search Button -->
+                <button mat-fab class="search-fab" (click)="GetCustomerBillDetails()" matTooltip="Search">
                     <mat-icon>search</mat-icon>
                 </button>
             </div>
         </div>
 
-        <div class="content">
-            <mat-card class="table-content">
-                <section class="example-container mat-elevation-z8" tabindex="0">
-                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z25">
-                        <!-- View Column -->
-                        <ng-container matColumnDef="sr">
-                            <th mat-header-cell *matHeaderCellDef> Sr </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{ 1 + dataSource.data.indexOf(saleDetails) }}
-                            </td>
-                             <td mat-footer-cell *matFooterCellDef>Records : {{ dataSource.data.length || 0 }} </td>
-                        </ng-container>
-                        <ng-container matColumnDef="view">
-                            <th mat-header-cell *matHeaderCellDef> Action </th>
-                            <td mat-cell *matCellDef="let saleDetails">
-                                <button mat-icon-button color="primary" aria-label="View" (click)="DeleteCustomerBillDetails(saleDetails.saleDetailsId, saleDetails.customerName)">
+        <!-- Table Card -->
+        <div class="table-card">
+            <div class="table-header-bar">
+                <div class="table-title">
+                    <mat-icon>list_alt</mat-icon>
+                    <span>Sale Details</span>
+                </div>
+                <div class="records-badge">
+                    <mat-icon>inventory_2</mat-icon>
+                    {{ dataSource.data.length }} Items
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table mat-table [dataSource]="dataSource" class="bill-table">
+                    <!-- Sr Column -->
+                    <ng-container matColumnDef="sr">
+                        <th mat-header-cell *matHeaderCellDef>Sr</th>
+                        <td mat-cell *matCellDef="let item">
+                            <span class="sr-badge">{{ 1 + dataSource.data.indexOf(item) }}</span>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>
+                            <span class="footer-records">{{ dataSource.data.length }} Records</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Customer Name Column -->
+                    <ng-container matColumnDef="customerName">
+                        <th mat-header-cell *matHeaderCellDef>Customer Name</th>
+                        <td mat-cell *matCellDef="let item">
+                            <div class="customer-cell">
+                                <span class="customer-avatar">{{ item.customerName?.charAt(0) }}</span>
+                                <span>{{ item.customerName }}</span>
+                            </div>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+
+                    <!-- Particular Name Column -->
+                    <ng-container matColumnDef="particularName">
+                        <th mat-header-cell *matHeaderCellDef>Particular Name</th>
+                        <td mat-cell *matCellDef="let item">{{ item.particularName }}</td>
+                        <td mat-footer-cell *matFooterCellDef><strong>Total</strong></td>
+                    </ng-container>
+
+                    <!-- Bill Date Column -->
+                    <ng-container matColumnDef="customerBillDate">
+                        <th mat-header-cell *matHeaderCellDef>Bill Date</th>
+                        <td mat-cell *matCellDef="let item">{{ item.customerBillDate | date:'dd/MMM/yyyy' }}</td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+
+                    <!-- Qty Column -->
+                    <ng-container matColumnDef="qty">
+                        <th mat-header-cell *matHeaderCellDef>Qty</th>
+                        <td mat-cell *matCellDef="let item">{{ item.qty }}</td>
+                        <td mat-footer-cell *matFooterCellDef class="footer-value">{{ getTotalQty() || 0 }}</td>
+                    </ng-container>
+
+                    <!-- Unit Column -->
+                    <ng-container matColumnDef="unit">
+                        <th mat-header-cell *matHeaderCellDef>Unit</th>
+                        <td mat-cell *matCellDef="let item">{{ item.unit }}</td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="weight">
+                        <th mat-header-cell *matHeaderCellDef>Weight</th>
+                        <td mat-cell *matCellDef="let item">{{ item.weight }}</td>
+                        <td mat-footer-cell *matFooterCellDef class="footer-value">{{ getTotalWeight() || 0 }}</td>
+                    </ng-container>
+
+                    <!-- Rate Column -->
+                    <ng-container matColumnDef="rate">
+                        <th mat-header-cell *matHeaderCellDef>Rate</th>
+                        <td mat-cell *matCellDef="let item">{{ item.rate }}</td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+
+                    <!-- Commission % Column -->
+                    <ng-container matColumnDef="comissionPercent">
+                        <th mat-header-cell *matHeaderCellDef>Commission %</th>
+                        <td mat-cell *matCellDef="let item">{{ item.comissionPercent | percent }}</td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+
+                    <!-- Commission Amt Column -->
+                    <ng-container matColumnDef="comissionAmt">
+                        <th mat-header-cell *matHeaderCellDef>Commission Amt</th>
+                        <td mat-cell *matCellDef="let item">{{ item.comissionAmt }}</td>
+                        <td mat-footer-cell *matFooterCellDef>......</td>
+                    </ng-container>
+
+                    <!-- Tax Amt Column -->
+                    <ng-container matColumnDef="taxAmt">
+                        <th mat-header-cell *matHeaderCellDef>Tax Amt</th>
+                        <td mat-cell *matCellDef="let item">{{ item.taxAmt }}</td>
+                        <td mat-footer-cell *matFooterCellDef>......</td>
+                    </ng-container>
+
+                    <!-- Amount Column -->
+                    <ng-container matColumnDef="amt">
+                        <th mat-header-cell *matHeaderCellDef>Amt</th>
+                        <td mat-cell *matCellDef="let item">
+                            <span class="amount-value">{{ item.amt }}</span>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef class="footer-total">{{ getTotalCost() || 0 }}</td>
+                    </ng-container>
+
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="view">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let item">
+                            <div class="action-cell">
+                                <button mat-icon-button class="delete-btn" 
+                                    (click)="DeleteCustomerBillDetails(item.saleDetailsId, item.customerName)"
+                                    matTooltip="Delete">
                                     <mat-icon>delete</mat-icon>
                                 </button>
-
-                                 <button mat-icon-button color="primary" aria-label="View"  (click)="EditCustomerBillDetails(saleDetails)">
+                                <button mat-icon-button class="edit-btn" 
+                                    (click)="EditCustomerBillDetails(item)"
+                                    matTooltip="Edit">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                            </td>
-                             <td mat-footer-cell *matFooterCellDef>   </td>
-                        </ng-container>
-                        <ng-container matColumnDef="saleDetailsId">
-                            <th mat-header-cell *matHeaderCellDef> ID </th>
-                            <td mat-cell *matCellDef="let saleDetails">
-                                {{saleDetails.saleDetailsId}} </td>
-                                 <td mat-footer-cell *matFooterCellDef>   </td>
-                        </ng-container>
+                            </div>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
 
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+                </table>
 
-                        <ng-container matColumnDef="customerName">
-                            <th mat-header-cell *matHeaderCellDef> Customer Name </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.customerName}}
-                            </td>
-                             <td mat-footer-cell *matFooterCellDef>   </td>
-                        </ng-container>
-                        <ng-container matColumnDef="particularName">
-                            <th mat-header-cell *matHeaderCellDef> Particular Name </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.particularName}}
-                            </td>
-                             <td mat-footer-cell *matFooterCellDef> Total </td>
-                        </ng-container>
-                        <ng-container matColumnDef="customerBillDate">
-                            <th mat-header-cell *matHeaderCellDef> Bill Date </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.customerBillDate | date:'dd/MMM/yyyy'}}
-                            </td>
-                             <td mat-footer-cell *matFooterCellDef>   </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="unit">
-                            <th mat-header-cell *matHeaderCellDef> Unit </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.unit}} </td>
-                             <td mat-footer-cell *matFooterCellDef>   </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="qty">
-                            <th mat-header-cell *matHeaderCellDef> Qty </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.qty}} </td>
-                             <td mat-footer-cell *matFooterCellDef> {{getTotalQty() || 0.00}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="rate">
-                            <th mat-header-cell *matHeaderCellDef> Rate </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.rate}} </td>
-                             <td mat-footer-cell *matFooterCellDef>   </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="weight">
-                            <th mat-header-cell *matHeaderCellDef> Weight </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.weight}} </td>
-                             <td mat-footer-cell *matFooterCellDef> {{getTotalWeight() || 0.00}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="comissionPercent">
-                            <th mat-header-cell *matHeaderCellDef> Commission % </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.comissionPercent | percent}}
-                            </td>
-                             <td mat-footer-cell *matFooterCellDef>   </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="comissionAmt">
-                            <th mat-header-cell *matHeaderCellDef> Commission Amt </th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.comissionAmt}}
-                            </td>
-                                <td mat-footer-cell *matFooterCellDef> ...... </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="taxAmt">
-                            <th mat-header-cell *matHeaderCellDef> Tax Amt</th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.taxAmt}}
-                            </td>
-                                <td mat-footer-cell *matFooterCellDef> ...... </td>
-                        </ng-container>
-                        <ng-container matColumnDef="amt">
-                            <th mat-header-cell *matHeaderCellDef> Amt</th>
-                            <td mat-cell *matCellDef="let saleDetails"> {{saleDetails.amt}}  </td>
-                            <td mat-footer-cell *matFooterCellDef> {{ getTotalCost() || 0.00 }} </td>
-                        </ng-container>
-
-                       
-                        <tr *ngIf="dataSource.data.length === 0">
-                            <td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
-                        </tr>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-
-                        
-                        <tr mat-row *matRowDef="let saleDetails; columns: displayedColumns;"></tr>
-                        <tr mat-footer-row class="mat-footer-cell" *matFooterRowDef="displayedColumns; sticky: true"></tr>  
-
-                        
-
-                    </table>
-                    <!-- <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
-					showFirstLastButtons>
-				</mat-paginator> -->
-                </section>
-            </mat-card>
-        </div>
-
-        <div class="footer">
-            <div class="first-row">
-                <div class="entry-cell customer-select">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Select Customer</mat-label>
-                        <input type="text" name="customerId" placeholder="Pick one" aria-label="Number" matInput
-                            [formControl]="customerListddl" [matAutocomplete]="autoCustomer">
-                        <mat-autocomplete #autoCustomer="matAutocomplete"
-                            (optionSelected)="onCustomerSelected($event.option.value)">
-                            <mat-option *ngFor="let option of (filteredOptionsCustomer | async)" [value]="option">
-                                {{ option }}</mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div class="entry-cell date-input">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Date</mat-label>
-
-                        <input matInput [matDatepicker]="entryDatePicker" [(ngModel)]="saleDetailsobj.customerBillDate"   placeholder="Select Date"  required="true" >
-                        <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
-                        <mat-datepicker #entryDatePicker></mat-datepicker>
-                    </mat-form-field>
-                </div>
-                <div class="entry-cell qty">
-                    <mat-form-field appearance="outline" class="entry-field">
-                        <mat-label>Qty</mat-label>
-
-                        <input matInput placeholder="Qty" type="number" [(ngModel)]="saleDetailsobj.qty" required />
-                    </mat-form-field>
-                </div>
-                <div class="entry-cell unit">
-                    <mat-form-field appearance="outline" class="entry-field">
-                        <mat-label>Unit</mat-label>
-
-                        <input matInput placeholder="Enter Unit" [(ngModel)]="saleDetailsobj.unit" required />
-                    </mat-form-field>
-                </div>
-                <div class="entry-cell weight">
-                    <mat-form-field appearance="outline" class="entry-field">
-                        <mat-label>Weight</mat-label>
-
-                        <input matInput placeholder="Weight" type="number" [(ngModel)]="saleDetailsobj.weight" required />
-                    </mat-form-field>
-                </div>
-                <div class="entry-cell rate">
-                    <mat-form-field appearance="outline" class="entry-field" >
-                        <mat-label>Rate</mat-label>
-
-                        <input matInput placeholder="Enter Rate" type="number" [(ngModel)]="saleDetailsobj.rate" required />
-                    </mat-form-field>
-                </div>
-                <div class="entry-cell com">
-                    <mat-form-field appearance="outline" class="entry-field">
-                        <mat-label>Com %</mat-label>
-
-                        <input matInput placeholder="Com %" type="number" [(ngModel)]="saleDetailsobj.comissionPercent" required />
-                    </mat-form-field>
-                </div>
-                <div class="col medium">
-                    <mat-form-field appearance="outline" class="entry-field">
-                        <mat-label>Amount</mat-label>
-
-                        <input matInput placeholder="Amount" [(ngModel)]="saleDetailsobj.amt" required type="number" />
-                    </mat-form-field>
-                </div>
-
-                <div class="entry-cell save-btn">
-                    <button mat-mini-fab color="primary" (click)="InsertCustomerBill()" aria-label="Save">
-                        <mat-icon>save</mat-icon>
-                    </button>
-                </div>
-            </div>
-
-            <div class="first-row">
-                <div class="col medium">
-                    <mat-form-field appearance="outline" class="entry-field">
-                        <mat-label>Market Fee</mat-label>
-                        <input matInput placeholder="Market Fee" [(ngModel)]="saleDetailsobj.taxRate"   type="number"   />
-                    </mat-form-field>
-                </div>
-                <div class="col medium">
-                    <mat-form-field appearance="outline" class="entry-field">
-                        <mat-label>Com Amt</mat-label>
-                        <input matInput placeholder="Com Amt" [(ngModel)]="saleDetailsobj.comissionAmt" type="number"     />
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="second-row">
-                <div class="grand-total">Total: <span class="total-value">12345.66</span></div>
-                <div class="actions">
-                    <button mat-flat-button color="accent" class="new-large">New</button>
-                    <button mat-flat-button color="primary" class="print-large" (click)="printCustomerBill()">Print</button>
+                <!-- Empty State -->
+                <div class="empty-state" *ngIf="dataSource.data.length === 0">
+                    <mat-icon>inbox</mat-icon>
+                    <p>No records found</p>
                 </div>
             </div>
         </div>
-    </mat-card>
 
+        <!-- Entry Section -->
+        <div class="entry-card">
+            <div class="entry-header">
+                <mat-icon>add_circle</mat-icon>
+                <span>Add New Entry</span>
+            </div>
+            <div class="entry-form">
+                <!-- Customer Select -->
+                <mat-form-field appearance="outline" class="entry-field customer-field">
+                    <mat-label>Select Customer</mat-label>
+                    <input type="text" placeholder="Pick one" matInput
+                        [formControl]="customerListddl" [matAutocomplete]="autoCustomer">
+                    <mat-autocomplete #autoCustomer="matAutocomplete" (optionSelected)="onCustomerSelected($event.option.value)">
+                        <mat-option *ngFor="let option of (filteredOptionsCustomer | async)" [value]="option">
+                            {{ option }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <!-- Date -->
+                <mat-form-field appearance="outline" class="entry-field date-field">
+                    <mat-label>Date</mat-label>
+                    <input matInput [matDatepicker]="entryDatePicker" [(ngModel)]="saleDetailsobj.customerBillDate" placeholder="Select Date">
+                    <mat-datepicker-toggle matSuffix [for]="entryDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #entryDatePicker></mat-datepicker>
+                </mat-form-field>
+
+                <!-- Qty -->
+                <mat-form-field appearance="outline" class="entry-field small-field">
+                    <mat-label>Qty</mat-label>
+                    <input matInput placeholder="Qty" type="number" [(ngModel)]="saleDetailsobj.qty">
+                </mat-form-field>
+
+                <!-- Unit -->
+                <mat-form-field appearance="outline" class="entry-field small-field">
+                    <mat-label>Unit</mat-label>
+                    <input matInput placeholder="Unit" [(ngModel)]="saleDetailsobj.unit">
+                </mat-form-field>
+
+                <!-- Weight -->
+                <mat-form-field appearance="outline" class="entry-field small-field">
+                    <mat-label>Weight</mat-label>
+                    <input matInput placeholder="Weight" type="number" [(ngModel)]="saleDetailsobj.weight">
+                </mat-form-field>
+
+                <!-- Rate -->
+                <mat-form-field appearance="outline" class="entry-field small-field">
+                    <mat-label>Rate</mat-label>
+                    <input matInput placeholder="Rate" type="number" [(ngModel)]="saleDetailsobj.rate">
+                </mat-form-field>
+
+                <!-- Com % -->
+                <mat-form-field appearance="outline" class="entry-field small-field">
+                    <mat-label>Com %</mat-label>
+                    <input matInput placeholder="Com %" type="number" [(ngModel)]="saleDetailsobj.comissionPercent">
+                </mat-form-field>
+
+                <!-- Amount -->
+                <mat-form-field appearance="outline" class="entry-field small-field">
+                    <mat-label>Amount</mat-label>
+                    <input matInput placeholder="Amount" type="number" [(ngModel)]="saleDetailsobj.amt">
+                </mat-form-field>
+
+                <!-- Save Button -->
+                <button mat-fab class="save-fab" (click)="InsertCustomerBill()" matTooltip="Save Entry">
+                    <mat-icon>save</mat-icon>
+                </button>
+            </div>
+
+            <!-- Additional Fields Row -->
+            <div class="additional-fields">
+                <mat-form-field appearance="outline" class="entry-field">
+                    <mat-label>Market Fee</mat-label>
+                    <input matInput placeholder="Market Fee" type="number" [(ngModel)]="saleDetailsobj.taxRate">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="entry-field">
+                    <mat-label>Com Amt</mat-label>
+                    <input matInput placeholder="Com Amt" type="number" [(ngModel)]="saleDetailsobj.comissionAmt">
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="action-bar">
+            <div class="grand-total-section">
+                <span class="total-label">Total Amount</span>
+                <span class="total-amount">{{ getTotalCost() | number:'1.2-2' }}</span>
+            </div>
+
+            <div class="action-buttons">
+                <button mat-stroked-button class="action-btn new-btn">
+                    <mat-icon>add</mat-icon>
+                    New
+                </button>
+                <button mat-raised-button class="action-btn print-btn" (click)="printCustomerBill()">
+                    <mat-icon>print</mat-icon>
+                    Print
+                </button>
+            </div>
+        </div>
+    </div>
 </app-master-page>

@@ -1,278 +1,316 @@
-<app-master-page>
-	<mat-card class="farmer-card">
-		<div class="title-bar">Farmer / {{ marathiNameObj.farmer }} Bill </div>
-
-		<div class="controls">
-			<div class="row">
-				<div class="hidecontrol" >
-					<mat-form-field   appearance="outline">
-						<mat-label>##</mat-label>
-						<input matInput type="number"    name="farmerBillId" [(ngModel)]="_farmerBill.farmerBillId"
-							disabled="true" value="0" placeholder="##"  />
-					</mat-form-field>
-				</div>
-				<div class="col medium">
-					<mat-form-field appearance="outline">
-						<mat-label>Bill No</mat-label>
-						<input matInput type="number" name="comissionBillId" [(ngModel)]="_farmerBill.comissionBillId"
-							placeholder="Bill No" />
-					</mat-form-field>
-				</div>
-				<div class="col btns">
-					<div class="button-group">
-						<button mat-raised-button color="primary">Edit</button>
-						<button mat-raised-button color="primary"
-							(click)="GetFarmerBill(_farmerBill.comissionBillId || 0)">View</button>
+﻿<app-master-page>
+	<div class="page-container">
+		<!-- Page Header -->
+		<div class="page-header">
+			<div class="header-content">
+				<div class="title-section">
+					<div class="title-icon">
+						<mat-icon>receipt_long</mat-icon>
 					</div>
-				</div>
-				<div class="col farmer-select">
-					<mat-form-field class="col medium" appearance="outline">
-						<mat-label>Select Farmer</mat-label>
-						<input type="text" name="vendorId" placeholder="Pick one" aria-label="Number" matInput
-							[formControl]="myControl" [matAutocomplete]="auto">
-						<mat-autocomplete #auto="matAutocomplete"
-							(optionSelected)="onVendorSelected($event.option.value)">
-							<mat-option *ngFor="let option of (filteredOptions | async)" [value]="option">{{ option
-								}}</mat-option>
-						</mat-autocomplete>
-					</mat-form-field>
-				</div>
-
-				<div class="col date">
-					<mat-form-field appearance="outline" class="ocean-input">
-						<mat-label>Bill Date</mat-label>
-						<input matInput [matDatepicker]="picker" placeholder="dd/MM/yyyy"
-							[(ngModel)]="_farmerBill.billDate">
-						<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-						<mat-datepicker #picker></mat-datepicker>
-					</mat-form-field>
+					<div class="title-text">
+						<h1>Farmer / {{ marathiNameObj.farmer }} Bill</h1>
+						<p>Create and manage farmer bills</p>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="content">
-			<mat-card >
-				<div class="table-content">
-					<mat-card>
-						<section class="example-container mat-elevation-z8" tabindex="0">
-							<table mat-table [dataSource]="dataSource" class="mat-elevation-z25">
-								<!-- View Column -->
-								<ng-container matColumnDef="sr">
-									<th mat-header-cell *matHeaderCellDef> Sr </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{ 1 +
-										dataSource.data.indexOf(_farmerBillDetail) }}
-									</td>
-									<td mat-footer-cell *matFooterCellDef> <b>Total:</b> </td>
-				
-								</ng-container>
-								<ng-container matColumnDef="view">
-									<th mat-header-cell *matHeaderCellDef> View </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail">
-										<button mat-button color="warn" (click)="confirmDelete(_farmerBillDetail.farmerBillDetailId)">
-											<mat-icon>delete</mat-icon>
-										</button>
-									</td>
-									<td mat-footer-cell *matFooterCellDef> _____ </td>
-				
-								</ng-container>
-								<ng-container matColumnDef="farmerBillDetailId">
-									<th mat-header-cell *matHeaderCellDef> ID </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail">
-										{{_farmerBillDetail.farmerBillDetailId}} </td>
-									<td mat-footer-cell *matFooterCellDef> ______ </td>
-				
-								</ng-container>
-				
-								<ng-container matColumnDef="particularName">
-									<th mat-header-cell *matHeaderCellDef> Particular Name </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.particularName}}
-									</td>
-									<td mat-footer-cell *matFooterCellDef> Records : {{ 1 + dataSource.data.indexOf(_farmerBillDetail)
-										}} </td>
-				
-								</ng-container>
-				
-								<ng-container matColumnDef="unit">
-									<th mat-header-cell *matHeaderCellDef> Unit </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.unit}} </td>
-									<td mat-footer-cell *matFooterCellDef> _____ </td>
-				
-								</ng-container>
-				
-								<ng-container matColumnDef="qty">
-									<th mat-header-cell *matHeaderCellDef> Qty </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.qty}} </td>
-									<td mat-footer-cell *matFooterCellDef> {{ getTotalQty() }} </td>
-				
-								</ng-container>
-				
-								<ng-container matColumnDef="rate">
-									<th mat-header-cell *matHeaderCellDef> Rate </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.rate}} </td>
-									<td mat-footer-cell *matFooterCellDef> _____ </td>
-				
-								</ng-container>
-				
-								<ng-container matColumnDef="weight">
-									<th mat-header-cell *matHeaderCellDef> Weight </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.weight}} </td>
-									<td mat-footer-cell *matFooterCellDef> {{getTotalWeight()}} </td>
-				
-								</ng-container>
-				
-								<ng-container matColumnDef="comissionPercent">
-									<th mat-header-cell *matHeaderCellDef> Com % </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionPercent}}
-									</td>
-									<td mat-footer-cell *matFooterCellDef> _____ </td>
-				
-								</ng-container>
-				
-								<ng-container matColumnDef="comissionAmount">
-									<th mat-header-cell *matHeaderCellDef> Com Amt </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.comissionAmount}}
-									</td>
-									<td mat-footer-cell *matFooterCellDef> {{ getTotalComAmt()}} </td>
-				
-								</ng-container>
-								<ng-container matColumnDef="amt">
-									<th mat-header-cell *matHeaderCellDef> Amount </th>
-									<td mat-cell *matCellDef="let _farmerBillDetail"> {{_farmerBillDetail.amt}} </td>
-									<td mat-footer-cell *matFooterCellDef> {{ this.getTotalCost() }} </td>
-				
-								</ng-container>
-				
-								<tr *ngIf="dataSource.data.length === 0">
-									<td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
-								</tr>
-								<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-								<tr mat-row *matRowDef="let _farmerBillDetail; columns: displayedColumns;"></tr>
-								<tr mat-footer-row class="mat-footer-cell" *matFooterRowDef="displayedColumns; sticky: true"></tr>
-				
-							</table>
-						</section>
-					</mat-card>
+		<!-- Bill Controls -->
+		<div class="controls-card">
+			<div class="controls-row">
+				<!-- Hidden ID Field -->
+				<div class="hidecontrol">
+					<mat-form-field appearance="outline">
+						<mat-label>##</mat-label>
+						<input matInput type="number" name="farmerBillId" [(ngModel)]="_farmerBill.farmerBillId"
+							disabled="true" value="0" placeholder="##" />
+					</mat-form-field>
 				</div>
-				<mat-card>
-					<div class="entry-controls">
-						<div class="entry-left">
-							<div class="entry-label">Select</div>
-							<!-- <div class="entry-records">Records : {{dataSource.data.length}}</div> -->
-						</div>
-						<mat-form-field appearance="outline" class="col medium">
-							<mat-label>Particular</mat-label>
 
+				<!-- Bill No -->
+				<mat-form-field appearance="outline" class="bill-no-field">
+					<mat-label>Bill No</mat-label>
+					<mat-icon matPrefix class="field-icon">tag</mat-icon>
+					<input matInput type="number" name="comissionBillId" [(ngModel)]="_farmerBill.comissionBillId"
+						placeholder="Bill No" />
+				</mat-form-field>
+
+				<!-- Edit/View Toggle -->
+				<div class="toggle-buttons">
+					<button mat-flat-button class="toggle-btn edit-toggle" [class.active]="true">
+						<mat-icon>edit</mat-icon>
+						Edit
+					</button>
+					<button mat-flat-button class="toggle-btn view-toggle"
+						(click)="GetFarmerBill(_farmerBill.comissionBillId || 0)">
+						<mat-icon>visibility</mat-icon>
+						View
+					</button>
+				</div>
+
+				<!-- Farmer Select -->
+				<mat-form-field appearance="outline" class="farmer-select-field">
+					<mat-label>Select Farmer</mat-label>
+					<mat-icon matPrefix class="field-icon">agriculture</mat-icon>
+					<input type="text" name="vendorId" placeholder="Pick one" aria-label="Farmer" matInput
+						[formControl]="myControl" [matAutocomplete]="auto">
+					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="onVendorSelected($event.option.value)">
+						<mat-option *ngFor="let option of (filteredOptions | async)" [value]="option">
+							{{ option }}
+						</mat-option>
+					</mat-autocomplete>
+				</mat-form-field>
+
+				<!-- Bill Date -->
+				<mat-form-field appearance="outline" class="date-field">
+					<mat-label>Bill Date</mat-label>
+					<mat-icon matPrefix class="field-icon">calendar_today</mat-icon>
+					<input matInput [matDatepicker]="picker" placeholder="dd/MM/yyyy"
+						[(ngModel)]="_farmerBill.billDate">
+					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+					<mat-datepicker #picker></mat-datepicker>
+				</mat-form-field>
+			</div>
+		</div>
+
+		<!-- Main Content Area -->
+		<div class="content-area">
+			<!-- Left Section - Table and Entry -->
+			<div class="main-section">
+				<!-- Items Table -->
+				<div class="table-card">
+					<div class="table-header-bar">
+						<div class="table-title">
+							<mat-icon>list_alt</mat-icon>
+							<span>Bill Items</span>
+						</div>
+						<div class="records-badge">
+							<mat-icon>inventory_2</mat-icon>
+							{{ dataSource.data.length }} Items
+						</div>
+					</div>
+
+					<div class="table-wrapper">
+						<table mat-table [dataSource]="dataSource" class="bill-table">
+							<!-- Sr Column -->
+							<ng-container matColumnDef="sr">
+								<th mat-header-cell *matHeaderCellDef>Sr</th>
+								<td mat-cell *matCellDef="let item">
+									<span class="sr-badge">{{ 1 + dataSource.data.indexOf(item) }}</span>
+								</td>
+								<td mat-footer-cell *matFooterCellDef>
+									<strong>Total:</strong>
+								</td>
+							</ng-container>
+
+							<!-- Particular Name Column -->
+							<ng-container matColumnDef="particularName">
+								<th mat-header-cell *matHeaderCellDef>Particular Name</th>
+								<td mat-cell *matCellDef="let item">{{ item.particularName }}</td>
+								<td mat-footer-cell *matFooterCellDef>
+									<span class="footer-records">{{ dataSource.data.length }} Records</span>
+								</td>
+							</ng-container>
+
+							<!-- Qty Column -->
+							<ng-container matColumnDef="qty">
+								<th mat-header-cell *matHeaderCellDef>Qty</th>
+								<td mat-cell *matCellDef="let item">{{ item.qty }}</td>
+								<td mat-footer-cell *matFooterCellDef class="footer-value">{{ getTotalQty() }}</td>
+							</ng-container>
+
+							<!-- Unit Column -->
+							<ng-container matColumnDef="unit">
+								<th mat-header-cell *matHeaderCellDef>Unit</th>
+								<td mat-cell *matCellDef="let item">{{ item.unit }}</td>
+								<td mat-footer-cell *matFooterCellDef>-</td>
+							</ng-container>
+
+							<!-- Rate Column -->
+							<ng-container matColumnDef="rate">
+								<th mat-header-cell *matHeaderCellDef>Rate</th>
+								<td mat-cell *matCellDef="let item">{{ item.rate | number:'1.0-0' }}</td>
+								<td mat-footer-cell *matFooterCellDef>-</td>
+							</ng-container>
+
+							<!-- Weight Column -->
+							<ng-container matColumnDef="weight">
+								<th mat-header-cell *matHeaderCellDef>Weight</th>
+								<td mat-cell *matCellDef="let item">{{ item.weight }}</td>
+								<td mat-footer-cell *matFooterCellDef class="footer-value">{{ getTotalWeight() }}</td>
+							</ng-container>
+
+							<!-- Commission % Column -->
+							<ng-container matColumnDef="comissionPercent">
+								<th mat-header-cell *matHeaderCellDef>Com %</th>
+								<td mat-cell *matCellDef="let item">{{ item.comissionPercent }}%</td>
+								<td mat-footer-cell *matFooterCellDef>-</td>
+							</ng-container>
+
+							<!-- Amount Column -->
+							<ng-container matColumnDef="amt">
+								<th mat-header-cell *matHeaderCellDef>Amount</th>
+								<td mat-cell *matCellDef="let item">
+									<span class="amount-value">{{ item.amt | number:'1.0-0' }}</span>
+								</td>
+								<td mat-footer-cell *matFooterCellDef class="footer-total">
+									{{ getTotalCost() | number:'1.0-0' }}
+								</td>
+							</ng-container>
+
+							<!-- Actions Column -->
+							<ng-container matColumnDef="view">
+								<th mat-header-cell *matHeaderCellDef>Actions</th>
+								<td mat-cell *matCellDef="let item">
+									<button mat-icon-button class="delete-btn"
+										(click)="confirmDelete(item.farmerBillDetailId)" matTooltip="Delete">
+										<mat-icon>delete</mat-icon>
+									</button>
+								</td>
+								<td mat-footer-cell *matFooterCellDef>-</td>
+							</ng-container>
+
+							<!-- Empty state handled separately -->
+							<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+							<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+							<tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+						</table>
+
+						<!-- Empty State -->
+						<div class="empty-state" *ngIf="dataSource.data.length === 0">
+							<mat-icon>inbox</mat-icon>
+							<p>No items added yet</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Entry Section -->
+				<div class="entry-card">
+					<div class="entry-header">
+						<mat-icon>add_circle</mat-icon>
+						<span>Add New Item</span>
+					</div>
+					<div class="entry-form">
+						<mat-form-field appearance="outline" class="particular-field">
+							<mat-label>Particular</mat-label>
 							<mat-select [(value)]="selectedParticular" placeholder="Select Particular" required>
 								<mat-option *ngFor="let p of particularOptions" [value]="p">{{ p }}</mat-option>
 								<mat-option *ngIf="particularOptions.length === 0" value="">(no
 									particulars)</mat-option>
 							</mat-select>
 						</mat-form-field>
+
 						<mat-form-field appearance="outline" class="entry-field">
 							<mat-label>Qty</mat-label>
-
 							<input matInput placeholder="Qty" type="number" [(ngModel)]="_farmerBillDetail.qty"
 								required />
 						</mat-form-field>
+
 						<mat-form-field appearance="outline" class="entry-field">
 							<mat-label>Unit</mat-label>
-
 							<input matInput placeholder="Unit" [(ngModel)]="_farmerBillDetail.unit" required />
 						</mat-form-field>
+
 						<mat-form-field appearance="outline" class="entry-field">
 							<mat-label>Weight</mat-label>
-
 							<input matInput placeholder="Weight" type="number" [(ngModel)]="_farmerBillDetail.weight"
 								required />
 						</mat-form-field>
+
 						<mat-form-field appearance="outline" class="entry-field">
 							<mat-label>Rate</mat-label>
-
 							<input matInput placeholder="Rate" type="number" [(ngModel)]="_farmerBillDetail.rate"
 								required />
 						</mat-form-field>
+
 						<mat-form-field appearance="outline" class="entry-field">
 							<mat-label>Com %</mat-label>
-
 							<input matInput placeholder="Com %" type="number"
 								[(ngModel)]="_farmerBillDetail.comissionPercent" required />
 						</mat-form-field>
-						<mat-form-field appearance="outline" class="entry-field">
+
+						<mat-form-field appearance="outline" class="entry-field calculated">
 							<mat-label>Amt</mat-label>
-
-							<input matInput placeholder="Com %" type="number" disabled value="{{ 
-							(calculationType.value === 'weightRate')
-								? ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.weight || 0))
-								: ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.qty || 0))
-							}}"/>
+							<input matInput type="number" disabled placeholder="Amount" value="{{ 
+(calculationType.value === 'weightRate')
+? ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.weight || 0))
+: ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.qty || 0))
+}}" />
 						</mat-form-field>
-						<mat-form-field appearance="outline" class="entry-field">
+
+						<mat-form-field appearance="outline" class="entry-field calculated">
 							<mat-label>Com Amt</mat-label>
-							<input matInput placeholder="Com %" type="number" disabled value="{{ 
-							((calculationType.value === 'weightRate')
-								? ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.weight || 0))
-								: ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.qty || 0)))/100 *
-							(_farmerBillDetail.comissionPercent || 0)
-							}}"/>
+							<input matInput type="number" disabled placeholder="Commission" value="{{ 
+((calculationType.value === 'weightRate')
+? ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.weight || 0))
+: ((_farmerBillDetail.rate || 0) * (_farmerBillDetail.qty || 0))) / 100 *
+(_farmerBillDetail.comissionPercent || 0)
+}}" />
 						</mat-form-field>
-						<div class="width-80">
-							<button mat-icon-button color="accent" class="save-entry" (click)="insertFarmerBillDetails()">
-								<mat-icon>save</mat-icon>
-							</button>
-						</div>
-					</div>
-				</mat-card>
 
-			</mat-card>
-			
-			<mat-card class="sidebar">
-				<div class="sidebar-box">
-					<div class="sidebar-title">Details
-
-						<button mat-mini-fab color="primary" (click)="addSidebarItem()" aria-label="Add Customer"
-							matTooltip="Add New Customer" hidden>
+						<button mat-fab class="add-item-btn" (click)="insertFarmerBillDetails()" matTooltip="Add Item">
 							<mat-icon>add</mat-icon>
 						</button>
-
-					</div>
-					<div class="sidebar-list">
-						<div class="side-row" *ngFor="let item of sidebarItems; let i = index">
-							<mat-form-field appearance="outline" class="side-field">
-								<input matInput placeholder="नाम" [(ngModel)]="sidebarItems[i].label">
-							</mat-form-field>
-							<mat-form-field appearance="outline" class="side-field amount-field">
-								<input matInput placeholder="रकम" type="number" [(ngModel)]="sidebarItems[i].value">
-							</mat-form-field>
-							<button mat-icon-button color="warn" aria-label="Remove" (click)="removeSidebarItem(i)"
-								hidden>
-								<mat-icon>remove_circle</mat-icon>
-							</button>
-						</div>
-					</div>
-
-					<div class="sidebar-total-row">
-						<div class="sidebar-total">{{ sidebarTotal | number:'1.2-2' }}</div>
-						<div class="sidebar-total-label">Total</div>
 					</div>
 				</div>
-			</mat-card>
-		</div>
+			</div>
 
-
-		<div class="bottom-bar">
-			<div class="grand-total">Total: {{  this.getTotalCost()  - sidebarTotal }}</div>
-			<mat-form-field appearance="outline" class="col medium">
-				<mat-label>Calculation</mat-label>
-				<mat-select placeholder="Calculation" #calculationType>
-					<mat-option value="weightRate" selected>Weight * Rate</mat-option>
-					<mat-option value="qtyRate">Qty * Rate</mat-option>
-				</mat-select>
-			</mat-form-field>
-			<div class="actions">
-				<button mat-raised-button color="primary" (click)="GetNewComissionBillId()">New Bill</button>
-				<button mat-raised-button color="primary" (click)="printFarmerBill()">Print</button>
-				<button mat-raised-button color="accent" (click)="insertFarmerBill()">Save Bill</button>
+			<!-- Right Section - Details Sidebar -->
+			<div class="sidebar-section">
+				<div class="sidebar-card">
+					<div class="sidebar-header">
+						<mat-icon>account_balance_wallet</mat-icon>
+						<span>Deductions</span>
+					</div>
+					<div class="sidebar-content">
+						<div class="deduction-item" *ngFor="let item of sidebarItems; let i = index">
+							<mat-form-field appearance="outline" class="deduction-label-field">
+								<input matInput placeholder="Name" [(ngModel)]="sidebarItems[i].label">
+							</mat-form-field>
+							<mat-form-field appearance="outline" class="deduction-value-field">
+								<input matInput placeholder="Amount" type="number" [(ngModel)]="sidebarItems[i].value">
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="sidebar-footer">
+						<span class="total-label">Total Deductions</span>
+						<span class="total-value">{{ sidebarTotal | number:'1.2-2' }}</span>
+					</div>
+				</div>
 			</div>
 		</div>
-	</mat-card>
+
+		<!-- Bottom Action Bar -->
+		<div class="action-bar">
+			<div class="grand-total-section">
+				<span class="total-label">Net Total</span>
+				<span class="total-amount">{{ getTotalCost() - sidebarTotal | number:'1.0-0' }}</span>
+			</div>
+
+			<div class="action-controls">
+				<mat-form-field appearance="outline" class="calc-field">
+					<mat-label>Calculation</mat-label>
+					<mat-select placeholder="Calculation" #calculationType>
+						<mat-option value="weightRate" selected>Weight x Rate</mat-option>
+						<mat-option value="qtyRate">Qty x Rate</mat-option>
+					</mat-select>
+				</mat-form-field>
+
+				<div class="action-buttons">
+					<button mat-stroked-button class="action-btn new-btn" (click)="GetNewComissionBillId()">
+						<mat-icon>add</mat-icon>
+						New Bill
+					</button>
+					<button mat-stroked-button class="action-btn print-btn" (click)="printFarmerBill()">
+						<mat-icon>print</mat-icon>
+						Print
+					</button>
+					<button mat-raised-button class="action-btn save-btn" (click)="insertFarmerBill()">
+						<mat-icon>save</mat-icon>
+						Save Bill
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </app-master-page>

@@ -1,76 +1,145 @@
-
 <app-master-page>
-	<!-- Include dialog components in template (hidden) so AOT/compiler recognizes standalone dialog components used only via MatDialog -->
-	<mat-card>
-		<!-- Header bar: title (left), search (center), actions (right) -->
-		<div class="card-header-bar">
-			<div class="card-title">
-				<mat-card-title>Farmer Payment List</mat-card-title>
-			</div>
-			<div class="card-actions">
-				<mat-form-field appearance="outline" class="header-search">
-					<mat-label>Search</mat-label>
-					<input matInput [(ngModel)]="searchValue" (keyup)="applyFilter()" placeholder="Search vendors...">
-				</mat-form-field>
-				<button mat-stroked-button color="primary" (click)="applyFilter()">Search</button>
-				<button mat-raised-button color="accent" (click)="openNewVendorDialog()">New</button> 
- 
-			</div>
-		</div>
-		<mat-card-content>
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <div class="title-icon">
+                        <mat-icon>payments</mat-icon>
+                    </div>
+                    <div class="title-text">
+                        <h1>Farmer Payments</h1>
+                        <p>Master / Farmer Payment Management</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <mat-icon>receipt_long</mat-icon>
+                        <span>{{ dataSource.data.length }} Transactions</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-			<table mat-table [dataSource]="dataSource" class="mat-elevation-z15">
-				<!-- View Column -->
-				
+        <!-- Controls Card -->
+        <div class="controls-card">
+            <div class="controls-row">
+                <mat-form-field appearance="outline" class="search-field">
+                    <mat-label>Search</mat-label>
+                    <mat-icon matPrefix class="field-icon">search</mat-icon>
+                    <input matInput [(ngModel)]="searchValue" (keyup)="applyFilter()" placeholder="Search payments...">
+                </mat-form-field>
 
-				<ng-container matColumnDef="transactionId">
-					<th mat-header-cell *matHeaderCellDef> ID </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.transactionId}} </td>
-				</ng-container>
+                <button mat-fab class="search-fab" (click)="applyFilter()" matTooltip="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
 
-				<ng-container matColumnDef="vendorName">
-					<th mat-header-cell *matHeaderCellDef> Farmer Name </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.vendorName}} </td>
-				</ng-container>
+                <button mat-raised-button class="print-btn" (click)="printReport()" matTooltip="Print Report">
+                    <mat-icon>print</mat-icon>
+                    Print
+                </button>
 
-				<ng-container matColumnDef="paymentMethod">
-					<th mat-header-cell *matHeaderCellDef> Payment Method </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.paymentMethod}} </td>
-				</ng-container>
+                <button mat-raised-button class="new-btn" (click)="openNewVendorDialog()">
+                    <mat-icon>add</mat-icon>
+                    New Payment
+                </button>
+            </div>
+        </div>
 
-				<ng-container matColumnDef="transactionAmount">
-					<th mat-header-cell *matHeaderCellDef> Transaction Amount </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.transactionAmount}} </td>
-				</ng-container>
+        <!-- Table Card -->
+        <div class="table-card">
+            <div class="table-header-bar">
+                <div class="table-title">
+                    <mat-icon>account_balance_wallet</mat-icon>
+                    <span>Payment Transactions</span>
+                </div>
+                <div class="records-badge">
+                    <mat-icon>inventory_2</mat-icon>
+                    {{ dataSource.data.length }} Records
+                </div>
+            </div>
 
-				<ng-container matColumnDef="discountAmount">
-					<th mat-header-cell *matHeaderCellDef> Discount Amount </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.discountAmount}} </td>
-				</ng-container>
+            <div class="table-wrapper">
+                <table mat-table [dataSource]="dataSource" class="payment-table">
+                    <!-- Transaction ID Column -->
+                    <ng-container matColumnDef="transactionId">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let vendor">
+                            <span class="id-badge">{{ vendor.transactionId }}</span>
+                        </td>
+                    </ng-container>
 
-				<ng-container matColumnDef="transactionDate">
-					<th mat-header-cell *matHeaderCellDef> Transaction Date </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.transactionDate | date:'dd/MMM/yyyy'}} </td>
-				</ng-container>
+                    <!-- Vendor Name Column -->
+                    <ng-container matColumnDef="vendorName">
+                        <th mat-header-cell *matHeaderCellDef>Farmer Name</th>
+                        <td mat-cell *matCellDef="let vendor">
+                            <div class="vendor-cell">
+                                <span class="vendor-avatar">{{ vendor.vendorName?.charAt(0) }}</span>
+                                <span>{{ vendor.vendorName }}</span>
+                            </div>
+                        </td>
+                    </ng-container>
 
-			 
-				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-				<tr *ngIf="dataSource.data.length === 0">
-					<td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
-				</tr>
+                    <!-- Payment Method Column -->
+                    <ng-container matColumnDef="paymentMethod">
+                        <th mat-header-cell *matHeaderCellDef>Payment Method</th>
+                        <td mat-cell *matCellDef="let vendor">
+                            <span class="method-tag">{{ vendor.paymentMethod }}</span>
+                        </td>
+                    </ng-container>
 
-                <ng-container matColumnDef="view">
-					<th mat-header-cell *matHeaderCellDef> View </th>
-					<td mat-cell *matCellDef="let vendor">
-						<button mat-button color="accent" (click)="viewVendor(vendor)">  <mat-icon>edit</mat-icon></button>
-						<button mat-button color="warn" (click)="confirmDeleteVendor(vendor)">     
-							       <mat-icon>delete</mat-icon></button>
-					</td>
-				</ng-container>
-			</table>
-			<mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
-				showFirstLastButtons></mat-paginator>
-		</mat-card-content>
-	</mat-card>
+                    <!-- Transaction Amount Column -->
+                    <ng-container matColumnDef="transactionAmount">
+                        <th mat-header-cell *matHeaderCellDef>Amount</th>
+                        <td mat-cell *matCellDef="let vendor">
+                            <span class="amount-value">₹ {{ vendor.transactionAmount | number:'1.2-2' }}</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Discount Amount Column -->
+                    <ng-container matColumnDef="discountAmount">
+                        <th mat-header-cell *matHeaderCellDef>Discount</th>
+                        <td mat-cell *matCellDef="let vendor">
+                            <span class="discount-value">₹ {{ vendor.discountAmount | number:'1.2-2' }}</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Transaction Date Column -->
+                    <ng-container matColumnDef="transactionDate">
+                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <td mat-cell *matCellDef="let vendor">
+                            <span class="date-cell">{{ vendor.transactionDate | date:'dd/MMM/yyyy' }}</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="view">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let vendor">
+                            <div class="action-cell">
+                                <button mat-icon-button class="edit-btn" (click)="viewVendor(vendor)" matTooltip="Edit">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="delete-btn" (click)="confirmDeleteVendor(vendor)" matTooltip="Delete">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+                <!-- Empty State -->
+                <div *ngIf="dataSource.data.length === 0" class="empty-state">
+                    <mat-icon>inbox</mat-icon>
+                    <p>No payment records found</p>
+                </div>
+            </div>
+
+            <mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
+                showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
 </app-master-page>

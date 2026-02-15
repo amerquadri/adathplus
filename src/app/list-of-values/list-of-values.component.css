@@ -1,36 +1,425 @@
-/* Layout for form: place fields in a row with gaps and wrap on small screens */
+/* ============================================
+   List of Values Page - Modern UI Styles
+   ============================================ */
+
+/* Page Container */
+.page-container {
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    min-height: calc(100vh - 64px);
+}
+
+/* ============================================
+   Page Header
+   ============================================ */
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.title-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.title-icon mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.title-text h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.title-text p {
+    margin: 4px 0 0;
+    opacity: 0.85;
+    font-size: 0.9rem;
+}
+
+.header-stats {
+    display: flex;
+    gap: 12px;
+}
+
+.stat-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 18px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-weight: 500;
+}
+
+.stat-badge mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ============================================
+   Form Card
+   ============================================ */
+.form-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #667eea;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.form-header mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
 .lov-form {
-	display: flex;
-	gap: 12px;
-	align-items: center;
-	flex-wrap: wrap;
-	margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-/* Make material form fields flexible but with a sensible minimum width */
-mat-form-field.full-width {
-	flex: 1 1 220px;
-	min-width: 180px;
+.form-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
-.buttons {
-	display: flex;
-	gap: 8px;
-	align-items: center;
-	margin-left: 8px;
+.form-field {
+    flex: 1;
+    min-width: 200px;
 }
 
+.field-icon {
+    color: #667eea;
+    margin-right: 8px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 8px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.reset-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 20px;
+    height: 42px;
+    border-radius: 10px !important;
+    font-weight: 500;
+    color: #718096 !important;
+    border-color: #e2e8f0 !important;
+    transition: all 0.2s ease;
+}
+
+.reset-btn:hover {
+    background: #f7fafc !important;
+    border-color: #667eea !important;
+    color: #667eea !important;
+}
+
+.reset-btn mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.submit-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 24px;
+    height: 42px;
+    border-radius: 10px !important;
+    font-weight: 500;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover:not([disabled]) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+}
+
+.submit-btn mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ============================================
+   Table Card
+   ============================================ */
+.table-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.table-header-bar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.table-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.table-title mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+.records-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.records-badge mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.table-wrapper {
+    max-height: 450px;
+    overflow: auto;
+}
+
+/* Table Styles */
 .lov-table {
-	margin-top: 16px;
+    width: 100%;
 }
 
-.full-width-table {
-	width: 100%;
+.lov-table th.mat-header-cell {
+    background: #f8f9fc;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 16px;
+    border-bottom: 2px solid #e2e8f0;
 }
 
-.empty-note {
-	padding: 12px 0;
-	color: rgba(0,0,0,0.6);
+.lov-table td.mat-cell {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    color: #2d3748;
+    border-bottom: 1px solid #e2e8f0;
 }
 
- 
+.lov-table tr.mat-row:hover {
+    background: #f7f8fc;
+}
+
+.id-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 28px;
+    padding: 0 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.form-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #e8f4fd;
+    color: #667eea;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Action Buttons */
+.action-cell {
+    display: flex;
+    gap: 4px;
+}
+
+.edit-btn {
+    color: #667eea !important;
+    transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+    background: #eff0ff !important;
+}
+
+.delete-btn {
+    color: #ef4444 !important;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    background: #fef2f2 !important;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: #a0aec0;
+}
+
+.empty-state mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Paginator Styling */
+::ng-deep .table-card .mat-mdc-paginator {
+    background: #f8f9fc;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 900px) {
+    .page-container {
+        padding: 16px;
+    }
+
+    .page-header {
+        padding: 20px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .title-section {
+        flex-direction: column;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-field {
+        min-width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .reset-btn,
+    .submit-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-text h1 {
+        font-size: 1.4rem;
+    }
+
+    .table-header-bar {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}
+
+/* ============================================
+   Form Field Customizations
+   ============================================ */
+::ng-deep .form-card .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: #667eea !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-floating-label {
+    color: #667eea !important;
+}

@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -14,10 +13,10 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { VendorPaymentServiceService } from '../vendor-payment-service.service';
 import { VendorInterface, VendorPaymentInterface } from '../vendor-payment-interface';
-import {map, startWith} from 'rxjs/operators';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {FormControl  } from '@angular/forms';
-import {Observable, of} from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormControl } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 
 
 @Component({
@@ -48,26 +47,51 @@ export class VendorPaymentDialogComponent implements OnInit {
   public PaymentMethod = PaymentMethod; // Expose enum to template
   public vendorList: VendorInterface[] = [];
 
-  
-  myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-
-  filteredOptions: Observable<string[]> = of(this.options);
+  // Autocomplete for farmer selection
+  farmerControl = new FormControl('');
+  farmerOptions: string[] = [];
+  filteredFarmers: Observable<string[]> = of([]);
 
   ngOnInit(): void {
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
-
-
     this.loadVendorList();
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  private _filterFarmers(value: string): string[] {
+    const filterValue = (value || '');
+    return this.farmerOptions.filter(option => option.toLowerCase().includes(filterValue));
+  }
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  private initFarmerAutocomplete(): void {
+    // Populate options from vendorList
+    this.farmerOptions = this.vendorList.map(v => v.vendorName || '');
+    
+    // Set initial value if vendor already has a name
+    if (this.vendor && this.vendor.vendorName) {
+      this.farmerControl.setValue(this.vendor.vendorName);
+    } else if (this.vendor && this.vendor.vendorId) {
+      const found = this.vendorList.find(v => v.vendorId === this.vendor.vendorId);
+      if (found) {
+        this.farmerControl.setValue(found.vendorName || '');
+      }
+    }
+    
+    // Setup filtered observable
+    this.filteredFarmers = this.farmerControl.valueChanges.pipe(
+      startWith(this.farmerControl.value || ''),
+      map(value => this._filterFarmers(value || ''))
+    );
+  }
+
+  onFarmerSelected(selectedName: string): void {
+    const target = (selectedName || '').trim();
+    const found = this.vendorList.find(v => (v.vendorName || '').trim() === target);
+    if (found) {
+      this.vendor.vendorId = found.vendorId;
+      this.vendor.vendorName = found.vendorName;
+    } else {
+      this.vendor.vendorId = null;
+      this.vendor.vendorName = '';
+    }
   }
 
   constructor(
@@ -79,19 +103,6 @@ export class VendorPaymentDialogComponent implements OnInit {
     //this.initializeDates();
   }
 
-
-  onVendorSelected(event: MatSelectChange) {
-    // event.value is the selected vendorId (could be string or number)
-    const selectedId = Number(event.value);
-    const found = this.vendorList.find(v => Number(v.vendorId) === selectedId);
-    if (found) {
-      this.vendor.vendorId = found.vendorId;
-      this.vendor.vendorName = found.vendorName;
-    } else {
-      // If not found, clear name but keep id
-      this.vendor.vendorName = '';
-    }
-  }
 
 // initializeDates() {
 //     if (this.vendor.createdDate && typeof this.vendor.createdDate === 'string') {
@@ -151,6 +162,7 @@ getVendorNameList() {
      this.vendorService.getVendorNameList().subscribe({
        next: (response: VendorInterface[]) => {
          this.vendorList = response || [];
+         this.initFarmerAutocomplete();
        },
        error: (err: any) => console.error('Failed to load vendor list', err)
      });

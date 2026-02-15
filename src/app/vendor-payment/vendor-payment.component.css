@@ -1,49 +1,445 @@
-/* You can add global styles to this file, and also import other style files */
-@import url('../master-page-content.css');
+/* ============================================
+   Vendor Payment Page - Modern UI Styles
+   ============================================ */
 
-/* General header/search styles */
-.customer-search-bar { margin-bottom: 16px; display:flex; align-items:center; gap:16px; }
-.no-record-cell { text-align:center; padding:24px; color:#888; }
-
-/* Ensure table wrappers allow horizontal scroll on small screens */
-.mat-elevation-z8, .mat-elevation-z13, .table-responsive { overflow-x:auto; display:block; max-width:100%; }
-
-/* Header bar styles copied from customer test */
-.card-header-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px 8px 16px; border-bottom:1px solid rgba(0,0,0,0.08); }
-.card-title { display:flex; align-items:center; min-width:200px; }
-.card-actions { display:flex; align-items:center; gap:8px; margin-left:auto; }
-.header-search { width:320px; max-width:40vw; }
-
-/* Table and paginator adjustments */
-table.mat-table { width:100%; min-width:760px;overflow: auto; }
-.mat-paginator { display:flex; align-items:center; gap:8px; }
-
-/* Mobile responsiveness */
-@media (max-width:1024px) {
-	.header-search { max-width:50vw; }
-	.card-actions button { padding:6px 10px; font-size:13px; }
+/* Page Container */
+.page-container {
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    min-height: calc(100vh - 64px);
 }
 
-@media (max-width:768px) {
-	.card-header-bar { flex-direction:column; align-items:stretch; gap:8px; }
-	.card-actions { justify-content:flex-end; }
-	.header-search{ width:100%; }
-	table.mat-table { min-width:680px; }
-	.card-title mat-card-title { font-size:18px; }
-    
+/* ============================================
+   Page Header
+   ============================================ */
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    color: white;
 }
 
-@media (max-width:480px) {
-	/* Make controls stack and reduce spacing */
-	.card-header-bar { padding:8px; }
-	.header-search { width:100%; }
-	.card-actions { gap:6px; }
-	.card-actions button { font-size:12px; padding:6px 8px; }
-	table.mat-table { min-width:640px; font-size:13px; }
-	.mat-paginator { font-size:12px; }
-} 
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
 
-mat-mdc-form-field-flex {
-  margin: -15px -15px -15px 20px;
+.title-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.title-icon mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.title-text h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.title-text p {
+    margin: 4px 0 0;
+    opacity: 0.85;
+    font-size: 0.9rem;
+}
+
+.header-stats {
+    display: flex;
+    gap: 12px;
+}
+
+.stat-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 18px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-weight: 500;
+}
+
+.stat-badge mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ============================================
+   Controls Card
+   ============================================ */
+.controls-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.controls-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-field {
+    flex: 1;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+.field-icon {
+    color: #667eea;
+    margin-right: 8px;
+}
+
+.search-fab {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+.search-fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5) !important;
+}
+
+.print-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px !important;
+    height: 48px;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
+    transition: all 0.3s ease;
+}
+
+.print-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4) !important;
+}
+
+.print-btn mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.new-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px !important;
+    height: 48px;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+    transition: all 0.3s ease;
+}
+
+.new-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4) !important;
+}
+
+.new-btn mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+/* ============================================
+   Table Card
+   ============================================ */
+.table-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.table-header-bar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.table-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.table-title mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+.records-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.records-badge mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.table-wrapper {
+    max-height: 500px;
+    overflow: auto;
+}
+
+/* Table Styles */
+.payment-table {
+    width: 100%;
+}
+
+.payment-table th.mat-header-cell {
+    background: #f8f9fc;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 16px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.payment-table td.mat-cell {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    color: #2d3748;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.payment-table tr.mat-row:hover {
+    background: #f7f8fc;
+}
+
+/* ID Badge */
+.id-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 28px;
+    padding: 0 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Vendor Cell */
+.vendor-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vendor-avatar {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Method Tag */
+.method-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: #e8f4fd;
+    color: #667eea;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Amount Values */
+.amount-value {
+    font-weight: 600;
+    color: #10b981;
+}
+
+.discount-value {
+    font-weight: 500;
+    color: #f59e0b;
+}
+
+/* Date Cell */
+.date-cell {
+    color: #718096;
+    font-size: 0.85rem;
+}
+
+/* Action Buttons */
+.action-cell {
+    display: flex;
+    gap: 4px;
+}
+
+.edit-btn {
+    color: #667eea !important;
+    transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+    background: #eff0ff !important;
+}
+
+.delete-btn {
+    color: #ef4444 !important;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    background: #fef2f2 !important;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: #a0aec0;
+}
+
+.empty-state mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Paginator Styling */
+::ng-deep .table-card .mat-mdc-paginator {
+    background: #f8f9fc;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 900px) {
+    .page-container {
+        padding: 16px;
+    }
+
+    .page-header {
+        padding: 20px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .title-section {
+        flex-direction: column;
+    }
+
+    .controls-row {
+        flex-direction: column;
+    }
+
+    .search-field {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .search-fab {
+        width: 100%;
+        border-radius: 12px !important;
+    }
+
+    .new-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-text h1 {
+        font-size: 1.4rem;
+    }
+
+    .table-header-bar {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}
+
+/* ============================================
+   Form Field Customizations
+   ============================================ */
+::ng-deep .controls-card .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: #667eea !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-floating-label {
+    color: #667eea !important;
 }

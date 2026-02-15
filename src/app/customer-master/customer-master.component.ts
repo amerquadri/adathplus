@@ -11,7 +11,7 @@ import { MatDialogModule, MatDialog, MAT_DIALOG_DATA } from '@angular/material/d
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { DatePipe, CommonModule } from '@angular/common';
+import { DatePipe, CommonModule, DecimalPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { CustomerService, Customer } from '../customer-page/customer.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -22,7 +22,8 @@ import { ConfirmDialogComponent } from '../customer-page/confirm-dialog.componen
 import { CustomerDialogComponent } from '../customer-page/customer-dialog.component';
 import { timeout, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-customer-master',
@@ -30,7 +31,7 @@ import { MatIcon } from '@angular/material/icon';
   imports: [MasterPageComponent, ReactiveFormsModule, FormsModule, MatInputModule,
     MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule,
     MatDialogModule, MatTableModule, MatSortModule, MatPaginatorModule,
-    DatePipe, CommonModule, MatIcon],
+     CommonModule, DecimalPipe, MatIconModule, MatTooltipModule],
   templateUrl: './customer-master.component.html',
   styleUrl: './customer-master.component.css'
 })
@@ -38,6 +39,7 @@ export class CustomerMasterComponent {
   // Expose dialog component classes to template for ngComponentOutlet if needed
   public CustomerDialog = CustomerDialogComponent;
   public ConfirmDialog = ConfirmDialogComponent;
+  public Math = Math; // For template usage
   customerForm: FormGroup;
   customers: Customer[] = [];
   dataSource = new MatTableDataSource<Customer>([]);
@@ -48,6 +50,11 @@ export class CustomerMasterComponent {
     'customerId', 'customerName',
     'credit', 'debit', 'openingAmt', 'isActive', 'view'
   ];
+
+  // Mobile pagination properties
+  mobilePageIndex: number = 0;
+  mobilePageSize: number = 10;
+  mobilePageSizeOptions: number[] = [5, 10, 20, 50];
 
   //'companyId','phone1', 'phone2', 'email', 'address', 'detail','createdById', 'createdDate', 'updatedById', 'updatedDate',
   constructor(private fb: FormBuilder, private dialog: MatDialog, private customerService: CustomerService) {
@@ -276,9 +283,32 @@ export class CustomerMasterComponent {
     this.dataSource.paginator = this.paginator;
   }
 
+  // Mobile pagination methods
+  get paginatedMobileData(): Customer[] {
+    const filtered = this.dataSource.filteredData;
+    const startIndex = this.mobilePageIndex * this.mobilePageSize;
+    return filtered.slice(startIndex, startIndex + this.mobilePageSize);
+  }
+
+  get totalMobilePages(): number {
+    return Math.ceil(this.dataSource.filteredData.length / this.mobilePageSize);
+  }
+
+  onMobilePageChange(event: any): void {
+    this.mobilePageIndex = event.pageIndex;
+    this.mobilePageSize = event.pageSize;
+  }
+
   applyFilter() {
-    this.fetchCustomers();
     this.dataSource.filter = this.searchValue.trim().toLowerCase();
+    
+    // Reset to first page after filtering
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+    
+    // Reset mobile pagination as well
+    this.mobilePageIndex = 0;
   }
 
   // Call getCustomerById service

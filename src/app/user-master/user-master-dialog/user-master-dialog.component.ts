@@ -10,7 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { UserMaster } from '../user-master.interface';
 import { UsermasterService } from '../usermaster.service';
 
@@ -28,7 +28,8 @@ import { UsermasterService } from '../usermaster.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule
   ],
   templateUrl: './user-master-dialog.component.html',
   styleUrls: ['./user-master-dialog.component.css']

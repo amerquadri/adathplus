@@ -1,102 +1,121 @@
-<!-- Dialog header bar -->
+<!-- Modern Dialog Header -->
 <div class="dialog-header">
-  <div class="dialog-title">Customer Details</div>
+  <div class="header-left">
+    <div class="header-icon">
+      <mat-icon>person</mat-icon>
+    </div>
+    <div class="header-text">
+      <h2 class="dialog-title">Customer Details</h2>
+      <p class="dialog-subtitle">{{ customer.customerId ? 'Edit customer information' : 'Add new customer' }}</p>
+    </div>
+  </div>
   <div class="dialog-header-actions">
-    <button mat-mini-fab color="primary" aria-label="Save" (click)="onSaveCustomer()">
-      <mat-icon>save</mat-icon>
-    </button>
-    
-    <button mat-icon-button  color="danger" aria-label="Close" (click)="dialogRef.close()">
+    <button mat-icon-button class="close-btn" aria-label="Close" (click)="dialogRef.close()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
 </div>
+
 <mat-dialog-content>
   <form class="customer-dialog-form">
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Customer Name</mat-label>
-        <input matInput [(ngModel)]="customer.customerName" name="customerName" id="customerName"
-          placeholder="Customer Name">
-      </mat-form-field>
-       </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Phone 1</mat-label>
-        <input matInput [(ngModel)]="customer.phone1" name="phone1" id="phone1" placeholder="Phone 1">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Phone 2</mat-label>
-        <input matInput [(ngModel)]="customer.phone2" name="phone2" id="phone2" placeholder="Phone 2">
-      </mat-form-field>
-    </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput [(ngModel)]="customer.email" name="email" placeholder="Email">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="address-field">
-        <mat-label>Address</mat-label>
-        <textarea matInput [(ngModel)]="customer.address" rows="2" name="address" placeholder="Address"></textarea>
-      </mat-form-field>
-    </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Detail</mat-label>
-        <textarea matInput [(ngModel)]="customer.detail" rows="2" name="detail" placeholder="Detail"></textarea>
-      </mat-form-field>
-    </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Credit</mat-label>
-        <input matInput type="number" [(ngModel)]="customer.credit" name="credit" placeholder="Credit">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Debit</mat-label>
-        <input matInput type="number" [(ngModel)]="customer.debit" name="debit" placeholder="Debit">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Opening Amount</mat-label>
-        <input matInput type="number" [(ngModel)]="customer.openingAmt" name="openingAmt" placeholder="Opening Amount">
-      </mat-form-field>
+    <!-- Basic Information Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>badge</mat-icon>
+        <span>Basic Information</span>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Customer Name</mat-label>
+          <mat-icon matPrefix class="field-icon">person_outline</mat-icon>
+          <input matInput [(ngModel)]="customer.customerName" name="customerName" id="customerName"
+            placeholder="Enter customer name">
+        </mat-form-field>
+      </div>
     </div>
 
+    <!-- Contact Information Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>contact_phone</mat-icon>
+        <span>Contact Information</span>
+      </div>
+      <div class="form-row two-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Phone 1</mat-label>
+          <mat-icon matPrefix class="field-icon">phone</mat-icon>
+          <input matInput [(ngModel)]="customer.phone1" name="phone1" id="phone1" placeholder="Primary phone">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Phone 2</mat-label>
+          <mat-icon matPrefix class="field-icon">phone_android</mat-icon>
+          <input matInput [(ngModel)]="customer.phone2" name="phone2" id="phone2" placeholder="Secondary phone">
+        </mat-form-field>
+      </div>
+      <div class="form-row two-col">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <mat-icon matPrefix class="field-icon">email</mat-icon>
+          <input matInput [(ngModel)]="customer.email" name="email" placeholder="Email address" type="email">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Address</mat-label>
+          <mat-icon matPrefix class="field-icon">location_on</mat-icon>
+          <textarea matInput [(ngModel)]="customer.address" rows="1" name="address" placeholder="Full address"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
 
-    <div class="form-row">
-<!-- 
-      <mat-form-field appearance="outline">
-        <mat-label>Created By ID</mat-label>
-        <input matInput type="number" [(ngModel)]="customer.createdById" name="createdById" placeholder="Created By ID">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Created Date</mat-label>
-        <input matInput [matDatepicker]="createdDatePicker" [(ngModel)]="customer.createdDate" name="createdDate"
-          placeholder="Select created date" readonly>
-        <mat-datepicker-toggle matIconSuffix [for]="createdDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #createdDatePicker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Updated By ID</mat-label>
-        <input matInput type="number" [(ngModel)]="customer.updatedById" name="updatedById" placeholder="Updated By ID">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Updated Date</mat-label>
-        <input matInput [matDatepicker]="updatedDatePicker" [(ngModel)]="customer.updatedDate" name="updatedDate"
-          placeholder="Select updated date" readonly>
-        <mat-datepicker-toggle matIconSuffix [for]="updatedDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #updatedDatePicker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Is Active</mat-label>
-        <mat-select [(ngModel)]="customer.isActive" name="isActive" placeholder="Is Active">
-          <mat-option [value]="true">True</mat-option>
-          <mat-option [value]="false">False</mat-option>
-        </mat-select>
-      </mat-form-field> 
-      <mat-form-field appearance="outline">
-        <mat-label>Company ID</mat-label>
-        <input matInput type="number" [(ngModel)]="customer.companyId" name="companyId" placeholder="Company ID">
-      </mat-form-field>-->
+    <!-- Additional Details Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>description</mat-icon>
+        <span>Additional Details</span>
+      </div>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Detail / Notes</mat-label>
+          <mat-icon matPrefix class="field-icon">notes</mat-icon>
+          <textarea matInput [(ngModel)]="customer.detail" rows="2" name="detail" placeholder="Additional notes or details"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Financial Information Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span>Financial Information</span>
+      </div>
+      <div class="form-row three-col">
+        <mat-form-field appearance="outline" class="credit-field">
+          <mat-label>Credit</mat-label>
+          <span matPrefix class="currency-prefix">?</span>
+          <input matInput type="number" [(ngModel)]="customer.credit" name="credit" placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="debit-field">
+          <mat-label>Debit</mat-label>
+          <span matPrefix class="currency-prefix">?</span>
+          <input matInput type="number" [(ngModel)]="customer.debit" name="debit" placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="opening-field">
+          <mat-label>Opening Amount</mat-label>
+          <span matPrefix class="currency-prefix">?</span>
+          <input matInput type="number" [(ngModel)]="customer.openingAmt" name="openingAmt" placeholder="0">
+        </mat-form-field>
+      </div>
     </div>
   </form>
-</mat-dialog-content> 
+</mat-dialog-content>
+
+<!-- Dialog Actions -->
+<mat-dialog-actions class="dialog-actions">
+  <button mat-button class="cancel-btn" (click)="dialogRef.close()">
+    <mat-icon>close</mat-icon>
+    Cancel
+  </button>
+  <button mat-raised-button class="save-btn" (click)="onSaveCustomer()">
+    <mat-icon>save</mat-icon>
+    {{ customer.customerId ? 'Update Customer' : 'Save Customer' }}
+  </button>
+</mat-dialog-actions>

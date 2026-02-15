@@ -1,92 +1,265 @@
-<header class="app-header  box-shadow">
-  <div class=" box-shadow">
-    <div class="header-content">
-      <nav class="nav-buttons">
+<header class="app-header">
+  <div class="header-container">
+    <!-- Left: Logo/Company Name -->
+    <div class="header-left">
+      <button mat-icon-button class="menu-toggle" (click)="toggleMobileMenu()">
+        <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+      <div class="company-brand" (click)="goToHome()">
+        <mat-icon class="brand-icon">business</mat-icon>
+        <span class="company-name">{{ companyName || 'Adath Plus' }}</span>
+      </div>
+    </div>
 
-        <h1>     {{     this.companyName || 'Not available' }}  </h1>
-        <!-- <button mat-button (click)="goToHome()"> Dashboard</button> -->
-        <button mat-flat-button [matMenuTriggerFor]="menu1">Master</button>
-
-        <mat-menu #menu1="matMenu">
-          <button mat-menu-item (click)="goToCustomer()">Customer Detail</button>
-          <button mat-menu-item (click)="goToCustomerMaster()">Customer</button>
-          <button mat-menu-item (click)="goToVendor()">Farmer</button>
-          <button mat-menu-item (click)="goToListOfValues()">List Master</button>
-        </mat-menu>
-        <button mat-button [matMenuTriggerFor]="Bill">Bill</button>
-        <mat-menu #Bill="matMenu">
-          <button mat-menu-item (click)="goToFarmerBill()">Farmer Bill</button>
-          <button mat-menu-item (click)="goToCustomerBill()">Customer Bill</button>
-
-        </mat-menu>
-        <button mat-button [matMenuTriggerFor]="Payment">Payment</button>
-        <mat-menu #Payment="matMenu">
-          <button mat-menu-item (click)="goToVendorPayment()">Farmer Payment</button>
-          <button mat-menu-item (click)="goToCustomerPayment()">Customer Payment</button>
-        </mat-menu>
-        <button mat-button [matMenuTriggerFor]="Reports">Reports</button>
-        <mat-menu #Reports="matMenu">
-          <button mat-menu-item (click)="goToVendorPayment()">Farmer Payment</button>
-          <button mat-menu-item (click)="goToCustomerPayment()">Customer Payment</button>
-        </mat-menu>
-
-        <button mat-button [matMenuTriggerFor]="Setting">Setting</button>
-        <mat-menu #Setting="matMenu">
-          <button mat-menu-item (click)="goToUserMaster()">User Master</button>
-          <button mat-menu-item (click)="goToCompanyMaster()">Company Master</button>
-          <button mat-menu-item (click)="goToCustomerPayment()">Role Master</button>
-          <button mat-menu-item (click)="goToCustomerPayment()">Profile</button>
-          <button mat-menu-item (click)="goToCustomerPayment()">Premium</button>
-        </mat-menu>
-      </nav>
-
-      <h1> {{ formname }}</h1>
-
-
-      <div class="scale-control">
-        <button mat-stroked-button color="primary" [matMenuTriggerFor]="scaleMenu">
-          {{ isScaled80 ? 'Normal (100%)' : 'Scale 80%' }}
+    <!-- Center: Desktop Navigation -->
+    <nav class="desktop-nav">
+      <button mat-button [matMenuTriggerFor]="menu1" class="nav-btn">
+        <mat-icon>folder_shared</mat-icon>
+        <span>Master</span>
+        <mat-icon class="dropdown-icon">expand_more</mat-icon>
+      </button>
+      <mat-menu #menu1="matMenu" class="nav-menu">
+        <button mat-menu-item (click)="goToCustomer()">
+          <mat-icon>people</mat-icon>Customer Detail
         </button>
-        <mat-menu #scaleMenu="matMenu">
-          <button mat-menu-item (click)="setNormal()">Normal (100%)</button>
-          <button mat-menu-item (click)="setZoomOut()">Zoom Out (80%)</button>
-        </mat-menu>
+        <button mat-menu-item (click)="goToCustomerMaster()">
+          <mat-icon>person</mat-icon>Customer
+        </button>
+        <button mat-menu-item (click)="goToVendor()">
+          <mat-icon>agriculture</mat-icon>Farmer
+        </button>
+        <button mat-menu-item (click)="goToListOfValues()">
+          <mat-icon>list</mat-icon>List Master
+        </button>
+      </mat-menu>
+
+      <button mat-button [matMenuTriggerFor]="Bill" class="nav-btn">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Bill</span>
+        <mat-icon class="dropdown-icon">expand_more</mat-icon>
+      </button>
+      <mat-menu #Bill="matMenu" class="nav-menu">
+        <button mat-menu-item (click)="goToFarmerBill()">
+          <mat-icon>agriculture</mat-icon>Farmer Bill
+        </button>
+        <button mat-menu-item (click)="goToCustomerBill()">
+          <mat-icon>receipt</mat-icon>Customer Bill
+        </button>
+      </mat-menu>
+
+      <button mat-button [matMenuTriggerFor]="Payment" class="nav-btn">
+        <mat-icon>payments</mat-icon>
+        <span>Payment</span>
+        <mat-icon class="dropdown-icon">expand_more</mat-icon>
+      </button>
+      <mat-menu #Payment="matMenu" class="nav-menu">
+        <button mat-menu-item (click)="goToVendorPayment()">
+          <mat-icon>agriculture</mat-icon>Farmer Payment
+        </button>
+        <button mat-menu-item (click)="goToCustomerPayment()">
+          <mat-icon>payment</mat-icon>Customer Payment
+        </button>
+      </mat-menu>
+
+      <button mat-button [matMenuTriggerFor]="Reports" class="nav-btn">
+        <mat-icon>assessment</mat-icon>
+        <span>Reports</span>
+        <mat-icon class="dropdown-icon">expand_more</mat-icon>
+      </button>
+      <mat-menu #Reports="matMenu" class="nav-menu">
+        <button mat-menu-item (click)="goToVendorPayment()">
+          <mat-icon>analytics</mat-icon>Farmer Report
+        </button>
+        <button mat-menu-item (click)="goToCustomerPayment()">
+          <mat-icon>bar_chart</mat-icon>Customer Report
+        </button>
+      </mat-menu>
+
+      <button mat-button [matMenuTriggerFor]="Setting" class="nav-btn">
+        <mat-icon>settings</mat-icon>
+        <span>Setting</span>
+        <mat-icon class="dropdown-icon">expand_more</mat-icon>
+      </button>
+      <mat-menu #Setting="matMenu" class="nav-menu">
+        <button mat-menu-item (click)="goToUserMaster()">
+          <mat-icon>manage_accounts</mat-icon>User Master
+        </button>
+        <button mat-menu-item (click)="goToCompanyMaster()">
+          <mat-icon>business</mat-icon>Company Master
+        </button>
+        <button mat-menu-item>
+          <mat-icon>admin_panel_settings</mat-icon>Role Master
+        </button>
+        <button mat-menu-item>
+          <mat-icon>person</mat-icon>Profile
+        </button>
+      </mat-menu>
+    </nav>
+
+    <!-- Right: User Actions -->
+    <div class="header-right">
+      <!-- Zoom Controls -->
+      <div class="zoom-controls">
+        <button mat-icon-button class="zoom-btn" (click)="zoomOut()" [disabled]="!canZoomOut()" matTooltip="Zoom Out">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button mat-button class="zoom-level-btn" (click)="resetZoom()" matTooltip="Reset to 100%">
+          {{ zoomLevel }}%
+        </button>
+        <button mat-icon-button class="zoom-btn" (click)="zoomIn()" [disabled]="!canZoomIn()" matTooltip="Zoom In">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
 
-
-      <div class="auth-area">
-        <ng-container *ngIf="!isSignedIn; else signedInTpl">
-          <button mat-raised-button color="warn" (click)="signIn()">Sign In</button>
-        </ng-container>
-        <ng-template #signedInTpl>
-          <button mat-raised-button color="warn" [matMenuTriggerFor]="userMenu">
-            <mat-icon>account_circle</mat-icon>
-            {{ userName || 'User' }}
+      <ng-container *ngIf="isSignedIn">
+        <button mat-button class="user-btn" [matMenuTriggerFor]="userMenu">
+          <div class="user-avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+          <!-- <span class="user-name">{{ userName || 'User' }}</span> -->
+          <mat-icon class="dropdown-icon">expand_more</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu" class="user-menu">
+          <div class="user-menu-header">
+            <div class="user-avatar-large">
+              <mat-icon>person</mat-icon>
+            </div>
+            <div class="user-info">
+              <span class="user-fullname">{{ userName }}</span>
+              <span class="user-company">{{ companyName }}</span>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="goToHome()">
+            <mat-icon>dashboard</mat-icon>Dashboard
           </button>
-          <mat-menu #userMenu="matMenu">
-            <button mat-menu-item (click)="logout()">
-              <mat-icon>logout</mat-icon>
-              Sign Out
-            </button>
-            <button mat-menu-item (click)="selectCompany()">
-              <mat-icon>home</mat-icon>
-              Select Company
-            </button>
-          </mat-menu>
-        </ng-template>
-      </div>
-
-      <!-- Scale control -->
-
-
-      <!-- Quick logout button (visible when signed in) -->
-      <!-- <div class="quick-logout" *ngIf="isSignedIn">
-        <button mat-raised-button color="warn" class="logout-button" (click)="logout()">
-          <mat-icon>logout</mat-icon>
+          <button mat-menu-item (click)="selectCompany()">
+            <mat-icon>swap_horiz</mat-icon>Switch Company
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item class="logout-item" (click)="logout()">
+            <mat-icon>logout</mat-icon>Sign Out
+          </button>
+        </mat-menu>
+      </ng-container>
+      <ng-container *ngIf="!isSignedIn">
+        <button mat-raised-button color="accent" (click)="signIn()" class="signin-btn">
+          <mat-icon>login</mat-icon>
+          Sign In
         </button>
-      </div> -->
-
-
+      </ng-container>
     </div>
   </div>
+
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-nav-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+  <nav class="mobile-nav" [class.open]="isMobileMenuOpen">
+    <div class="mobile-nav-header">
+      <div class="mobile-brand">
+        <mat-icon>business</mat-icon>
+        <span>{{ companyName || 'Adath Plus' }}</span>
+      </div>
+      <button mat-icon-button (click)="closeMobileMenu()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    
+    <div class="mobile-nav-content">
+      <div class="mobile-nav-section">
+        <div class="mobile-nav-title" (click)="toggleMobileSection('master')">
+          <mat-icon>folder_shared</mat-icon>
+          <span>Master</span>
+          <mat-icon class="expand-icon">{{ mobileExpandedSection === 'master' ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        <div class="mobile-nav-items" [class.expanded]="mobileExpandedSection === 'master'">
+          <button mat-button (click)="goToCustomer(); closeMobileMenu()">
+            <mat-icon>people</mat-icon>Customer Detail
+          </button>
+          <button mat-button (click)="goToCustomerMaster(); closeMobileMenu()">
+            <mat-icon>person</mat-icon>Customer
+          </button>
+          <button mat-button (click)="goToVendor(); closeMobileMenu()">
+            <mat-icon>agriculture</mat-icon>Farmer
+          </button>
+          <button mat-button (click)="goToListOfValues(); closeMobileMenu()">
+            <mat-icon>list</mat-icon>List Master
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-nav-section">
+        <div class="mobile-nav-title" (click)="toggleMobileSection('bill')">
+          <mat-icon>receipt_long</mat-icon>
+          <span>Bill</span>
+          <mat-icon class="expand-icon">{{ mobileExpandedSection === 'bill' ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        <div class="mobile-nav-items" [class.expanded]="mobileExpandedSection === 'bill'">
+          <button mat-button (click)="goToFarmerBill(); closeMobileMenu()">
+            <mat-icon>agriculture</mat-icon>Farmer Bill
+          </button>
+          <button mat-button (click)="goToCustomerBill(); closeMobileMenu()">
+            <mat-icon>receipt</mat-icon>Customer Bill
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-nav-section">
+        <div class="mobile-nav-title" (click)="toggleMobileSection('payment')">
+          <mat-icon>payments</mat-icon>
+          <span>Payment</span>
+          <mat-icon class="expand-icon">{{ mobileExpandedSection === 'payment' ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        <div class="mobile-nav-items" [class.expanded]="mobileExpandedSection === 'payment'">
+          <button mat-button (click)="goToVendorPayment(); closeMobileMenu()">
+            <mat-icon>agriculture</mat-icon>Farmer Payment
+          </button>
+          <button mat-button (click)="goToCustomerPayment(); closeMobileMenu()">
+            <mat-icon>payment</mat-icon>Customer Payment
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-nav-section">
+        <div class="mobile-nav-title" (click)="toggleMobileSection('reports')">
+          <mat-icon>assessment</mat-icon>
+          <span>Reports</span>
+          <mat-icon class="expand-icon">{{ mobileExpandedSection === 'reports' ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        <div class="mobile-nav-items" [class.expanded]="mobileExpandedSection === 'reports'">
+          <button mat-button (click)="closeMobileMenu()">
+            <mat-icon>analytics</mat-icon>Farmer Report
+          </button>
+          <button mat-button (click)="closeMobileMenu()">
+            <mat-icon>bar_chart</mat-icon>Customer Report
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-nav-section">
+        <div class="mobile-nav-title" (click)="toggleMobileSection('setting')">
+          <mat-icon>settings</mat-icon>
+          <span>Setting</span>
+          <mat-icon class="expand-icon">{{ mobileExpandedSection === 'setting' ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </div>
+        <div class="mobile-nav-items" [class.expanded]="mobileExpandedSection === 'setting'">
+          <button mat-button (click)="goToUserMaster(); closeMobileMenu()">
+            <mat-icon>manage_accounts</mat-icon>User Master
+          </button>
+          <button mat-button (click)="goToCompanyMaster(); closeMobileMenu()">
+            <mat-icon>business</mat-icon>Company Master
+          </button>
+          <button mat-button (click)="closeMobileMenu()">
+            <mat-icon>admin_panel_settings</mat-icon>Role Master
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-nav-footer">
+      <button mat-button class="mobile-logout" (click)="logout(); closeMobileMenu()">
+        <mat-icon>logout</mat-icon>
+        Sign Out
+      </button>
+    </div>
+  </nav>
 </header>

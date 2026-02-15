@@ -1,54 +1,85 @@
+<!-- Dialog Header -->
 <div class="dialog-header">
-    <div class="dialog-title">User Master</div>
-    <div class="dialog-header-actions">
-        <button mat-mini-fab color="primary" aria-label="Save" (click)="save()">
-            <mat-icon>save</mat-icon>
-        </button>
-
-        <button mat-icon-button aria-label="Close" (click)="dialogRef.close()">
-            <mat-icon>close</mat-icon>
-        </button>
+    <div class="header-content">
+        <div class="header-icon">
+            <mat-icon>person</mat-icon>
+        </div>
+        <div class="header-text">
+            <h2 class="dialog-title">{{ userMaster?.userId ? 'Edit User' : 'New User' }}</h2>
+            <p class="dialog-subtitle">{{ userMaster?.userId ? 'Update user information' : 'Create a new user account' }}</p>
+        </div>
     </div>
+    <button mat-icon-button class="close-btn" (click)="dialogRef.close()">
+        <mat-icon>close</mat-icon>
+    </button>
 </div>
-<form class="user-master-dialog">
-    <div class="row">
-        <mat-form-field appearance="outline">
-            <mat-label>Username</mat-label>
-            <input matInput name="userName" [(ngModel)]="userMaster.userName" placeholder="Enter username">
-        </mat-form-field>
 
-    </div>
-    <div class="row">
-        <mat-form-field appearance="outline">
-            <mat-label>Full Name</mat-label>
-            <input matInput name="userFullName" [(ngModel)]="userMaster.userFullName" placeholder="Enter full name">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput name="password" type="password" [(ngModel)]="userMaster.password"
-                placeholder="Enter password">
-        </mat-form-field>
-    </div>
+<mat-dialog-content>
+    <form class="user-dialog-form">
+        <!-- Account Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <mat-icon>account_circle</mat-icon>
+                <span>Account Information</span>
+            </div>
+            <div class="form-row two-col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Username</mat-label>
+                    <mat-icon matPrefix class="field-icon">person</mat-icon>
+                    <input matInput name="userName" [(ngModel)]="userMaster.userName" placeholder="Enter username">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <mat-icon matPrefix class="field-icon">lock</mat-icon>
+                    <input matInput name="password" type="password" [(ngModel)]="userMaster.password" placeholder="Enter password">
+                </mat-form-field>
+            </div>
+        </div>
 
+        <!-- Personal Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <mat-icon>badge</mat-icon>
+                <span>Personal Information</span>
+            </div>
+            <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Full Name</mat-label>
+                    <mat-icon matPrefix class="field-icon">badge</mat-icon>
+                    <input matInput name="userFullName" [(ngModel)]="userMaster.userFullName" placeholder="Enter full name">
+                </mat-form-field>
+            </div>
+            <div class="form-row two-col">
+                <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <mat-icon matPrefix class="field-icon">email</mat-icon>
+                    <input matInput name="email" type="email" [(ngModel)]="userMaster.email" placeholder="Enter email">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Mobile</mat-label>
+                    <mat-icon matPrefix class="field-icon">phone</mat-icon>
+                    <input matInput name="mobile" [(ngModel)]="userMaster.mobile" placeholder="Enter mobile">
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Designation</mat-label>
+                    <mat-icon matPrefix class="field-icon">work</mat-icon>
+                    <input matInput name="designation" [(ngModel)]="userMaster.designation" placeholder="Enter designation">
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
 
-    <div class="row">
-        <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput name="email" type="email" [(ngModel)]="userMaster.email" placeholder="Enter email">
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Mobile</mat-label>
-            <input matInput name="mobile" [(ngModel)]="userMaster.mobile" placeholder="Enter mobile">
-        </mat-form-field>
-    </div>
-
-
-    <div class="row">
-        <mat-form-field appearance="outline">
-            <mat-label>Designation</mat-label>
-            <input matInput name="designation" [(ngModel)]="userMaster.designation" placeholder="Enter designation">
-        </mat-form-field>
-    </div>
-
-
-</form>
+<!-- Dialog Actions -->
+<div class="dialog-actions">
+    <button mat-stroked-button class="cancel-btn" (click)="cancel()">
+        <mat-icon>close</mat-icon>
+        Cancel
+    </button>
+    <button mat-raised-button class="save-btn" (click)="save()">
+        <mat-icon>save</mat-icon>
+        {{ userMaster?.userId ? 'Update' : 'Save' }}
+    </button>
+</div>

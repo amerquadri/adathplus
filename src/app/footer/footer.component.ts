@@ -11,6 +11,7 @@ import { DatePipe } from '@angular/common';
 })
 export class FooterComponent {
   userInfo: any = {};
+  currentYear: number = new Date().getFullYear();
 
   constructor() {
     this.loadUserInfo();

@@ -1,144 +1,252 @@
-<app-master-page>
-	<!-- Include dialog components in template (hidden) so AOT/compiler recognizes standalone dialog components used only via MatDialog -->
-	<mat-card>
-		<!-- Header bar: title (left), search (center), actions (right) -->
-		<div class="card-header-bar">
-			<div class="card-title">
-				<mat-card-title>Farmer List</mat-card-title>
-			</div>
-			<div class="card-actions">
-				<mat-form-field appearance="outline" class="header-search">
-					<mat-label>Search</mat-label>
-					<input matInput [(ngModel)]="searchValue" (keyup)="applyFilter()" placeholder="Search vendors..." class="ocean-input">
-				</mat-form-field> 
+﻿<app-master-page>
+    <div class="page-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <div class="title-icon">
+                        <mat-icon>agriculture</mat-icon>
+                    </div>
+                    <div class="title-text">
+                        <h1>Farmer Master</h1>
+                        <p>Manage your farmer records</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <mat-icon>groups</mat-icon>
+                        <span>{{ dataSource.data.length }} Farmers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-				<button mat-stroked-button color="primary" (click)="applyFilter()">Search</button>
-				<button mat-raised-button color="accent" (click)="openNewVendorDialog()">New</button>
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="search-section">
+                <mat-form-field appearance="outline" class="search-field">
+                    <mat-icon matPrefix>search</mat-icon>
+                    <mat-label>Search farmers...</mat-label>
+                    <input matInput [(ngModel)]="searchValue" (keyup)="applyFilter()" placeholder="Name, ID, Phone...">
+                    <button mat-icon-button matSuffix *ngIf="searchValue" (click)="searchValue=''; applyFilter()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+            <div class="action-buttons">
+                <button mat-stroked-button class="action-btn search-btn" (click)="applyFilter()">
+                    <mat-icon>search</mat-icon>
+                    <span class="btn-text">Search</span>
+                </button>
+                <button mat-raised-button class="action-btn new-btn" (click)="openNewVendorDialog()">
+                    <mat-icon>add</mat-icon>
+                    <span class="btn-text">New</span>
+                </button>
+                <button mat-raised-button class="action-btn export-btn">
+                    <mat-icon>download</mat-icon>
+                    <span class="btn-text">Export</span>
+                </button>
+            </div>
+        </div>
 
-			</div>
-		</div>
-		<mat-card-content>
+        <!-- Desktop Table View -->
+        <div class="table-container desktop-view">
+            <table mat-table [dataSource]="dataSource" class="farmer-table">
+                <!-- VendorId Column -->
+                <ng-container matColumnDef="vendorId">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="header-cell">
+                            <mat-icon>tag</mat-icon>
+                            <span>ID</span>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let vendor">
+                        <span class="id-badge">{{ vendor.vendorId }}</span>
+                    </td>
+                </ng-container>
 
-			<table mat-table [dataSource]="dataSource" class="mat-elevation-z15">
-				<!-- View Column -->
-				<ng-container matColumnDef="view">
-					<th mat-header-cell *matHeaderCellDef> View </th>
-					<td mat-cell *matCellDef="let vendor">
-						<button mat-icon-button color="primary" (click)="viewVendor(vendor)"><mat-icon>edit</mat-icon></button>
-						<button mat-icon-button color="warn" (click)="confirmDeleteVendor(vendor)"><mat-icon>delete</mat-icon></button>
-					</td>
-				</ng-container>
+                <!-- VendorName Column -->
+                <ng-container matColumnDef="vendorName">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="header-cell">
+                            <mat-icon>person</mat-icon>
+                            <span>Name</span>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let vendor">
+                        <div class="farmer-name-cell">
+                            <div class="avatar">{{ vendor.vendorName?.charAt(0)?.toUpperCase() }}</div>
+                            <span>{{ vendor.vendorName }}</span>
+                        </div>
+                    </td>
+                </ng-container>
 
-				<ng-container matColumnDef="vendorId">
-					<th mat-header-cell *matHeaderCellDef> ID </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.vendorId}} </td>
-				</ng-container>
+                <!-- Credit Column -->
+                <ng-container matColumnDef="credit">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="header-cell">
+                            <mat-icon>arrow_upward</mat-icon>
+                            <span>Credit</span>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let vendor">
+                        <span class="amount credit">₹{{ vendor.credit | number:'1.0-0' }}</span>
+                    </td>
+                </ng-container>
 
-				<ng-container matColumnDef="vendorName">
-					<th mat-header-cell *matHeaderCellDef> Name </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.vendorName}} </td>
-				</ng-container>
+                <!-- Debit Column -->
+                <ng-container matColumnDef="debit">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="header-cell">
+                            <mat-icon>arrow_downward</mat-icon>
+                            <span>Debit</span>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let vendor">
+                        <span class="amount debit">₹{{ vendor.debit | number:'1.0-0' }}</span>
+                    </td>
+                </ng-container>
 
-				<ng-container matColumnDef="phone1">
-					<th mat-header-cell *matHeaderCellDef> Phone 1 </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.phone1}} </td>
-				</ng-container>
+                <!-- OpeningAmt Column -->
+                <ng-container matColumnDef="openingAmt">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="header-cell">
+                            <mat-icon>account_balance_wallet</mat-icon>
+                            <span>Opening</span>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let vendor">
+                        <span class="amount">₹{{ vendor.openingAmt | number:'1.0-0' }}</span>
+                    </td>
+                </ng-container>
 
-				<ng-container matColumnDef="email">
-					<th mat-header-cell *matHeaderCellDef> Email </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.email}} </td>
-				</ng-container>
+                <!-- IsActive Column -->
+                <ng-container matColumnDef="isActive">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="header-cell">
+                            <mat-icon>toggle_on</mat-icon>
+                            <span>Status</span>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let vendor">
+                        <span class="status-badge" [class.active]="vendor.isActive" [class.inactive]="!vendor.isActive">
+                            <mat-icon>{{ vendor.isActive ? 'check_circle' : 'cancel' }}</mat-icon>
+                            {{ vendor.isActive ? 'Active' : 'Inactive' }}
+                        </span>
+                    </td>
+                </ng-container>
 
-				<ng-container matColumnDef="address">
-					<th mat-header-cell *matHeaderCellDef> Address </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.address}} </td>
-				</ng-container>
+                <!-- View/Actions Column -->
+                <ng-container matColumnDef="view">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <div class="header-cell">
+                            <mat-icon>settings</mat-icon>
+                            <span>Actions</span>
+                        </div>
+                    </th>
+                    <td mat-cell *matCellDef="let vendor">
+                        <div class="action-cell">
+                            <button mat-icon-button class="edit-btn" (click)="viewVendor(vendor)" matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button class="delete-btn" (click)="confirmDeleteVendor(vendor)"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
 
-				<ng-container matColumnDef="credit">
-					<th mat-header-cell *matHeaderCellDef> Credit </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.credit}} </td>
-				</ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+            </table>
 
-				<ng-container matColumnDef="debit">
-					<th mat-header-cell *matHeaderCellDef> Debit </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.debit}} </td>
-				</ng-container>
+            <!-- Empty State -->
+            <div class="empty-state" *ngIf="dataSource.data.length === 0">
+                <mat-icon>person_search</mat-icon>
+                <h3>No farmers found</h3>
+                <p>Try adjusting your search or add a new farmer</p>
+                <button mat-raised-button class="new-btn" (click)="openNewVendorDialog()">
+                    <mat-icon>add</mat-icon>
+                    Add Farmer
+                </button>
+            </div>
+        </div>
 
-				<ng-container matColumnDef="openingAmt">
-					<th mat-header-cell *matHeaderCellDef> Opening Amt </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.openingAmt}} </td>
-				</ng-container>
+        <!-- Mobile Card View -->
+        <div class="cards-container mobile-view">
+            <!-- Mobile Pagination Info -->
+            <div class="mobile-pagination-info" *ngIf="dataSource.filteredData.length > 0">
+                <span class="showing-text">
+                    Showing {{ mobilePageIndex * mobilePageSize + 1 }} - {{ Math.min((mobilePageIndex + 1) *
+                    mobilePageSize, dataSource.filteredData.length) }} of {{ dataSource.filteredData.length }}
+                </span>
+            </div>
 
-				<ng-container matColumnDef="isActive">
-					<th mat-header-cell *matHeaderCellDef> Active </th>
-					<td mat-cell *matCellDef="let vendor"> {{vendor.isActive ? 'Yes' : 'No'}} </td>
-				</ng-container>
+            <div class="farmer-card" *ngFor="let vendor of paginatedMobileData">
+                <div class="card-header">
+                    <div class="farmer-avatar">{{ vendor.vendorName.charAt(0) }}</div>
+                    <div class="farmer-info">
+                        <h3>{{ vendor.vendorName }}</h3>
+                        <span class="farmer-id">#{{ vendor.vendorId }}</span>
+                    </div>
+                    <span class="status-dot" [class.active]="vendor.isActive"
+                        [class.inactive]="!vendor.isActive"></span>
+                </div>
 
-				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-				<tr *ngIf="dataSource.data.length === 0">
-					<td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
-				</tr>
-			</table>
-			<mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
-				showFirstLastButtons></mat-paginator>
-		</mat-card-content>
-	</mat-card>
+                <div class="card-body">
+                    <div class="info-row">
+                        <div class="info-item">
+                            <span class="label">Credit</span>
+                            <span class="value credit">₹{{ vendor.credit | number:'1.0-0' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Debit</span>
+                            <span class="value debit">₹{{ vendor.debit | number:'1.0-0' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Opening</span>
+                            <span class="value">₹{{ vendor.openingAmt | number:'1.0-0' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button mat-button class="card-action-btn edit" (click)="viewVendor(vendor)">
+                        <mat-icon>edit</mat-icon>
+                        Edit
+                    </button>
+                    <button mat-button class="card-action-btn delete" (click)="confirmDeleteVendor(vendor)">
+                        <mat-icon>delete</mat-icon>
+                        Delete
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Paginator -->
+            <div class="mobile-paginator" *ngIf="dataSource.filteredData.length > 0">
+                <mat-paginator [length]="dataSource.filteredData.length" [pageIndex]="mobilePageIndex"
+                    [pageSize]="mobilePageSize" [pageSizeOptions]="mobilePageSizeOptions"
+                    (page)="onMobilePageChange($event)" showFirstLastButtons>
+                </mat-paginator>
+            </div>
+
+            <!-- Mobile Empty State -->
+            <div class="empty-state" *ngIf="dataSource.filteredData.length === 0">
+                <mat-icon>person_search</mat-icon>
+                <h3>No farmers found</h3>
+                <p>Try adjusting your search or add a new farmer</p>
+                <button mat-raised-button class="new-btn" (click)="openNewVendorDialog()">
+                    <mat-icon>add</mat-icon>
+                    Add Farmer
+                </button>
+            </div>
+        </div>
+
+        <!-- Paginator -->
+        <div class="paginator-container desktop-view">
+            <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20, 50]"
+                showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
 </app-master-page>
-
-
-<!-- 
-<mat-dialog-content>
-  <form class="customer-dialog-form">
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Vendor Name</mat-label>
-        <input matInput   name="vendorName" placeholder="Vendor Name">
-      </mat-form-field>
-       </div>
-    <div class="form-row">
-   
-      <mat-form-field appearance="outline">
-        <mat-label>Phone 1</mat-label>
-        <input matInput   name="phone1" placeholder="Phone 1">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Phone 2</mat-label>
-        <input matInput   name="phone2" placeholder="Phone 2">
-      </mat-form-field>
-    </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput   name="email" placeholder="Email">
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="address-field">
-        <mat-label>Address</mat-label>
-        <textarea matInput  rows="2" name="address" placeholder="Address"></textarea>
-      </mat-form-field>
-    </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Detail</mat-label>
-        <textarea matInput  rows="2" name="detail" placeholder="Detail"></textarea>
-      </mat-form-field>
-    </div>
-    <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Credit</mat-label>
-        <input matInput type="number"  name="credit" placeholder="Credit" min="0">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Debit</mat-label>
-        <input matInput type="number"  name="debit" placeholder="Debit" min="0">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Opening Amount</mat-label>
-        <input matInput type="number"  name="openingAmt" placeholder="Opening Amount" min="0" [defaultValue]="0">
-      </mat-form-field>
-    </div>
- 
-
-  </form>
-</mat-dialog-content>
-  -->

@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MasterPageComponent } from "../master-page.component";
 import { ListofValuesService } from './listof-values.service';
 import { MatPaginator } from '@angular/material/paginator';
@@ -30,6 +31,7 @@ interface ListValue {
     MatButtonModule,
     MatTableModule,
     MatIconModule,
+    MatTooltipModule,
     MasterPageComponent,
     MatPaginator
 ],

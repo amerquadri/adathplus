@@ -7,7 +7,7 @@ import { CustomerPageComponent } from './customer-page/customer-page.component';
 import { VendorPageComponent } from './vendor-page/vendor-page.component';
 import { ItemMasterPageComponent } from './item-master-page/item-master-page.component';
 import { ErrorPageComponent } from './error-page.component';
-import { DashboardPageTestComponent } from './dashboard-page-test/dashboard-page-test.component';
+// import { DashboardPageTestComponent } from './dashboard-page-test/dashboard-page-test.component';
 import { CustomerMasterComponent } from './customer-master/customer-master.component';
 import { VendorPaymentComponent } from './vendor-payment/vendor-payment.component';
 import { CustomerPaymentComponent } from './customer-payment/customer-payment.component';

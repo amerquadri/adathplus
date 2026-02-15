@@ -13,6 +13,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import {  startWith } from 'rxjs/operators';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -45,6 +46,7 @@ import { MarathiName } from '../common-fields/marathi-name';
     MatSelectModule,
     MatDialogModule,
     MatIconModule,
+    MatTooltipModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatAutocompleteModule,
@@ -583,95 +585,447 @@ export class FarmerBillComponent implements OnInit {
     const totalQty = rows.reduce((s: number, r: any) => s + (Number(r.qty) || 0), 0);
     const totalWeight = rows.reduce((s: number, r: any) => s + (Number(r.weight) || 0), 0);
     const totalAmt = rows.reduce((s: number, r: any) => s + (Number(r.amt) || 0), 0);
+    const totalComAmt = rows.reduce((s: number, r: any) => s + (Number(r.comissionAmount) || 0), 0);
+    
+    // Calculate net amount (total - deductions)
+    const deductionsTotal = this.sidebarTotal || 0;
+    const netAmount = totalAmt - deductionsTotal;
+
+    // Get current date and time
+    const now = new Date();
+    const printDateTime = now.toLocaleString('en-IN', { 
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: true 
+    });
+
+    // Get selected farmer name
+    const farmerName = this.myControl.value || 'N/A';
 
     const head = `
       <style>
-        body{font-family: Arial, Helvetica, sans-serif; margin:20px}
-        .bill-header{text-align:center;margin-bottom:12px}
-        .bill-header h1{margin:0;font-size:20px}
-        .bill-header p{margin:0;font-size:12px}
-        table{width:100%;border-collapse:collapse;margin-top:12px}
-        th,td{border:1px solid #ddd;padding:6px;font-size:12px}
-        th{background:#f5f5f5}
-        tfoot td{font-weight:700}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+          font-family: 'Segoe UI', Arial, sans-serif; 
+          padding: 20px;
+          background: #fff;
+          color: #333;
+          font-size: 12px;
+          line-height: 1.4;
+        }
+        
+        .bill-container {
+          max-width: 800px;
+          margin: 0 auto;
+          border: 2px solid #333;
+          padding: 0;
+        }
+        
+        /* Header */
+        .bill-header {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 16px 20px;
+          text-align: center;
+        }
+        .bill-header h1 {
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 4px;
+          letter-spacing: 1px;
+        }
+        .bill-header .subtitle {
+          font-size: 12px;
+          opacity: 0.9;
+        }
+        
+        /* Bill Info */
+        .bill-info {
+          display: flex;
+          justify-content: space-between;
+          padding: 12px 20px;
+          background: #f8f9fc;
+          border-bottom: 1px solid #ddd;
+        }
+        .bill-info-left, .bill-info-right {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .bill-info-right {
+          text-align: right;
+        }
+        .info-row {
+          display: flex;
+          gap: 8px;
+        }
+        .info-label {
+          font-weight: 600;
+          color: #666;
+        }
+        .info-value {
+          font-weight: 600;
+          color: #333;
+        }
+        
+        /* Main Content */
+        .bill-content {
+          display: flex;
+          gap: 0;
+        }
+        
+        /* Table Section */
+        .table-section {
+          flex: 1;
+          padding: 0;
+        }
+        
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        
+        th {
+          background: #667eea;
+          color: white;
+          padding: 10px 8px;
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border: 1px solid #5a6fd6;
+        }
+        
+        td {
+          padding: 8px;
+          border: 1px solid #ddd;
+          font-size: 12px;
+        }
+        
+        tr:nth-child(even) {
+          background: #f9f9f9;
+        }
+        
+        tr:hover {
+          background: #f0f0f0;
+        }
+        
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        
+        tfoot td {
+          background: #f5f5f5;
+          font-weight: 700;
+          border-top: 2px solid #667eea;
+        }
+        
+        tfoot .total-label {
+          background: #667eea;
+          color: white;
+          font-weight: 700;
+        }
+        
+        tfoot .total-amount {
+          background: #4caf50;
+          color: white;
+          font-weight: 700;
+          font-size: 14px;
+        }
+        
+        /* Details Section */
+        .details-section {
+          width: 220px;
+          border-left: 2px solid #667eea;
+          background: #fafafa;
+        }
+        
+        .details-header {
+          background: #667eea;
+          color: white;
+          padding: 10px 12px;
+          font-weight: 700;
+          text-align: center;
+          font-size: 13px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .details-list {
+          padding: 10px;
+        }
+        
+        .detail-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 10px;
+          margin-bottom: 6px;
+          background: white;
+          border: 1px solid #e0e0e0;
+          border-radius: 4px;
+        }
+        
+        .detail-label {
+          font-weight: 500;
+          color: #555;
+          font-size: 11px;
+        }
+        
+        .detail-value {
+          font-weight: 700;
+          color: #f44336;
+          font-size: 12px;
+        }
+        
+        .details-total {
+          margin-top: 10px;
+          padding: 10px;
+          background: #fff3e0;
+          border: 1px solid #ffcc80;
+          border-radius: 4px;
+        }
+        
+        .details-total .detail-label {
+          color: #e65100;
+          font-weight: 700;
+        }
+        
+        .details-total .detail-value {
+          color: #e65100;
+          font-size: 14px;
+        }
+        
+        /* Summary Section */
+        .bill-summary {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px 20px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+        }
+        
+        .summary-left {
+          font-size: 14px;
+        }
+        
+        .net-total {
+          text-align: right;
+        }
+        
+        .net-total-label {
+          font-size: 12px;
+          opacity: 0.9;
+          margin-bottom: 4px;
+        }
+        
+        .net-total-amount {
+          font-size: 28px;
+          font-weight: 700;
+        }
+        
+        /* Footer */
+        .bill-footer {
+          display: flex;
+          justify-content: space-between;
+          padding: 20px;
+          border-top: 1px dashed #ccc;
+          background: #fff;
+        }
+        
+        .signature-box {
+          width: 200px;
+        }
+        
+        .signature-line {
+          border-bottom: 1px solid #333;
+          margin-bottom: 6px;
+          height: 30px;
+        }
+        
+        .signature-label {
+          font-size: 11px;
+          color: #666;
+          text-align: center;
+        }
+        
+        .print-info {
+          font-size: 10px;
+          color: #999;
+          text-align: center;
+          padding: 8px;
+          border-top: 1px solid #eee;
+        }
+        
+        /* Print Styles */
+        @media print {
+          body { padding: 0; }
+          .bill-container { border: 1px solid #333; }
+          .bill-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .details-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .bill-summary { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          tfoot .total-label, tfoot .total-amount { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
       </style>`;
 
-    const rowsHtml = rows.map((r: any) => `
+    const rowsHtml = rows.map((r: any, idx: number) => `
       <tr>
-        <td>${r.particularName || ''}</td>
-        <td style="text-align:right">${Number(r.qty || 0)}</td>
-        <td>${r.unit || ''}</td>
-        <td style="text-align:right">${Number(r.weight || 0)}</td>
-        <td style="text-align:right">${Number(r.rate || 0)}</td>
-        <td style="text-align:right">${Number(r.comissionPercent || 0)}</td>
-        <td style="text-align:right">${Number(r.comissionAmount || 0)}</td>
-        <td style="text-align:right">${Number(r.amt || 0)}</td>
+        <td class="text-center">${idx + 1}</td>
+        <td>${r.particularName || '-'}</td>
+        <td class="text-right">${Number(r.qty || 0)}</td>
+        <td class="text-center">${r.unit || '-'}</td>
+        <td class="text-right">${Number(r.weight || 0)}</td>
+        <td class="text-right">₹${Number(r.rate || 0).toLocaleString('en-IN')}</td>
+        <td class="text-center">${Number(r.comissionPercent || 0)}%</td>
+        <td class="text-right">₹${Number(r.comissionAmount || 0).toLocaleString('en-IN')}</td>
+        <td class="text-right">₹${Number(r.amt || 0).toLocaleString('en-IN')}</td>
       </tr>`).join('');
 
-    // include sidebar details
-    const detailsHtml = (this.sidebarItems || []).map(it => `
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-        <div style="background:#fafafa;border:1px solid #eee;padding:8px 10px;border-radius:6px;min-width:120px;font-weight:600">${(it.label||'').toString()}</div>
-        <div style="border:1px solid #eee;padding:8px 10px;border-radius:6px;min-width:100px;text-align:right">${Number(it.value||0)}</div>
+    // Deductions/Details section
+    const detailsHtml = (this.sidebarItems || []).filter(it => it.label || it.value).map(it => `
+      <div class="detail-item">
+        <span class="detail-label">${(it.label || '').toString()}</span>
+        <span class="detail-value">₹${Number(it.value || 0).toLocaleString('en-IN')}</span>
       </div>
     `).join('');
 
-    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Farmer Bill</title>${head}</head><body>
-      <div class="bill-header">
-        <h1>Farmer Bill</h1>
-        <p>Bill No: ${this._farmerBill.comissionBillId || ''} | Date: ${this._farmerBill.billDate ? new Date(this._farmerBill.billDate).toLocaleDateString('en-GB') : ''}</p>
-      </div>
-      <div style="display:flex;gap:20px;align-items:flex-start">
-        <div style="flex:1;min-width:600px">
-          <table>
-            <thead>
-              <tr>
-                <th>Particular</th>
-                <th>Qty</th>
-                <th>Unit</th>
-                <th>Weight</th>
-                <th>Rate</th>
-                <th>Com %</th>
-                <th>Com Amt</th>
-                <th>Amt</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>Total</td>
-                <td style="text-align:right">${totalQty}</td>
-                <td></td>
-                <td style="text-align:right">${totalWeight}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="text-align:right">${totalAmt}</td>
-              </tr>
-            </tfoot>
-          </table>
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer Bill - ${this._farmerBill.comissionBillId || 'New'}</title>
+  ${head}
+</head>
+<body>
+  <div class="bill-container">
+    <!-- Header -->
+    <div class="bill-header">
+      <h1>🌾 FARMER BILL</h1>
+      <div class="subtitle">शेतकरी बिल / Purchase Invoice</div>
+    </div>
+    
+    <!-- Bill Info -->
+    <div class="bill-info">
+      <div class="bill-info-left">
+        <div class="info-row">
+          <span class="info-label">Bill No:</span>
+          <span class="info-value">#${this._farmerBill.comissionBillId || 'NEW'}</span>
         </div>
-        <div style="width:260px">
-          <div style="font-weight:700;margin-bottom:8px;padding:6px 8px;background:#f5f5f5;border:1px solid #e6e6e6;text-align:center">Details</div>
-          ${detailsHtml}
+        <div class="info-row">
+          <span class="info-label">Farmer:</span>
+          <span class="info-value">${farmerName}</span>
         </div>
       </div>
-      <div style="margin-top:18px;font-size:13px">
-        <p>Prepared by: ____________________</p>
-        <p>Signature: ______________________</p>
+      <div class="bill-info-right">
+        <div class="info-row">
+          <span class="info-label">Date:</span>
+          <span class="info-value">${this._farmerBill.billDate ? new Date(this._farmerBill.billDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Printed:</span>
+          <span class="info-value">${printDateTime}</span>
+        </div>
       </div>
-    </body></html>`;
+    </div>
+    
+    <!-- Main Content -->
+    <div class="bill-content">
+      <!-- Table -->
+      <div class="table-section">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px">Sr</th>
+              <th>Particular</th>
+              <th style="width:50px">Qty</th>
+              <th style="width:50px">Unit</th>
+              <th style="width:60px">Weight</th>
+              <th style="width:70px">Rate</th>
+              <th style="width:50px">Com%</th>
+              <th style="width:70px">Com Amt</th>
+              <th style="width:80px">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml || '<tr><td colspan="9" class="text-center" style="padding:20px;color:#999;">No items added</td></tr>'}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td class="total-label" colspan="2">TOTAL</td>
+              <td class="text-right" style="font-weight:700">${totalQty}</td>
+              <td></td>
+              <td class="text-right" style="font-weight:700">${totalWeight}</td>
+              <td></td>
+              <td></td>
+              <td class="text-right" style="font-weight:700">₹${totalComAmt.toLocaleString('en-IN')}</td>
+              <td class="total-amount text-right">₹${totalAmt.toLocaleString('en-IN')}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      
+      <!-- Details/Deductions -->
+      <div class="details-section">
+        <div class="details-header">📋 Deductions</div>
+        <div class="details-list">
+          ${detailsHtml || '<div class="detail-item"><span class="detail-label">No deductions</span><span class="detail-value">₹0</span></div>'}
+          
+          <div class="details-total">
+            <div class="detail-item" style="border:none;margin:0;padding:0;background:transparent;">
+              <span class="detail-label">Total Deductions</span>
+              <span class="detail-value">₹${deductionsTotal.toLocaleString('en-IN')}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Summary -->
+    <div class="bill-summary">
+      <div class="summary-left">
+        <div>Items: ${rows.length} | Total Weight: ${totalWeight} | Total Qty: ${totalQty}</div>
+      </div>
+      <div class="net-total">
+        <div class="net-total-label">NET PAYABLE AMOUNT</div>
+        <div class="net-total-amount">₹${netAmount.toLocaleString('en-IN')}</div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="bill-footer">
+      <div class="signature-box">
+        <div class="signature-line"></div>
+        <div class="signature-label">Farmer's Signature</div>
+      </div>
+      <div class="signature-box">
+        <div class="signature-line"></div>
+        <div class="signature-label">Authorized Signature</div>
+      </div>
+    </div>
+    
+    <!-- Print Info -->
+    <div class="print-info">
+      This is a computer generated bill. | Printed on: ${printDateTime}
+    </div>
+  </div>
+  
+  <script>
+    window.onload = function() {
+      setTimeout(function() {
+        window.print();
+      }, 500);
+    };
+  </script>
+</body>
+</html>`;
 
     const w = window.open('', '_blank', 'noopener');
-    // if (w) {
-    //   w.document.open();
-    //   w.document.write(html);
-    //   w.document.close();
-    //   setTimeout(() => { w.focus(); w.print(); }, 300);
-    // } else
-       {
+    if (w) {
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+    } else {
       // iframe fallback
       try {
         const iframe = document.createElement('iframe');

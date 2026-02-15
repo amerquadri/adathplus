@@ -1,75 +1,138 @@
 
 <app-master-page>
-	<!-- Include dialog components in template (hidden) so AOT/compiler recognizes standalone dialog components used only via MatDialog -->
-	<mat-card>
-		<!-- Header bar: title (left), search (center), actions (right) -->
-		<div class="card-header-bar">
-			<div class="card-title">
-				<mat-card-title>Customer Payment List</mat-card-title>
-			</div>
-			<div class="card-actions">
-				<mat-form-field appearance="outline" class="header-search">
-					<mat-label>Search</mat-label>
-					<input matInput [(ngModel)]="searchValue" (keyup)="applyFilter()" placeholder="Search customers...">
-				</mat-form-field>
-				<button mat-stroked-button color="primary" (click)="applyFilter()">Search</button>
-				<button mat-raised-button color="accent" (click)="openNewVendorDialog()">New</button> 
- 
+	<div class="page-container">
+		<!-- Page Header -->
+		<div class="page-header">
+			<div class="header-content">
+				<div class="title-section">
+					<div class="title-icon">
+						<mat-icon>account_balance_wallet</mat-icon>
+					</div>
+					<div class="title-text">
+						<h1>Customer Payments</h1>
+						<p>Payment Management</p>
+					</div>
+				</div>
 			</div>
 		</div>
-		<mat-card-content>
 
-			<table mat-table [dataSource]="dataSource" class="mat-elevation-z15">
-				<!-- View Column -->
-				
+		<!-- Controls Card -->
+		<div class="controls-card">
+			<div class="controls-row">
+				<mat-form-field appearance="outline" class="search-field">
+					<mat-label>Search</mat-label>
+					<mat-icon matPrefix class="field-icon">search</mat-icon>
+					<input matInput [(ngModel)]="searchValue" (keyup)="applyFilter()" placeholder="Search payments...">
+				</mat-form-field>
 
-				<ng-container matColumnDef="transactionId">
-					<th mat-header-cell *matHeaderCellDef> ID </th>
-					<td mat-cell *matCellDef="let customer"> {{customer.transactionId}} </td>
-				</ng-container>
+				<button mat-raised-button class="print-btn" (click)="printReport()" matTooltip="Print Report">
+					<mat-icon>print</mat-icon>
+					Print
+				</button>
 
-				<ng-container matColumnDef="customerName">
-					<th mat-header-cell *matHeaderCellDef> Customer Name </th>
-					<td mat-cell *matCellDef="let customer"> {{customer.customerName}} </td>
-				</ng-container>
+				<button mat-raised-button class="new-payment-btn" (click)="openNewVendorDialog()">
+					<mat-icon>add</mat-icon>
+					New Payment
+				</button>
+			</div>
+		</div>
 
-				<ng-container matColumnDef="paymentMethod">
-					<th mat-header-cell *matHeaderCellDef> Payment Method </th>
-					<td mat-cell *matCellDef="let customer"> {{customer.paymentMethod}} </td>
-				</ng-container>
+		<!-- Table Card -->
+		<div class="table-card">
+			<div class="table-header-bar">
+				<div class="table-title">
+					<mat-icon>receipt_long</mat-icon>
+					<span>Payment Transactions</span>
+				</div>
+				<div class="records-badge">
+					<mat-icon>payments</mat-icon>
+					{{ dataSource.data.length }} Records
+				</div>
+			</div>
 
-				<ng-container matColumnDef="transactionAmount">
-					<th mat-header-cell *matHeaderCellDef> Transaction Amount </th>
-					<td mat-cell *matCellDef="let customer"> {{customer.transactionAmount}} </td>
-				</ng-container>
+			<div class="table-wrapper">
+				<table mat-table [dataSource]="dataSource" class="payment-table">
+					<!-- ID Column -->
+					<ng-container matColumnDef="transactionId">
+						<th mat-header-cell *matHeaderCellDef>ID</th>
+						<td mat-cell *matCellDef="let customer">
+							<span class="id-badge">#{{ customer.transactionId }}</span>
+						</td>
+					</ng-container>
 
-				<ng-container matColumnDef="discountAmount">
-					<th mat-header-cell *matHeaderCellDef> Discount Amount </th>
-					<td mat-cell *matCellDef="let customer"> {{customer.discountAmount}} </td>
-				</ng-container>
+					<!-- Customer Name Column -->
+					<ng-container matColumnDef="customerName">
+						<th mat-header-cell *matHeaderCellDef>Customer Name</th>
+						<td mat-cell *matCellDef="let customer">
+							<div class="customer-info">
+								<div class="customer-avatar">{{ customer.customerName?.charAt(0) || 'C' }}</div>
+								<span class="customer-name">{{ customer.customerName }}</span>
+							</div>
+						</td>
+					</ng-container>
 
-				<ng-container matColumnDef="transactionDate">
-					<th mat-header-cell *matHeaderCellDef> Transaction Date </th>
-					<td mat-cell *matCellDef="let customer"> {{customer.transactionDate | date:'dd/MMM/yyyy'}} </td>
-				</ng-container>
+					<!-- Payment Method Column -->
+					<ng-container matColumnDef="paymentMethod">
+						<th mat-header-cell *matHeaderCellDef>Payment Method</th>
+						<td mat-cell *matCellDef="let customer">
+							<span class="method-tag" [ngClass]="customer.paymentMethod?.toLowerCase()">
+								{{ customer.paymentMethod }}
+							</span>
+						</td>
+					</ng-container>
 
-			 
-				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-				<tr *ngIf="dataSource.data.length === 0">
-					<td [attr.colspan]="displayedColumns.length" class="no-record-cell">No record found</td>
-				</tr>
+					<!-- Transaction Amount Column -->
+					<ng-container matColumnDef="transactionAmount">
+						<th mat-header-cell *matHeaderCellDef>Amount</th>
+						<td mat-cell *matCellDef="let customer">
+							<span class="amount-value">₹ {{ customer.transactionAmount | number:'1.2-2' }}</span>
+						</td>
+					</ng-container>
 
-                <ng-container matColumnDef="view">
-					<th mat-header-cell *matHeaderCellDef> View </th>
-					<td mat-cell *matCellDef="let customer">
-						<button mat-button color="accent" (click)="viewCustomer(customer)"> <mat-icon>edit</mat-icon> </button>
-						<button mat-button color="warn" (click)="confirmDeleteCustomer(customer)"><mat-icon>delete</mat-icon></button>
-					</td>
-				</ng-container>
-			</table>
-			<mat-paginator [length]="dataSource.data.length" [pageSize]="5" [pageSizeOptions]="[5,10,20]"
+					<!-- Discount Amount Column -->
+					<ng-container matColumnDef="discountAmount">
+						<th mat-header-cell *matHeaderCellDef>Discount</th>
+						<td mat-cell *matCellDef="let customer">
+							<span class="discount-value">₹ {{ customer.discountAmount | number:'1.2-2' }}</span>
+						</td>
+					</ng-container>
+
+					<!-- Transaction Date Column -->
+					<ng-container matColumnDef="transactionDate">
+						<th mat-header-cell *matHeaderCellDef>Date</th>
+						<td mat-cell *matCellDef="let customer">
+							<span class="date-value">{{ customer.transactionDate | date:'dd/MMM/yyyy' }}</span>
+						</td>
+					</ng-container>
+
+					<!-- Actions Column -->
+					<ng-container matColumnDef="view">
+						<th mat-header-cell *matHeaderCellDef>Actions</th>
+						<td mat-cell *matCellDef="let customer">
+							<div class="action-buttons">
+								<button mat-icon-button class="edit-btn" (click)="viewCustomer(customer)" matTooltip="Edit">
+									<mat-icon>edit</mat-icon>
+								</button>
+								<button mat-icon-button class="delete-btn" (click)="confirmDeleteCustomer(customer)" matTooltip="Delete">
+									<mat-icon>delete</mat-icon>
+								</button>
+							</div>
+						</td>
+					</ng-container>
+
+					<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+					<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+				</table>
+
+				<!-- Empty State -->
+				<div class="empty-state" *ngIf="dataSource.data.length === 0">
+					<mat-icon>inbox</mat-icon>
+					<p>No payment records found</p>
+				</div>
+			</div>
+
+			<mat-paginator [length]="dataSource.data.length" [pageSize]="10" [pageSizeOptions]="[5,10,20,50]"
 				showFirstLastButtons></mat-paginator>
-		</mat-card-content>
-	</mat-card>
+		</div>
+	</div>
 </app-master-page>

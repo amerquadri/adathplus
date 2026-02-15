@@ -2,6 +2,8 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgIf, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -12,7 +14,7 @@ import { LoginServiceService } from '../login-page/login-service.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatMenuModule, MatCardModule, NgIf],
+  imports: [MatButtonModule, MatIconModule, MatMenuModule, MatCardModule, MatDividerModule, MatTooltipModule, NgIf],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
@@ -24,16 +26,110 @@ export class HeaderComponent {
   public companyName: string | null = null;
   private isBrowser: boolean = false;
   
+  // Zoom control
+  public zoomLevel: number = 100;
+  public readonly zoomLevels: number[] = [75, 80, 90, 100, 110, 125];
+  
+  // Mobile menu state
+  public isMobileMenuOpen: boolean = false;
+  public mobileExpandedSection: string | null = null;
+  
   constructor(private router: Router, private loginService: LoginServiceService, @Inject(PLATFORM_ID) private platformId: Object) {
     this.isBrowser = isPlatformBrowser(this.platformId);
     if (this.isBrowser) {
       this.loadAuthState();
+      this.loadZoomLevel();
     }
     // Refresh auth state on route changes (useful after login redirects)
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
       if (this.isBrowser) this.loadAuthState();
+      this.closeMobileMenu(); // Close menu on navigation
     });
+  }
 
+  // Zoom control methods
+  private loadZoomLevel() {
+    if (this.isBrowser) {
+      const saved = localStorage.getItem('appZoomLevel');
+      if (saved) {
+        this.zoomLevel = parseInt(saved, 10);
+        this.applyZoom();
+      }
+    }
+  }
+
+  zoomIn() {
+    const currentIndex = this.zoomLevels.indexOf(this.zoomLevel);
+    if (currentIndex < this.zoomLevels.length - 1) {
+      this.zoomLevel = this.zoomLevels[currentIndex + 1];
+      this.applyZoom();
+      this.saveZoomLevel();
+    }
+  }
+
+  zoomOut() {
+    const currentIndex = this.zoomLevels.indexOf(this.zoomLevel);
+    if (currentIndex > 0) {
+      this.zoomLevel = this.zoomLevels[currentIndex - 1];
+      this.applyZoom();
+      this.saveZoomLevel();
+    }
+  }
+
+  resetZoom() {
+    this.zoomLevel = 100;
+    this.applyZoom();
+    this.saveZoomLevel();
+  }
+
+  private applyZoom() {
+    if (this.isBrowser) {
+      try {
+        const html = document.documentElement;
+        // Remove all zoom classes
+        this.zoomLevels.forEach(level => {
+          html.classList.remove(`zoom-${level}`);
+        });
+        // Add current zoom class
+        html.classList.add(`zoom-${this.zoomLevel}`);
+      } catch (err) {
+        console.warn('Unable to apply zoom', err);
+      }
+    }
+  }
+
+  private saveZoomLevel() {
+    if (this.isBrowser) {
+      localStorage.setItem('appZoomLevel', this.zoomLevel.toString());
+    }
+  }
+
+  canZoomIn(): boolean {
+    return this.zoomLevels.indexOf(this.zoomLevel) < this.zoomLevels.length - 1;
+  }
+
+  canZoomOut(): boolean {
+    return this.zoomLevels.indexOf(this.zoomLevel) > 0;
+  }
+
+  // Mobile menu methods
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    if (this.isBrowser) {
+      document.body.style.overflow = this.isMobileMenuOpen ? 'hidden' : '';
+    }
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen = false;
+    this.mobileExpandedSection = null;
+    if (this.isBrowser) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  toggleMobileSection(section: string) {
+    this.mobileExpandedSection = this.mobileExpandedSection === section ? null : section;
   }
 
   private loadAuthState() {

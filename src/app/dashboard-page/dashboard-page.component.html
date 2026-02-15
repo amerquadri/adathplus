@@ -3,51 +3,205 @@
   <div class="content-wrapper">
     <main class="main-content">
       <div class="dashboard-content">
-      
-        <!-- User Information Card -->
-        <div class="user-info-section">
-          <mat-card class="user-info-card">
-            <mat-card-header>
-              <mat-card-title>User Session Information</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="info-grid">
-                <div class="info-item">
-                  <strong>Username:</strong> 
-                  <span>{{ userInfo.username || 'Not available' }}</span>
+        
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+          <div class="welcome-text">
+            <h1 class="welcome-title">Welcome back, <span class="user-highlight">{{ userInfo.userFullName || 'User' }}</span>! 👋</h1>
+            <p class="welcome-subtitle">Here's what's happening with your business today</p>
+          </div>
+          <div class="welcome-date">
+            <mat-icon>calendar_today</mat-icon>
+            <span>{{ currentDate | date:'EEEE, MMMM d, yyyy' }}</span>
+          </div>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card stat-purple">
+            <div class="stat-icon">
+              <mat-icon>people</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalCustomers }}</span>
+              <span class="stat-label">Total Customers</span>
+            </div>
+            <div class="stat-trend up">
+              <mat-icon>trending_up</mat-icon>
+              <span>Active</span>
+            </div>
+          </div>
+          
+          <div class="stat-card stat-blue">
+            <div class="stat-icon">
+              <mat-icon>agriculture</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalVendors }}</span>
+              <span class="stat-label">Total Farmers</span>
+            </div>
+            <div class="stat-trend up">
+              <mat-icon>trending_up</mat-icon>
+              <span>Active</span>
+            </div>
+          </div>
+          
+          <div class="stat-card stat-green">
+            <div class="stat-icon">
+              <mat-icon>receipt_long</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalBills }}</span>
+              <span class="stat-label">Total Bills</span>
+            </div>
+            <div class="stat-trend up">
+              <mat-icon>trending_up</mat-icon>
+              <span>This Month</span>
+            </div>
+          </div>
+          
+          <div class="stat-card stat-orange">
+            <div class="stat-icon">
+              <mat-icon>payments</mat-icon>
+            </div>
+            <div class="stat-info">
+              <span class="stat-value">{{ totalPayments }}</span>
+              <span class="stat-label">Payments</span>
+            </div>
+            <div class="stat-trend up">
+              <mat-icon>trending_up</mat-icon>
+              <span>Processed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions-section">
+          <h2 class="section-title">
+            <mat-icon>flash_on</mat-icon>
+            Quick Actions
+          </h2>
+          <div class="actions-grid">
+            <button class="action-card" (click)="goToCustomer()">
+              <div class="action-icon purple">
+                <mat-icon>person_add</mat-icon>
+              </div>
+              <span class="action-label">Add Customer</span>
+            </button>
+            <button class="action-card" (click)="goToVendor()">
+              <div class="action-icon blue">
+                <mat-icon>agriculture</mat-icon>
+              </div>
+              <span class="action-label">Add Farmer</span>
+            </button>
+            <button class="action-card" (click)="goToItem()">
+              <div class="action-icon green">
+                <mat-icon>inventory_2</mat-icon>
+              </div>
+              <span class="action-label">Add Item</span>
+            </button>
+            <button class="action-card" routerLink="/farmer-bill">
+              <div class="action-icon orange">
+                <mat-icon>receipt</mat-icon>
+              </div>
+              <span class="action-label">New Bill</span>
+            </button>
+            <button class="action-card" routerLink="/customer-payment">
+              <div class="action-icon pink">
+                <mat-icon>payment</mat-icon>
+              </div>
+              <span class="action-label">Payment</span>
+            </button>
+            <button class="action-card" routerLink="/list-of-values">
+              <div class="action-icon teal">
+                <mat-icon>settings</mat-icon>
+              </div>
+              <span class="action-label">Settings</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- User Session Info -->
+        <div class="session-section">
+          <h2 class="section-title">
+            <mat-icon>account_circle</mat-icon>
+            Session Information
+          </h2>
+          <mat-card class="session-card">
+            <div class="session-grid">
+              <div class="session-item">
+                <div class="session-icon purple">
+                  <mat-icon>person</mat-icon>
                 </div>
-                <div class="info-item">
-                  <strong>User ID:</strong> 
-                  <span>{{ userInfo.userId || 'Not available' }}</span>
-                </div>
-                <div class="info-item">
-                  <strong>Full Name:</strong> 
-                  <span>{{ userInfo.userFullName || 'Not available' }}</span>
-                </div>
-                <div class="info-item">
-                  <strong>Company ID:</strong> 
-                  <span>{{ userInfo.companyId || 'Not available' }}</span>
-                </div>
-                <div class="info-item">
-                  <strong>Role ID:</strong> 
-                  <span>{{ userInfo.roleId || 'Not available' }}</span>
-                </div>
-                <div class="info-item">
-                  <strong>Login Time:</strong> 
-                  <span>{{ userInfo.loginTime || 'Not available' }}</span>
-                </div>
-                  <div class="info-item">
-                  <strong>Company Name:</strong> 
-                  <span>{{ userInfo.companyName || 'Not available' }}</span>
-                </div>
-                <div class="info-item">
-                  <strong>Auth Token:</strong> 
-                  <span class="token-display">{{ userInfo.authToken ? (userInfo.authToken.length > 50 ? userInfo.authToken.substring(0, 50) + '...' : userInfo.authToken) : 'Not available' }}</span>
+                <div class="session-details">
+                  <span class="session-label">Username</span>
+                  <span class="session-value">{{ userInfo.username || 'Not available' }}</span>
                 </div>
               </div>
-            </mat-card-content>
+              
+              <div class="session-item">
+                <div class="session-icon blue">
+                  <mat-icon>badge</mat-icon>
+                </div>
+                <div class="session-details">
+                  <span class="session-label">User ID</span>
+                  <span class="session-value">{{ userInfo.userId || 'Not available' }}</span>
+                </div>
+              </div>
+              
+              <div class="session-item">
+                <div class="session-icon green">
+                  <mat-icon>face</mat-icon>
+                </div>
+                <div class="session-details">
+                  <span class="session-label">Full Name</span>
+                  <span class="session-value">{{ userInfo.userFullName || 'Not available' }}</span>
+                </div>
+              </div>
+              
+              <div class="session-item">
+                <div class="session-icon orange">
+                  <mat-icon>business</mat-icon>
+                </div>
+                <div class="session-details">
+                  <span class="session-label">Company</span>
+                  <span class="session-value">{{ userInfo.companyName || 'Not available' }}</span>
+                </div>
+              </div>
+              
+              <div class="session-item">
+                <div class="session-icon pink">
+                  <mat-icon>schedule</mat-icon>
+                </div>
+                <div class="session-details">
+                  <span class="session-label">Login Time</span>
+                  <span class="session-value">{{ userInfo.loginTime || 'Not available' }}</span>
+                </div>
+              </div>
+              
+              <div class="session-item">
+                <div class="session-icon teal">
+                  <mat-icon>verified_user</mat-icon>
+                </div>
+                <div class="session-details">
+                  <span class="session-label">Role ID</span>
+                  <span class="session-value">{{ userInfo.roleId || 'Not available' }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="token-section" *ngIf="userInfo.authToken">
+              <div class="token-header">
+                <mat-icon>vpn_key</mat-icon>
+                <span>Authentication Token</span>
+              </div>
+              <div class="token-display">
+                {{ userInfo.authToken.length > 60 ? userInfo.authToken.substring(0, 60) + '...' : userInfo.authToken }}
+              </div>
+            </div>
           </mat-card>
         </div>
+
       </div>
     </main>
   </div>

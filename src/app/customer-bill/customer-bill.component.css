@@ -1,169 +1,606 @@
-/* Styles for Customer Bill page */
-.customer-bill-card {
-	padding: 16px;
+/* ============================================
+   Customer Bill Page - Modern UI Styles
+   ============================================ */
+
+/* Page Container */
+.page-container {
+    padding: 24px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    min-height: calc(100vh - 64px);
 }
 
-.header-bar {
-	background: #0d6efd;
-	padding: 12px 16px;
-	border-radius: 4px;
-	margin-bottom: 16px;
+/* ============================================
+   Page Header
+   ============================================ */
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    color: white;
 }
 
-.header-bar h2 {
-	margin: 0;
-	font-size: 1.6rem;
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.filters {
-	display: flex;
-	gap: 16px;
-	align-items: flex-start;
-	flex-wrap: wrap;
-	margin-bottom: 16px;
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.filter-item {
-	width: 220px;
+.title-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
 }
 
-.view-button {
-	align-self: flex-end;
+.title-icon mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: white;
 }
- 
+
+.title-text h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.title-text p {
+    margin: 4px 0 0;
+    opacity: 0.85;
+    font-size: 0.9rem;
+}
+
+.header-stats {
+    display: flex;
+    gap: 12px;
+}
+
+.stat-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 18px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+    font-weight: 500;
+}
+
+.stat-badge mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ============================================
+   Controls Card (Filters)
+   ============================================ */
+.controls-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.controls-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-field {
+    flex: 1;
+    min-width: 180px;
+    max-width: 220px;
+}
+
+.farmer-field {
+    min-width: 200px;
+    max-width: 280px;
+}
+
+.bill-field {
+    min-width: 150px;
+    max-width: 180px;
+}
+
+.field-icon {
+    color: #667eea;
+    margin-right: 8px;
+}
+
+.search-fab {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+.search-fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5) !important;
+}
+
+/* ============================================
+   Table Card
+   ============================================ */
+.table-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.table-header-bar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.table-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.table-title mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+.records-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.records-badge mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
 
 .table-wrapper {
-	
-	padding: 8px;
-	
-	min-height: 320px;
+    max-height: 400px;
+    overflow: auto;
 }
 
+/* Table Styles */
 .bill-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 8px;
+    width: 100%;
 }
 
-.bill-table thead th {
-	 
-	padding: 8px;
-	text-align: left;
+.bill-table th.mat-header-cell {
+    background: #f8f9fc;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 12px;
+    border-bottom: 2px solid #e2e8f0;
 }
 
-.bill-table tbody td {
-	padding: 8px;
-	 
+.bill-table td.mat-cell {
+    padding: 12px;
+    font-size: 0.9rem;
+    color: #2d3748;
+    border-bottom: 1px solid #e2e8f0;
 }
 
-.entry-row {
-	display: flex;
-	gap: 8px;
-	align-items: center;
- 
-	padding: 10px;
-	margin-top: 12px;
-	border-radius: 4px;
+.bill-table tr.mat-row:hover {
+    background: #f7f8fc;
 }
 
-.entry-cell {
-	display: flex;
-	align-items: center;
+.sr-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
-.entry-cell.total-label {
-	font-weight: 700;
-	width: 90px;
+.customer-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.entry-cell.customer-select {
-	width: 220px;
+.customer-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
 }
 
-.entry-cell.date-input {
-	width: 180px;
+.amount-value {
+    font-weight: 600;
+    color: #667eea;
 }
 
-.entry-cell.qty,
-.entry-cell.unit,
-.entry-cell.weight,
-.entry-cell.rate,
-.entry-cell.com {
-	width: 110px;
+/* Footer Row */
+.bill-table td.mat-footer-cell {
+    background: #f8f9fc;
+    font-weight: 700;
+    padding: 14px 12px;
+    border-top: 2px solid #e2e8f0;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
 }
 
-.entry-cell.amt {
-	width: 80px;
-	text-align: right;
+.footer-records {
+    background: #667eea;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
 }
 
-.entry-cell.save-btn button {
-	 
-	color: #000;
+.footer-value {
+    color: #667eea;
+    font-size: 0.95rem;
 }
 
-
-.footer {
-	display: flex;
-	flex-direction: column;
-	gap: 12px;
-	margin-top: 12px;
+.footer-total {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.1rem;
 }
 
-.footer .first-row {
-	display: flex;
-	gap: 12px;
-	align-items: center;
-	flex-wrap: wrap;
+/* Action Buttons in Table */
+.action-cell {
+    display: flex;
+    gap: 4px;
 }
 
-.footer .second-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+.delete-btn {
+    color: #ef4444 !important;
+    transition: all 0.2s ease;
 }
 
-.grand-total {
-	font-size: 28px;
-	font-weight: 700;
+.delete-btn:hover {
+    background: #fef2f2 !important;
 }
 
-.actions {
-	display: flex;
-	gap: 12px;
+.edit-btn {
+    color: #667eea !important;
+    transition: all 0.2s ease;
 }
 
-.save-large {
-	 
-	color: #000;
+.edit-btn:hover {
+    background: #eff0ff !important;
 }
 
-.new-large {
-	background: #0d6efd;
-	 
+/* Empty State */
+.empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: #a0aec0;
 }
 
-/* Responsive adjustments */
-@media (max-width: 800px) {
-	.filters { gap: 8px; }
-	.filter-item { width: 100%; }
-	.entry-row { flex-direction: column; align-items: stretch; }
-	.entry-cell { width: 100%; }
+.empty-state mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
 }
 
-.example-container {
-	height: 400px;
-	overflow: auto;
-	min-width: 1000px;
+.empty-state p {
+    font-size: 1.1rem;
+    margin: 0;
 }
 
-.mat-footer-cell {
-	font-weight: bold;
-	position: sticky;
-	bottom: 0;
-	background: #fff;
-	z-index: 10;
-	padding-top: 12px;
-	/* make footer font bold */
-	font-weight: 700;
+/* ============================================
+   Entry Card
+   ============================================ */
+.entry-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.entry-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #667eea;
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.entry-header mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.entry-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.entry-field {
+    flex: 1;
+}
+
+.customer-field {
+    min-width: 200px;
+    max-width: 250px;
+}
+
+.date-field {
+    min-width: 150px;
+    max-width: 180px;
+}
+
+.small-field {
+    min-width: 90px;
+    max-width: 110px;
+}
+
+.save-fab {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+.save-fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5) !important;
+}
+
+.additional-fields {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.additional-fields .entry-field {
+    max-width: 180px;
+}
+
+/* ============================================
+   Action Bar
+   ============================================ */
+.action-bar {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.grand-total-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.total-label {
+    font-size: 0.85rem;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.total-amount {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    padding: 10px 24px !important;
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.new-btn {
+    border-color: #667eea !important;
+    color: #667eea !important;
+}
+
+.new-btn:hover {
+    background: #f0f1ff !important;
+}
+
+.print-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+}
+
+.print-btn:hover {
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5) !important;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 1200px) {
+    .controls-row {
+        gap: 12px;
+    }
+    
+    .filter-field {
+        min-width: 160px;
+    }
+}
+
+@media (max-width: 900px) {
+    .page-container {
+        padding: 16px;
+    }
+    
+    .page-header {
+        padding: 20px;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+    
+    .title-section {
+        flex-direction: column;
+    }
+    
+    .controls-row {
+        flex-direction: column;
+    }
+    
+    .filter-field,
+    .farmer-field,
+    .bill-field {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .search-fab {
+        width: 100%;
+        border-radius: 12px !important;
+    }
+    
+    .entry-form {
+        flex-direction: column;
+    }
+    
+    .entry-field,
+    .customer-field,
+    .date-field,
+    .small-field {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .save-fab {
+        width: 100%;
+        border-radius: 12px !important;
+    }
+    
+    .additional-fields {
+        flex-direction: column;
+    }
+    
+    .additional-fields .entry-field {
+        max-width: 100%;
+    }
+    
+    .action-bar {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+    
+    .action-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .action-btn {
+        width: 100%;
+        justify-content: center !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-text h1 {
+        font-size: 1.4rem;
+    }
+    
+    .table-header-bar {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+    
+    .total-amount {
+        font-size: 1.6rem;
+    }
+}
+
+/* ============================================
+   Form Field Customizations
+   ============================================ */
+::ng-deep .controls-card .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+::ng-deep .entry-card .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: #667eea !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-floating-label {
+    color: #667eea !important;
 }
