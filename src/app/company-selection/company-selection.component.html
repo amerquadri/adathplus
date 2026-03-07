@@ -58,6 +58,9 @@
 						<mat-label>Select Company</mat-label>
 						<mat-icon matPrefix class="input-icon">business</mat-icon>
 						<mat-select [(ngModel)]="selectedCompany" placeholder="Choose a company">
+							<mat-select-trigger>
+								{{ companyName || 'Choose a company' }}
+							</mat-select-trigger>
 							<mat-option *ngFor="let company of companylist" [value]="company.companyID" (onSelectionChange)="onCompanySelected(company)">
 								<div class="company-option">
 									<mat-icon class="option-icon">apartment</mat-icon>

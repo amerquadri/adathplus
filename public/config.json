@@ -1,3 +1,4 @@
 {
-  "apiUrl": "http://localhost:29033"
+  "apiUrl": "http://localhost:29033",
+  "version": "1.0.12.6"
 }

@@ -68,9 +68,9 @@ export class LoginServiceService {
   }
  
   login(username: string, password: string): Observable<LoginResult> {
-    const loginUrl = `${this.apiUrl}/UserMaster/login?UserName=${(username)}&Password=${(password)}`;
+    const loginUrl = `${this.apiUrl}/UserMaster/login`;
     
-    return this.http.post<LoginResponse>(loginUrl, {}).pipe(
+    return this.http.post<LoginResponse>(loginUrl, { userName: username, password: password }).pipe(
       map((response: LoginResponse) => {
         console.log('API Response:', response);
         

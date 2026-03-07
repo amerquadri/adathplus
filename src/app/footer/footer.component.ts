@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginPageComponent } from '../login-page/login-page.component';
 import { DatePipe } from '@angular/common';
+import { RuntimeConfigService } from '../runtime-config.service';
 
 @Component({
   selector: 'app-footer',
@@ -12,9 +13,11 @@ import { DatePipe } from '@angular/common';
 export class FooterComponent {
   userInfo: any = {};
   currentYear: number = new Date().getFullYear();
+  appVersion: string = '';
 
-  constructor() {
+  constructor(private configService: RuntimeConfigService) {
     this.loadUserInfo();
+    this.appVersion = this.configService.get('version', '1.0.0.0');
   }
 
   loadUserInfo() {

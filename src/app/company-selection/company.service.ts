@@ -157,7 +157,7 @@ export class CompanyService {
       ...(token ? { Authorization: `Bearer ${token}` } : {})
     });
 
-    return this.http.put(url, payload, { headers }).pipe(
+    return this.http.post(url, payload, { headers }).pipe(
       catchError(err => {
         console.error('Error saving default company', err);
         return throwError(() => err);
