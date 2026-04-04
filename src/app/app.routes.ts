@@ -17,6 +17,7 @@ import { CustomerBillComponent } from './customer-bill/customer-bill.component';
 import { CompanySelectionComponent } from './company-selection/company-selection.component';
 import { UserMasterComponent } from './user-master/user-master.component';
 import { CompanyMasterComponent } from './company-master/company-master.component';
+import { ReportsComponent } from './reports/reports.component';
 
 
 export const routes: Routes = [
@@ -99,6 +100,11 @@ export const routes: Routes = [
 		path: "company-master",
 		component: CompanyMasterComponent,
 		data: { breadcrumb: "Master / Company Master" }
+	},
+	{
+		path:'report',
+		component: ReportsComponent,
+		data: { breadcrumb:'Master / Report' }
 	}
 
 ];

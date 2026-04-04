@@ -1,0 +1,19 @@
+
+<app-master-page>
+
+<div class="report-container">
+  <div class="report-toolbar">
+    <input type="text" [(ngModel)]="reportUrl" placeholder="Enter report URL" class="report-url-input" />
+    <button (click)="showReport()" class="show-btn">Show</button>
+    <button (click)="exportPdf()" class="pdf-btn">PDF</button>
+  </div>
+
+  @if (iframeSrc) {
+    <iframe [src]="iframeSrc" class="report-iframe" title="Report Viewer"></iframe>
+  }
+
+  <div class="fallback-link">
+    If the report doesn't load in the frame, <a (click)="openInNewTab()" class="open-link">open in a new tab</a>.
+  </div>
+</div>
+</app-master-page>

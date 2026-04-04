@@ -67,10 +67,10 @@
         <mat-icon class="dropdown-icon">expand_more</mat-icon>
       </button>
       <mat-menu #Reports="matMenu" class="nav-menu">
-        <button mat-menu-item (click)="goToVendorPayment()">
+        <button mat-menu-item (click)="goToReport()">
           <mat-icon>analytics</mat-icon>Farmer Report
         </button>
-        <button mat-menu-item (click)="goToCustomerPayment()">
+        <button mat-menu-item (click)="goToReport()">
           <mat-icon>bar_chart</mat-icon>Customer Report
         </button>
       </mat-menu>
@@ -210,10 +210,10 @@
           <mat-icon class="expand-icon">{{ mobileExpandedSection === 'payment' ? 'expand_less' : 'expand_more' }}</mat-icon>
         </div>
         <div class="mobile-nav-items" [class.expanded]="mobileExpandedSection === 'payment'">
-          <button mat-button (click)="goToVendorPayment(); closeMobileMenu()">
+          <button mat-button (click)="goToReport(); closeMobileMenu()">
             <mat-icon>agriculture</mat-icon>Farmer Payment
           </button>
-          <button mat-button (click)="goToCustomerPayment(); closeMobileMenu()">
+          <button mat-button (click)="goToReport(); closeMobileMenu()">
             <mat-icon>payment</mat-icon>Customer Payment
           </button>
         </div>

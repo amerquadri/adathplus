@@ -228,6 +228,10 @@ export class HeaderComponent {
     this.router.navigate(['/company-master']);
   }
 
+  goToReport() {
+    this.router.navigate(['/report']);
+  }
+
   logout() {
     // Clear session storage token/user and update UI
     console.log('Logout clicked');
