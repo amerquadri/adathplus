@@ -24,6 +24,7 @@ import { timeout, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-customer-master',
@@ -53,11 +54,11 @@ export class CustomerMasterComponent {
 
   // Mobile pagination properties
   mobilePageIndex: number = 0;
-  mobilePageSize: number = 10;
+  mobilePageSize: number = 5;
   mobilePageSizeOptions: number[] = [5, 10, 20, 50];
 
   //'companyId','phone1', 'phone2', 'email', 'address', 'detail','createdById', 'createdDate', 'updatedById', 'updatedDate',
-  constructor(private fb: FormBuilder, private dialog: MatDialog, private customerService: CustomerService) {
+  constructor(private fb: FormBuilder, private dialog: MatDialog, private customerService: CustomerService,private snackBar: MatSnackBar) {
     this.customerForm = this.fb.group({
       customerId: [null],
       customerName: ['', Validators.required],
@@ -98,9 +99,6 @@ export class CustomerMasterComponent {
         }
       });
   }
-
-
-
 
   openCustomerDialog() {
     this.blurActiveElement();
@@ -196,8 +194,24 @@ export class CustomerMasterComponent {
 
   // Call insert customer service
   insertCustomer() {
+     const customer: Customer = this.customerForm.value;
+    
+  if(customer.customerName.length < 3) {
+     this.snackBar.open('Customer name must be at least 3 characters long.', 'Close', {
+       duration: 3000,verticalPosition: 'top',
+    });
+    return;
+  }
+  if(customer.credit < 0 || customer.debit < 0 || customer.openingAmt < 0  
+    || customer.credit ==null || customer.debit == null || customer.openingAmt == null
+  ) {
+     this.snackBar.open('Amounts cannot be negative.', 'Close', {
+       duration: 3000,verticalPosition: 'top',
+    });
+    return;
+  }
+
     if (this.customerForm.valid) {
-      const customer: Customer = this.customerForm.value;
       this.customerService.insertCustomer(customer).subscribe({
         next: (result: any) => {
           this.customers.push(result);

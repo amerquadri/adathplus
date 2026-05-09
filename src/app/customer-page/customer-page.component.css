@@ -27,7 +27,7 @@
 
 .action-buttons button:hover {
 	transform: translateY(-2px);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
 }
 
 .action-buttons button mat-icon {
@@ -95,7 +95,7 @@
   z-index: 100 !important;
   background-color: #fafafa !important;
   border-bottom: 1px solid #e0e0e0 !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.7) !important;
 }
 
 .sticky-header-table .mat-mdc-header-cell {
@@ -113,7 +113,7 @@
   z-index: 100 !important;
   background-color: #fafafa !important;
   border-bottom: 1px solid #e0e0e0 !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.7) !important;
 }
 
 .sticky-header-table .mat-header-cell {
@@ -126,7 +126,7 @@
 
 /* Override default table styles */
 .mat-elevation-z8 {
-  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.7), 0 2px 4px -1px rgba(0,0,0,0.7);
   border-radius: 0;
 }
 
@@ -186,7 +186,7 @@
 	background: white;
 	border-radius: 8px;
 	margin: 16px 0;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .detail-header {

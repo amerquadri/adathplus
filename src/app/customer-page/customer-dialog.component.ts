@@ -12,6 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CustomerService } from './customer.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-customer-dialog',
@@ -36,11 +37,12 @@ import { CustomerService } from './customer.service';
 
 export class CustomerDialogComponent {
   public customer: any;
-  
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private customerService: CustomerService,
     public dialogRef: MatDialogRef<CustomerDialogComponent>
+    , private snackBar: MatSnackBar
   ) {
     this.customer = data && data.customer ? data.customer : {};
     //this.initializeDates();
@@ -63,12 +65,12 @@ export class CustomerDialogComponent {
    */
   prepareDatesForSave() {
     const customerToSave = { ...this.customer };
-      customerToSave.createdById = Number(sessionStorage.getItem('userId')) || 0;; // Example static value
-      customerToSave.createdDate = new Date().toISOString(); // Current date-time
-      customerToSave.isActive = true; // Default to active
-      customerToSave.companyId = Number(sessionStorage.getItem('companyId')) || 0;
-      customerToSave.updatedById = Number(sessionStorage.getItem('userId')) || 0;; // Example static value
-      customerToSave.updatedDate = new Date().toISOString(); // Current date-time
+    customerToSave.createdById = Number(sessionStorage.getItem('userId')) || 0;; // Example static value
+    customerToSave.createdDate = new Date().toISOString(); // Current date-time
+    customerToSave.isActive = true; // Default to active
+    customerToSave.companyId = Number(sessionStorage.getItem('companyId')) || 0;
+    customerToSave.updatedById = Number(sessionStorage.getItem('userId')) || 0;; // Example static value
+    customerToSave.updatedDate = new Date().toISOString(); // Current date-time
 
     if (customerToSave.createdDate instanceof Date) {
       customerToSave.createdDate = customerToSave.createdDate.toISOString();
@@ -76,7 +78,7 @@ export class CustomerDialogComponent {
     if (customerToSave.updatedDate instanceof Date) {
       customerToSave.updatedDate = customerToSave.updatedDate.toISOString();
     }
-    
+
     return customerToSave;
   }
 
@@ -94,8 +96,23 @@ export class CustomerDialogComponent {
   }
 
   onSaveCustomer() {
-    const customerToSave = this.prepareDatesForSave();
-    
+    // const customerToSave = this.prepareDatesForSave();
+    const customerToSave = { ...this.customer };
+
+    if (customerToSave.customerName.length < 3) {
+      this.snackBar.open('Customer name must be at least 3 characters long.', 'Close', {
+        duration: 3000, verticalPosition: 'top',
+      });
+      return;
+    }
+    if (customerToSave.credit < 0 || customerToSave.debit < 0 || customerToSave.openingAmt < 0
+      || customerToSave.credit == null || customerToSave.debit == null || customerToSave.openingAmt == null
+    ) {
+      this.snackBar.open('Amounts cannot be negative.', 'Close', {
+        duration: 3000, verticalPosition: 'top',
+      });
+      return;
+    }
     if (customerToSave && customerToSave.customerId) {
       this.customerService.updateCustomer(customerToSave).subscribe({
         next: (result: any) => {

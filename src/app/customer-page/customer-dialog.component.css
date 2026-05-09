@@ -17,7 +17,7 @@
   padding: 20px 24px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  margin: -24px -24px 0 -24px;
+  /* margin: -24px -24px 0 -24px; */
   border-radius: 4px 4px 0 0;
 }
 
@@ -90,7 +90,7 @@ mat-dialog-content {
 
 /* Form Sections */
 .form-section {
-  background: #f8f9ff;
+  /* background: #f8f9ff; */
   border-radius: 12px;
   padding: 16px 20px;
   margin-bottom: 8px;
@@ -100,7 +100,7 @@ mat-dialog-content {
 
 .form-section:hover {
   border-color: rgba(102, 126, 234, 0.25);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.7);
 }
 
 .section-header {
@@ -215,8 +215,8 @@ mat-form-field {
 /* Dialog Actions */
 .dialog-actions {
   padding: 16px 24px 20px !important;
-  margin: 0 -24px -24px -24px !important;
-  background: #f8f9ff;
+  /* margin: 0 -24px -24px -24px !important; */
+  /* background: #f8f9ff; */
   border-top: 1px solid rgba(102, 126, 234, 0.1);
   display: flex;
   justify-content: flex-end;
@@ -255,13 +255,13 @@ mat-form-field {
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.7);
   transition: all 0.3s ease;
 }
 
 .save-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.7);
 }
 
 .save-btn mat-icon {

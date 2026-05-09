@@ -34,6 +34,33 @@
       </div>
     </div>
 
+
+    <!-- Financial Information Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span>Financial Information</span>
+      </div>
+      <div class="form-row three-col">
+        <mat-form-field appearance="outline" class="credit-field">
+          <mat-label>Credit</mat-label>
+          <span matPrefix class="currency-prefix">&#x20B9;</span>
+          <input matInput type="number" [(ngModel)]="vendor.credit" name="credit" placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="debit-field">
+          <mat-label>Debit</mat-label>
+          <span matPrefix class="currency-prefix">&#x20B9;</span>
+          <input matInput type="number" [(ngModel)]="vendor.debit" name="debit" placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="opening-field">
+          <mat-label>Opening Amount</mat-label>
+          <span matPrefix class="currency-prefix">&#x20B9;</span>
+          <input matInput type="number" [(ngModel)]="vendor.openingAmt" name="openingAmt" placeholder="0">
+        </mat-form-field>
+      </div>
+    </div>
+
+
     <!-- Contact Information Section -->
     <div class="form-section">
       <div class="section-header">
@@ -81,30 +108,6 @@
       </div>
     </div>
 
-    <!-- Financial Information Section -->
-    <div class="form-section">
-      <div class="section-header">
-        <mat-icon>account_balance_wallet</mat-icon>
-        <span>Financial Information</span>
-      </div>
-      <div class="form-row three-col">
-        <mat-form-field appearance="outline" class="credit-field">
-          <mat-label>Credit</mat-label>
-          <span matPrefix class="currency-prefix">&#x20B9;</span>
-          <input matInput type="number" [(ngModel)]="vendor.credit" name="credit" placeholder="0">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="debit-field">
-          <mat-label>Debit</mat-label>
-          <span matPrefix class="currency-prefix">&#x20B9;</span>
-          <input matInput type="number" [(ngModel)]="vendor.debit" name="debit" placeholder="0">
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="opening-field">
-          <mat-label>Opening Amount</mat-label>
-          <span matPrefix class="currency-prefix">&#x20B9;</span>
-          <input matInput type="number" [(ngModel)]="vendor.openingAmt" name="openingAmt" placeholder="0">
-        </mat-form-field>
-      </div>
-    </div>
   </form>
 </mat-dialog-content>
 

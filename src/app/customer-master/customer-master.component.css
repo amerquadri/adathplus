@@ -14,7 +14,7 @@
   padding: 28px 32px;
   margin-bottom: 24px;
   color: white;
-  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
 }
 
 .header-content {
@@ -87,8 +87,10 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  margin-bottom: 20px;
+  padding: 20px;
+  margin: 20px;
   flex-wrap: wrap;
+  box-shadow :0 10px 40px rgba(0, 0, 0, 0.7)
 }
 
 .search-section {
@@ -134,30 +136,30 @@
 .new-btn {
   background: linear-gradient(135deg, #10b981, #059669) !important;
   color: white !important;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.7);
 }
 
 .new-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.7);
 }
 
 .export-btn {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
   color: white !important;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.7);
 }
 
 .export-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.7);
 }
 
 /* ==================== Desktop Table View ==================== */
 .table-container {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
   overflow: hidden;
 }
 
@@ -301,14 +303,14 @@
 .customer-card {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
   overflow: hidden;
   transition: all 0.3s ease;
 }
 
 .customer-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
 }
 
 .card-header {
@@ -357,12 +359,12 @@
 
 .status-dot.active {
   background: #10b981;
-  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.7);
 }
 
 .status-dot.inactive {
   background: #ef4444;
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.7);
 }
 
 .card-body {
@@ -468,7 +470,7 @@
   background: white;
   border-radius: 12px;
   padding: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 /* Mobile Pagination */
@@ -483,7 +485,7 @@
   justify-content: center;
   font-weight: 500;
   font-size: 0.9rem;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.7);
 }
 
 .mobile-paginator {
@@ -491,7 +493,7 @@
   background: white;
   border-radius: 12px;
   padding: 8px 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
 }
 
 .mobile-paginator ::ng-deep .mat-mdc-paginator-container {
@@ -597,6 +599,9 @@
 
   .action-bar {
     flex-direction: column;
+    padding: 20px;
+    margin:20px;
+    box-shadow :0 10px 40px rgba(0, 0, 0, 0.7)
   }
 
   .search-section {

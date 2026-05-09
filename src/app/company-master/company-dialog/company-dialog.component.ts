@@ -45,6 +45,7 @@ export class CompanyDialogComponent {
 
   save() {
     // basic validation could be added here
+
     if(this.company.companyID === undefined || this.company.companyID === null) {
       this.company.companyID = 0; // or some default/new ID logic
     }
